@@ -1,0 +1,12 @@
+{% if tracks %}
+    <table>
+    <tr>
+    {% for track in tracks %}
+        <td>
+        <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
+        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </td>
+    {% endfor %}
+    </tr>
+    </table>
+{% endif %}

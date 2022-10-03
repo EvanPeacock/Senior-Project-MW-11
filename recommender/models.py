@@ -1,5 +1,4 @@
-from django.db import models
-from django import forms
+from django.db import models  
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -24,14 +23,14 @@ class Musicdata(models.Model):
     liveness = models.FloatField()
     valence = models.FloatField()
     tempo = models.FloatField()
-    duration_ms  = models.IntegerField()
-
-class SearchForm(forms.Form):
-    artist = forms.CharField(label='Artist', required=True)
-    from_year = forms.DateField(required=False)
-    to_year = forms.DateField(required=False)
-
+    duration_ms = models.IntegerField()
     
-    
-    
-    
+# class User(models.Model):
+# #     username = models.CharField(max_length=25, Required=True)
+#     username = models.CharField(max_length=100, null=True)
+#     user_fname = models.CharField(max_length=50, null=False)
+#     user_lname = models.CharField(max_length=50, null   =False)
+#     user_email = models.EmailField(null=False)
+#     user_password = models.CharField(max_length=50, null=False)
+# #     liked_songs = models.ManyToManyField('Musicdata', blank=True)
+#     objects = UserManager

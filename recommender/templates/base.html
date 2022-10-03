@@ -24,6 +24,30 @@
 
 <!-- CSRF token added to htmx headers for htmx requests -->
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<div class='navbar' style="display:flex;background-color:lightgray;border-bottom:solid 2px black">    
+    <div class="nav-left" style="padding:4px;display:flex;gap:40px;justify-content:start;">    
+        <div class="home-button" style="padding:5px;border:black solid 1px;border-radius:8px">
+            <a href='/'>Home</a>
+        </div>
+        <div class="artist-button" style="padding:5px;border:black solid 1px;border-radius:8px">
+            <a href="{% url 'recommender:get_artist' %}">Artist</a>
+        </div>
+        <div class="album-button" style="padding:5px;border:black solid 1px;border-radius:8px">
+            <a href="{% url 'recommender:get_album' %}">Album</a>
+        </div>
+        <div class="track-button" style="padding:5px;border:black solid 1px;border-radius:8px">
+            <a href="{% url 'recommender:get_track' %}">Track</a>
+        </div>
+    </div>
+    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;">
+        <div class="signin-button">
+            <a href="{% url 'recommender:get_signin' %}">Sign In</a>
+        </div>
+        <div class="register-button">
+            <a href="{% url 'recommender:get_registration' %}">Register</a>
+        </div>
+    </div>
+</div>
 <div class="container">
     {% block content %}
     {% endblock %}
