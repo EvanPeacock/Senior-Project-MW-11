@@ -10,7 +10,20 @@ from django.contrib.auth import authenticate
 
 
 def get_home(request):
-    return render(request, 'recommender/home.html', {})
+    songs = Musicdata.objects.all().values('track_id')
+    sResp = list(songs)
+    random.shuffle(sResp)
+    albums = Musicdata.objects.all().values('track_id')
+    aResp = list(albums)
+    random.shuffle(aResp)
+    playlists = Musicdata.objects.all().values('track_id')
+    pResp = list(playlists)
+    random.shuffle(pResp)
+    return render(request, "recommender/home.html", {
+        'songs': sResp[:3],
+        'albums': aResp[:3],
+        'playlists': pResp[:3]
+    })
 
 def find_albums(artist, from_year = None, to_year = None):
     query = Musicdata.objects.filter(track_artist__contains = artist)
