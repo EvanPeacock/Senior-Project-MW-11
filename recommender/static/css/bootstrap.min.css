@@ -17,7 +17,7 @@
   }
   
   .btn-custom:hover {
-    transform: scale(1.25);
+    transform: scale(1.1);
     box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.45);
   }
   
@@ -38,7 +38,7 @@
   }
   
   .btn-outline-custom:hover {
-    transform: scale(1.25);
+    transform: scale(1.1);
     color: #E9437B;
     box-shadow: 
     2px 2px 5px 0 rgba(0, 0, 0, 0.45),
@@ -57,7 +57,7 @@
   }
   
   .btn-link-custom:hover {
-    transform: scale(1.25);
+    transform: scale(1.1);
     color: #E9437B;
   }
 
@@ -79,3 +79,27 @@
     font-weight: bold;
     color: #E9437B;
   }
+
+  #left {
+    padding: 20px;
+    float: left;
+    height: 756px;
+    width: 40%;
+    overflow-y: scroll;
+    /* text-align: center; */
+  }
+  
+  #right {
+    padding: 20px;
+    float: left;
+    height: 756px;
+    width: 60%;
+    overflow-y: scroll;
+    /* text-align: center; */
+  }
+
+  .navbar {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
+
+    /* the rest of your styling */
+}
