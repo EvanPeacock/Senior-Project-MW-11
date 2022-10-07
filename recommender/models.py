@@ -24,7 +24,11 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
-    
+  
+
+    def __str__(self): 
+        return self.track_name   
+
 # class User(models.Model):
 # #     username = models.CharField(max_length=25, Required=True)
 #     username = models.CharField(max_length=100, null=True)
