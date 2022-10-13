@@ -84,7 +84,7 @@
     padding: 20px;
     float: left;
     height: 756px;
-    width: 40%;
+    width: 25%;
     overflow-y: scroll;
     /* text-align: center; */
   }
@@ -93,7 +93,7 @@
     padding: 20px;
     float: left;
     height: 756px;
-    width: 60%;
+    width: 75%;
     overflow-y: scroll;
     /* text-align: center; */
   }
@@ -102,4 +102,18 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
 
     /* the rest of your styling */
+}
+
+h5 {
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 30%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h6 {
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 30%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
