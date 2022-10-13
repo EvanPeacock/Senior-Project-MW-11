@@ -6,19 +6,19 @@
 <div class='nav' style="margin:25px;padding:10px;display:flex;flex-direction:column;gap:20px;justify-content:center;">
     <div style="border:1px solid black;border-radius:8px;">
         <div class="artist-link" style="padding:10px;text-align:center;background-color:lightgrey;border-radius:8px 8px 0 0">
-            <a href="artist/">Artist Search</a>
+            <a href="{% url "recommender:get_artist" %}">Artist Search</a>
         </div>
         <p style="padding: 0 35px;text-align:center;">This search allows you to search for an Artist and get recommended tracks by them.</p>
     </div>
     <div style="border:1px solid black;border-radius:8px;">
         <div class="album-link" style="padding:10px;text-align:center;background-color:lightgrey;border-radius:8px 8px 0 0">
-            <a href="album/">Album Search</a>
+            <a href="{% url "recommender:get_album" %}">Album Search</a>
         </div>
         <p style="padding: 0 35px;text-align:center;">This search allows you to search for an Album and get recoomended tracks from that album.</p>
     </div>
     <div style="border:1px solid black;border-radius:8px;">
         <div class="track-link" style="padding:10px;text-align:center;background-color:lightgrey;border-radius:8px 8px 0 0">
-            <a href="track/">Track Search</a>
+            <a href="{% url "recommender:get_track" %}">Track Search</a>
         </div>
         <p style="padding: 0 35px;text-align:center;">This search allows you to search for a Track and get tracks that contain the search phrase.</p>
     </div>
