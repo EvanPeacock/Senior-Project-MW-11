@@ -1,4 +1,15 @@
 from django.db import models  
+import random
+from email.policy import default
+from enum import unique
+
+def unique_rand():
+        index = random.randint(1,100000000)
+        while True:
+            if not playlist.objects.filter(playlist_id=index).exists():
+                return index
+            else:
+                index += 1
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -24,17 +35,52 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
-  
+    
+    def __str__(self): 
+        return self.track_name
+    
+class song(models.Model):
+    track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    track_name = models.TextField()
+    artist_id = models.TextField()
+    track_album_id  = models.TextField()
+    track_album_release_date = models.IntegerField() 
+    playlist_id = models.ManyToManyField('playlist')
+    duration_ms = models.IntegerField()
 
     def __str__(self): 
-        return self.track_name   
+        return self.track_name
 
-# class User(models.Model):
-# #     username = models.CharField(max_length=25, Required=True)
-#     username = models.CharField(max_length=100, null=True)
-#     user_fname = models.CharField(max_length=50, null=False)
-#     user_lname = models.CharField(max_length=50, null   =False)
-#     user_email = models.EmailField(null=False)
-#     user_password = models.CharField(max_length=50, null=False)
-# #     liked_songs = models.ManyToManyField('Musicdata', blank=True)
-#     objects = UserManager
+class playlist(models.Model):
+    track_id = models.ManyToManyField(song,  null=True, blank=True)
+    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    playlist_name = models.TextField( null=True, blank=True)
+    user_id = models.TextField( null=True, blank=True)
+    
+    def __str__(self): 
+        return self.playlist_name
+
+class artist(models.Model):
+    artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    artist_name = models.TextField( null=True, blank=True)
+    genre = models.TextField( null=True, blank=True)
+    subgenre = models.TextField( null=True, blank=True)
+    track_id = models.ManyToManyField(song, null=True, blank=True)
+
+    def __str__(self): 
+        return self.artist_name 
+
+class album(models.Model):
+    album_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    album_name = models.TextField( null=True, blank=True)
+    track_id = models.ManyToManyField(song, null=True, blank=True)
+    artist_id = models.ManyToManyField(artist, null=True, blank=True)
+    genre = models.TextField()
+    subgenre = models.TextField()
+
+    def __str__(self): 
+        return self.album_name
+
+#class songtoplaylist(models.Model):
+   # track_id = models.ForeignKey('song', on_delete=models.CASCADE)
+    #playlist_id = models.ForeignKey('playlist',  on_delete=models.CASCADE)
