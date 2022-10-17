@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Explore {% endblock %}
+
+{% block content %}
+<div class='nav'>
+    <div class="row" style="margin-top: -30px">
+        <div class="col-md-4" id="left">
+            {% if users %}
+            {% for user in users %}
+            <div class="card" style="width: 100%; margin-bottom: 20px">
+                <div class="row">
+                <a>    
+                    <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="...">
+                </a>
+                <div class="card-body" style="margin-left: 10px; text-align: center;">
+                    <h5 class="card-title" style="background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 70%); background-clip: text;">{{ user }}'s Name</h5>
+                  <h6 class="card-subtitle" style="margin-bottom: 20px; background: linear-gradient(0.125turn, #D286F5 20%, #FF0000 70%); background-clip: text;">@{{ user }}</h6>
+                  <a class="btn btn-outline-custom">View Profile</a>
+                <a class="btn btn-custom" style="margin-left: 10px">Add Friend</a>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-8" id="right">
+            <div class="card" style="width: 100%; margin-bottom: 20px">
+                <div class="card-body">
+                  <h5 class="card-title">Recomended Songs</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Songs you might like</h6>
+                  <div class="row row-cols-1 row-cols-md-3 g-3">
+                    {% if songs %}
+                    {% for song in songs %}
+                      <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
+                      frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    {% endfor %}
+                    {% endif %}
+                  </div>
+              </div>
+            </div>
+        
+            <div class="card" style="width: 100%; margin-bottom: 20px">
+              <div class="card-body">
+                <h5 class="card-title">Recomended Albums</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Albums you might like</h6>
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+                  {% if albums %}
+                  {% for album in albums %}
+                  <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+                  frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        
+            <div class="card" style="width: 100%; margin-bottom: 20px">
+                <div class="card-body">
+                  <h5 class="card-title">Recomended Playlists</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
+                  <div class="row row-cols-1 row-cols-md-3 g-3">
+                    {% if playlists %}
+                    {% for playlist in playlists %}
+                    <iframe src="https://open.spotify.com/embed/track/{{ playlist.track_id }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    {% endfor %}
+                    {% endif %}
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
