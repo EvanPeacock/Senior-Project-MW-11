@@ -1,5 +1,4 @@
-# Senior-Project-MW-11-F22
-![SoundLogic Logo](/recommender/static/logo.svg)
+#![SoundLogic Logo](/recommender/static/logo.svg)
 
 ## Summary
 The main repository for our Senior Project, SoundLogic
