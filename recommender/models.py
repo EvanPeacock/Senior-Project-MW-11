@@ -11,6 +11,15 @@ def unique_rand():
             else:
                 index += 1
 
+def unique_rand():
+    index = 0
+    while True:
+        # code = password = User.objects.make_random_password(length=8)
+        if not Playlist.objects.filter(playlist_id=index).exists():
+            return index
+        else:
+            index += 1
+
 class Musicdata(models.Model):
     track_id = models.TextField()
     track_name = models.TextField()
@@ -35,7 +44,25 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
+        
+class Playlist(models.Model):
+    # playlist_id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    playlist_name = models.CharField(max_length=50, null=True, blank=False, default='New Playlist')
+    playlist_owner = models.ManyToManyField(User, null=True, blank=True)
+    playlist_songs = models.ManyToManyField('Musicdata', blank=True, null=True)
     
+    def creator(self):
+        author = list(self.playlist_owner.all())
+        return str(author[0].username)
+    
+class RecentSearches(models.Model):
+    artist = models.CharField(max_length=50)
+    from_year = models.IntegerField(blank=True, null=True)
+    to_year = models.IntegerField(blank=True, null=True)
+    result1 = models.CharField(max_length=25, null=True, blank=True)
+    result2 = models.CharField(max_length=25, null=True, blank=True)
+    result3 = models.CharField(max_length=25, null=True, blank=True)
     def __str__(self): 
         return self.track_name
     
@@ -50,15 +77,6 @@ class song(models.Model):
 
     def __str__(self): 
         return self.track_name
-
-class playlist(models.Model):
-    track_id = models.ManyToManyField(song,  null=True, blank=True)
-    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    playlist_name = models.TextField( null=True, blank=True)
-    user_id = models.TextField( null=True, blank=True)
-    
-    def __str__(self): 
-        return self.playlist_name
 
 class artist(models.Model):
     artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
