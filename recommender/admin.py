@@ -1,17 +1,29 @@
 from django.contrib import admin
-<<<<<<< Updated upstream
-from .models import Musicdata
-=======
-from .models import Musicdata, Playlist, RecentSearches
 from django.contrib.auth.models import User
->>>>>>> Stashed changes
+from .models import *
+
 
 # Register your models here.
-admin.site.register(Musicdata)
+@admin.register(Musicdata)
+class MusicAdmin(admin.ModelAdmin):
+    list_display = ['track_name', 'track_album_name', 'track_artist', 'duration_ms']
 
-<<<<<<< Updated upstream
-=======
-admin.site.register(Playlist)
 
 admin.site.register(RecentSearches)
->>>>>>> Stashed changes
+
+@admin.register(song)
+class songAdmin(admin.ModelAdmin):
+     list_display = ['track_name', 'artist_id', 'duration_ms']
+
+@admin.register(Playlist)
+class playlisttAdmin(admin.ModelAdmin):
+     list_display = ['playlist_name']
+
+@admin.register(album)
+class albumAdmin(admin.ModelAdmin):
+     list_display = ['album_name']
+
+@admin.register(artist)
+class artistAdmin(admin.ModelAdmin):
+     list_display = ['artist_name']
+
