@@ -2,15 +2,48 @@
 from recommender.forms import SearchForm
 from django.shortcuts import render
 from django.http import Http404
-from .models import Musicdata, Playlist
+from .models import Musicdata
 from .forms import RegisterForm, SearchForm, SigninForm
 import random
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
 
 
 def get_home(request):
-    return render(request, 'recommender/home.html', {})
+    songs = Musicdata.objects.all().values('track_id')
+    sResp = list(songs)
+    random.shuffle(sResp)
+    albums = Musicdata.objects.all().values('track_id')
+    aResp = list(albums)
+    random.shuffle(aResp)
+    playlists = Musicdata.objects.all().values('track_id')
+    pResp = list(playlists)
+    random.shuffle(pResp)
+    return render(request, "recommender/home.html", {
+        'songs': sResp[:3],
+        'albums': aResp[:3],
+        'playlists': pResp[:3]
+    })
+
+def get_explore(request):
+    songs = Musicdata.objects.all().values('track_id')
+    sResp = list(songs)
+    random.shuffle(sResp)
+    albums = Musicdata.objects.all().values('track_id')
+    aResp = list(albums)
+    random.shuffle(aResp)
+    playlists = Musicdata.objects.all().values('track_id')
+    pResp = list(playlists)
+    random.shuffle(pResp)
+    # userResp = User.objects.all().values('username')
+    uResp = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10']
+    # random.shuffle(uResp)
+    return render(request, "recommender/explore.html", {
+        'songs': sResp[:3],
+        'albums': aResp[:3],
+        'playlists': pResp[:3],
+        'users': uResp[:10]
+    })
 
 def find_albums(artist, from_year = None, to_year = None):
     query = Musicdata.objects.filter(track_artist__contains = artist)
@@ -95,9 +128,8 @@ def get_signin(request):
         try:
             form = SigninForm(request.POST)
             if form.is_valid():
-                user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
-                    login(request, user)
                     return render(request, 'recommender/home.html', {'form':form, 'err':err})
                 else:
                     err = 'Unable to authenticate account'
@@ -123,8 +155,7 @@ def get_registration(request):
             user.last_name = lname
             user.set_password(password)
             user.save()
-            login(request, user)
-            return render(request, "recommender/home.html", {'form':form, 'user':user, 'err':err})
+            return render(request, "recommender/register.html", {'form':form, 'user':user, 'err':err})
         else:
             err = 'All fields must be filled correctly.'
             return render(request, 'recommender/register.html', {
@@ -134,35 +165,3 @@ def get_registration(request):
     else:
         form = RegisterForm()
         return render(request, 'recommender/register.html', {'form':form})
-
-def logout_view(request):
-    if request.user.is_authenticated:
-        logout(request)
-        return render(request, 'recommender/home.html', {})
-    else:
-        raise Http404('Error logging out')
-
-def get_profile(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            return render(request, 'recommender/profile.html', {})
-        else:
-            return render(request, 'recommender/signin.html', {})
-    else:
-        raise Http404('Unable to access profile')
-
-def playlist_view(request, playlist_num):
-    # try:
-    print(playlist_num)
-    pl = Playlist.objects.get(playlist_id=playlist_num)
-    print(pl)
-    return render(request, 'recommender/playlist.html', {'pl':pl})
-    # except:
-    #     raise Http404('Could not display playlist')
-    
-def get_playlists(request):
-    if request.method == 'GET':
-        playlists = Playlist.objects.all()
-        return render(request, 'recommender/playlists.html', {'playlists':playlists})
-    else:
-        return Http404('Error getting playlists')
