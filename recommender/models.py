@@ -2,14 +2,27 @@ from django.db import models
 import random
 from email.policy import default
 from enum import unique
+from django.contrib.auth.models import User
+
+
+# Create your models here.
 
 def unique_rand():
         index = random.randint(1,100000000)
         while True:
-            if not playlist.objects.filter(playlist_id=index).exists():
+            if not Playlist.objects.filter(playlist_id=index).exists():
                 return index
             else:
                 index += 1
+
+def unique_rand():
+    index = 0
+    while True:
+        # code = password = User.objects.make_random_password(length=8)
+        if not Playlist.objects.filter(playlist_id=index).exists():
+            return index
+        else:
+            index += 1
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -19,10 +32,6 @@ class Musicdata(models.Model):
     track_album_id  = models.TextField()
     track_album_name = models.TextField()
     track_album_release_date = models.IntegerField()
-    playlist_name = models.TextField()
-    playlist_id = models.TextField()
-    playlist_genre = models.TextField()
-    playlist_subgenre = models.TextField()
     danceability = models.FloatField()
     energy = models.FloatField()
     key = models.FloatField()
@@ -35,9 +44,25 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
+        
+class Playlist(models.Model):
+    # playlist_id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    playlist_name = models.CharField(max_length=50, null=True, blank=False, default='New Playlist')
+    playlist_owner = models.ManyToManyField(User, null=True, blank=True)
+    playlist_songs = models.ManyToManyField('Musicdata', blank=True, null=True)
     
-    def __str__(self): 
-        return self.track_name
+    def creator(self):
+        author = list(self.playlist_owner.all())
+        return str(author[0].username)
+    
+class RecentSearches(models.Model):
+    artist = models.CharField(max_length=50)
+    from_year = models.IntegerField(null=True, blank=True,)
+    to_year = models.IntegerField(null=True, blank=True,)
+    result1 = models.CharField(max_length=25, null=True, blank=True)
+    result2 = models.CharField(max_length=25, null=True, blank=True)
+    result3 = models.CharField(max_length=25, null=True, blank=True)
     
 class song(models.Model):
     track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
@@ -50,15 +75,6 @@ class song(models.Model):
 
     def __str__(self): 
         return self.track_name
-
-class playlist(models.Model):
-    track_id = models.ManyToManyField(song,  null=True, blank=True)
-    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    playlist_name = models.TextField( null=True, blank=True)
-    user_id = models.TextField( null=True, blank=True)
-    
-    def __str__(self): 
-        return self.playlist_name
 
 class artist(models.Model):
     artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %} Playlists {% endblock %}
+
+{% block content %}
+
+{% if owner %}
+<script>
+    function showForm() {
+        hf = document.getElementById("hidden-form");
+        hf.style.display = "block";
+    }
+</script>
+<div class="header" style="display:flex;justify-content:space-between;">     
+    <h4 class="card-title">Playlists - {{ owner }}</h4>
+    <div class="dep-header" style="diplay:flex;flex-direction:column;gap:10px;">   
+        <div>
+            <button onclick="showForm()" class="btn btn-custom">Create Playlist</button>
+        </div>
+        <div class="hidden-form" id="hidden-form" style="display:none;">
+            <form method='post' class="form" action="{% url 'recommender:create_playlist' user.username %}">
+                {% csrf_token %}
+                <br>
+                <center>
+                    {% comment %} {{ form.as_p }} {% endcomment %}
+        
+                    <div>
+                        <label for="playlist_name">Playlist Name: </label>
+                        <input id="playlist_name" type="text" name="playlist_name">
+                    </div>
+                    {% comment %} <div>
+                        <label for="playlist_songs">Playlist Songs: </label>
+                        <select id="playlist_songs" name="playlist_songs">
+                            {% for song in songs %}
+                            <option>{{song.track_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div> {% endcomment %}
+        
+                    {% comment %} <p>Playlist Name: {{ form.playlist_name }}</p>
+                    <p>Playlist Songs: {{ form.playlist_songs }}</p> {% endcomment %}
+        
+                    <input href="{url 'recommender:get_playlists' user.username}" class="btn btn-custom" type="submit" value="Create"> 
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="header" style="display:flex;justify-content:space-between;">    
+    <h4 class="card-title">Playlists</h4>
+</div>
+{% endif %}
+<hr>
+
+{% if playlists %}
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+        {% for pl in playlists.all %}
+            <li style="width:30%;">
+                <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black;">
+                    <div class="card">
+                        <div class="card-body"> 
+                        {% if pl.playlist_name %}
+                            <h5 class="card-title">{{ pl.playlist_name }}</h5>
+                        {% endif %}
+                        {% if pl.creator %}
+                            <p>Owner: {{ pl.creator }}</p>
+                        {% endif %}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+{% endif %}
+
+{% endblock %}
