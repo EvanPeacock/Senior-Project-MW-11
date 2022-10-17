@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile Page {% endblock %}
+
+{% block content %}
+
+<div class="header" style="display:flex;justify-content:space-around;"> 
+    <h3>{{user.username}}'s Profile Page</h3>
+    <div>
+        <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-custom">My Playlists</a>
+    </div>
+</div>
+<hr>
+{% if request.user.is_authenticated %}
+    {% if user.username %}
+        <p>Username: {{user.username}}</p>
+    {% endif %}
+    {% if user.first_name %}
+        <p>First Name: {{user.first_name}}</p>
+    {% endif %}
+    {% if user.last_name %}
+        <p>Last Name: {{user.last_name}}</p>
+    {% endif %}
+    {% if user.email %}
+        <p>Email: {{user.email}}</p>
+    {% endif %}
+{% else %}
+
+{% endif %}
+
+{% endblock %}
