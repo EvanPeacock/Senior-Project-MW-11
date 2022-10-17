@@ -37,9 +37,9 @@ def get_explore(request):
     playlists = Musicdata.objects.all().values('track_id')
     pResp = list(playlists)
     random.shuffle(pResp)
-    # userResp = User.objects.all().values('username')
-    uResp = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10']
-    # random.shuffle(uResp)
+    userResp = User.objects.all()
+    uResp = list(userResp)
+    random.shuffle(uResp)
     return render(request, "recommender/explore.html", {
         'songs': sResp[:3],
         'albums': aResp[:3],
