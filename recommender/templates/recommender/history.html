@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %} History {% endblock %}
+
+{% block content %}
+
+<h3>Artist Search History</h3>
+{% for search in searches %}
+    <a href="{% url "recommender:get_artist" %}" style="text-decoration:none;color:black;">
+        <div class="card">
+            <div class="card-header">
+                {% if search.artist %}   
+                <div> 
+                    <h5>{{ search.artist|capfirst }}</h5>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if search.from_year %}    
+                <div>
+                        <p>{{ search.from_year }}</p>    
+                </div>
+                {% endif %}
+                {% if search.to_year %}    
+                <div>
+                        <p>{{ search.to_year }}</p>   
+                </div>
+                {% endif %}
+                {% if search.result1 %}    
+                    <div>
+                        <p>{{ search.result1 }}</p>
+                    </div>    
+                {% endif %}
+                {% if search.result2 %}    
+                    <div>
+                        <p>{{ search.result2 }}</p>
+                    </div>   
+                {% endif %}
+                {% if search.result3 %}    
+                    <div>
+                        <p>{{ search.result3 }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+{% endfor %}
+
+{% endblock %}

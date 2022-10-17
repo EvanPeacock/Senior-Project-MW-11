@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile Page {% endblock %}
+
+{% block content %}
+
+<p>This is the Profile Page</p>
+{% if request.user.is_authenticated %}
+    {% if user.username %}
+        <p>{{user.username}}</p>
+    {% endif %}
+    {% if user.first_name %}
+        <p>{{user.first_name}}</p>
+    {% endif %}
+    {% if user.last_name %}
+        <p>{{user.last_name}}</p>
+    {% endif %}
+    {% if user.email %}
+        <p>{{user.email}}</p>
+    {% endif %}
+{% else %}
+
+{% endif %}
+
+{% endblock %}
