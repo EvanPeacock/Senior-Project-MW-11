@@ -4,16 +4,11 @@ from pickle import GET
 from recommender.forms import SearchForm
 from django.shortcuts import render, redirect
 from django.http import Http404
-<<<<<<< Updated upstream
-from .models import Musicdata
-from .forms import RegisterForm, SearchForm, SigninForm
-=======
-from .models import Musicdata, Playlist, RecentSearches
+from .models import *
 from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm
->>>>>>> Stashed changes
 import random
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 
 
 def get_home(request):
@@ -145,6 +140,7 @@ def get_signin(request):
             if form.is_valid():
                 user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
+                    login(request, user)
                     return render(request, 'recommender/home.html', {'form':form, 'err':err})
                 else:
                     err = 'Unable to authenticate account'
@@ -180,8 +176,6 @@ def get_registration(request):
     else:
         form = RegisterForm()
         return render(request, 'recommender/register.html', {'form':form})
-<<<<<<< Updated upstream
-=======
 
 def logout_view(request):
     if request.user.is_authenticated:
@@ -252,7 +246,6 @@ def get_history(request):
             searches = RecentSearches.objects.all()
             return render(request, "recommender/history.html", {'searches':searches})
         except:
-            return Http404('Error with searches')
+            raise Http404('Error with searches')
     else:
-        return Http404('Error')
->>>>>>> Stashed changes
+        raise Http404('Error')

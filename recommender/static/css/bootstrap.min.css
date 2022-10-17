@@ -105,7 +105,7 @@
 }
 
 h5 {
-  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 30%);
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 60%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

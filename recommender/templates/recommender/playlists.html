@@ -59,16 +59,14 @@
             <li style="width:30%;">
                 <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black;">
                     <div class="card">
+                        <div class="card-body"> 
                         {% if pl.playlist_name %}
-                        <div class="card-header" style="text-align:center;font-weight:bold">
-                            <h5>{{ pl.playlist_name }}</h5>
-                        </div>
+                            <h5 class="card-title">{{ pl.playlist_name }}</h5>
                         {% endif %}
                         {% if pl.creator %}
-                        <div class="card-body">    
                             <p>Owner: {{ pl.creator }}</p>
-                        </div>
                         {% endif %}
+                        </div>
                     </div>
                 </a>
             </li>

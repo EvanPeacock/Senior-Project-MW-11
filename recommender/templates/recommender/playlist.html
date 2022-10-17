@@ -8,17 +8,15 @@
 <h5>{{ playlist.creator }}</h5>
 {% for song in playlist.playlist_songs.all %}
     <br>
-    <div class="card">
-        {% if song.track_name %}    
-            <div class="card-header">
-                <h5>{{ song.track_name }}</h5>
-            </div>
-        {% endif %}
-        {% if song.track_artist %}    
-            <div class="card-body">
-                <p>{{ song.track_artist }}</p>
-            </div>    
-        {% endif %}
+    <div class="card">    
+        <div class="card-body">
+            {% if song.track_name %}    
+            <h5 class="card-title">{{ song.track_name }}</h5>
+            {% endif %}
+            {% if song.track_artist %} 
+            <p>{{ song.track_artist }}</p>        
+            {% endif %}
+        </div>
     </div>
 {% endfor %}
 

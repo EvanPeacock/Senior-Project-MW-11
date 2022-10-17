@@ -2,11 +2,15 @@ from django.db import models
 import random
 from email.policy import default
 from enum import unique
+from django.contrib.auth.models import User
+
+
+# Create your models here.
 
 def unique_rand():
         index = random.randint(1,100000000)
         while True:
-            if not playlist.objects.filter(playlist_id=index).exists():
+            if not Playlist.objects.filter(playlist_id=index).exists():
                 return index
             else:
                 index += 1
@@ -28,10 +32,6 @@ class Musicdata(models.Model):
     track_album_id  = models.TextField()
     track_album_name = models.TextField()
     track_album_release_date = models.IntegerField()
-    playlist_name = models.TextField()
-    playlist_id = models.TextField()
-    playlist_genre = models.TextField()
-    playlist_subgenre = models.TextField()
     danceability = models.FloatField()
     energy = models.FloatField()
     key = models.FloatField()
@@ -58,13 +58,11 @@ class Playlist(models.Model):
     
 class RecentSearches(models.Model):
     artist = models.CharField(max_length=50)
-    from_year = models.IntegerField(blank=True, null=True)
-    to_year = models.IntegerField(blank=True, null=True)
+    from_year = models.IntegerField(null=True, blank=True,)
+    to_year = models.IntegerField(null=True, blank=True,)
     result1 = models.CharField(max_length=25, null=True, blank=True)
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
-    def __str__(self): 
-        return self.track_name
     
 class song(models.Model):
     track_id = models.CharField(max_length=8, unique=True, default=unique_rand)

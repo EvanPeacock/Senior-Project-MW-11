@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} History {% endblock %}
+
+{% block content %}
+<h3> Artist Search History </h3>
+
+{% for search in searches %}
+    {% comment %} <a href="{% url "recommender:get_artist" %}" style="text-decoration:none;color:black;"> {% endcomment %}
+    <div class="card" style="margin-bottom:20px">
+        <div class="card-body">
+            {% if search.artist %}
+                <h5 class="card-title" style="background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 10%);background-clip: text;">{{ search.artist }}</h5>
+            {% endif %}
+            {% if search.from_year %}
+                <p>{{ search.from_year }}</p>
+            {% endif %}
+            {% if search.to_year %}
+                <p>{{ search.to_year }}</p>
+            {% endif %}
+            {% if search.result1 %}
+                <p>{{ search.result1 }}</p>
+            {% endif %}
+            {% if search.result2 %}
+                <p>{{ search.result2 }}</p>
+            {% endif %}
+            {% if search.result3 %}
+                <p>{{ search.result3 }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% comment %} </a> {% endcomment %}
+{% endfor %}
+
+{% endblock %}
