@@ -104,6 +104,20 @@
     /* the rest of your styling */
 }
 
+h3 {
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 20%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h4 {
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 40%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 h5 {
   background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 60%);
   background-clip: text;
@@ -112,7 +126,7 @@ h5 {
 }
 
 h6 {
-  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 30%);
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 80%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

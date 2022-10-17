@@ -19,6 +19,8 @@
                 <p>{{ search.to_year }}</p>
             {% endif %}
             {% if search.result1 %}
+            {% comment %} <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> {% endcomment %}
                 <p>{{ search.result1 }}</p>
             {% endif %}
             {% if search.result2 %}
