@@ -202,7 +202,7 @@ def get_profile(request, user_name):
             albums = Musicdata.objects.all().values('track_id')
             aResp = list(albums)
             random.shuffle(aResp)
-            return render(request, 'recommender/myprofile.html',{
+            return render(request, 'recommender/profile.html',{
                 'songs': sResp[:3],
                 'albums': aResp[:3]
                 })
