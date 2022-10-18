@@ -207,7 +207,7 @@ def get_profile(request, user_name):
                 'albums': aResp[:3]
                 })
         else:
-            return render(request, 'recommender/signin.html',{})
+            return render(request, 'recommender/signin.html',{'user':user_name})
     else:
         raise render('Unable to access profile')
 

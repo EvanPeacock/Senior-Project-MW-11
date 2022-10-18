@@ -9,7 +9,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="card-title">Settings</h6>
+          <h6 class="card-title">Your Profile</h6>
           <button type="button" class="close btn btn-outline-custom" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -50,7 +50,7 @@
               <div class="modal-footer">
                 
                 {% comment %} <button type="button" class="btn btn-link-custom" data-dismiss="modal">Close</button> {% endcomment %}
-                <a href="{% url 'recommender:get_settings' %}" class="btn btn-custom">Change Settings</a>
+                <a href="{% url 'recommender:get_settings' %}" class="btn btn-custom">Edit Profile</a>
               
               </div>
 
@@ -67,10 +67,10 @@
       <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
       <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
       <h5 class="card-title">{{user.username}}'s Profile</h5>
-      <div class="card-subtitle mb-2 text-muted">(Bio)</div>
+      <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
       <div class="card-body" style="text-align: right;">
-        <a href="" class="btn btn-outline-custom" data-toggle = "modal" data-target="#editprofile" style="margin-right: 10px">View Settings</a> 
-        <a href="" class="btn btn-custom">Update</a>
+        <a href="" class="btn btn-outline-custom" style="margin-right: 10px">Update</a>
+        <a href="" class="btn btn-custom" data-toggle = "modal" data-target="#editprofile">View Information</a> 
       </div>
   </div>
 </div>

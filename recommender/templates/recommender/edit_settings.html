@@ -21,28 +21,38 @@
 
           {% csrf_token %}
 
-          <div class="mb-3">
-            <h5 style="text-align:left">Username:</h5> {{form.username}}
-            <input type="username" class="form-control" id="changeusername" >
+          <div class="form-floating mb-3">
+            {% comment %} <h5 style="text-align:left">Username</h5>  {% endcomment %}
+            {{form.username}}
+            <input type="username" class="form-control" id="changeusername" placeholder="Username">
+            <label for="changeusername">Username</label> 
           </div>
-          <div class="mb-3">
-            <h5 style="text-align:left">Password</h5> {{form.user_password}}
-            <input type="password" class="form-control" id="changepassword" >
+          <div class="form-floating mb-3">
+            {% comment %} <h5 style="text-align:left">Password</h5>  {% endcomment %}
+            {{form.user_password}}
+            <input type="password" class="form-control" id="changepassword" placeholder="Password">
+            <label for="changepassword">Password</label> 
           </div>
-          <div class="mb-3">
-            <h5 style="text-align:left">Email</h5> {{form.user_email}}
-            <input type="email" class="form-control" id="change_email" >
+          <div class="form-floating mb-3">
+            {% comment %} <h5 style="text-align:left">Email</h5>  {% endcomment %}
+            {{form.user_email}}
+            <input type="email" class="form-control" id="change_email" placeholder="Email Address">
+            <label for="change_email">Email Address</label> 
           </div>
-          <div class="mb-3">
-            <h5 style="text-align:left">First Name</h5> {{form.user_fname}}
-              <input type="firstname" class="form-control" id="change_fname" >
+          <div class="form-floating mb-3">
+            {% comment %} <h5 style="text-align:left">First Name</h5>  {% endcomment %}
+            {{form.user_fname}}
+              <input type="firstname" class="form-control" id="change_fname" placeholder="First Name">
+              <label for="change_fname">First Name</label> 
             </div>
-          <div class="mb-3">
-            <h5 style="text-align:left">Last Name</h5> {{form.user_lname}}
-              <input type="lastname" class="form-control" id="change_lname" >
+          <div class="form-floating mb-3">
+            {% comment %} <h5 style="text-align:left">Last Name</h5>  {% endcomment %}
+            {{form.user_lname}}
+              <input type="lastname" class="form-control" id="change_lname" placeholder="Last Name">
+              <label for="change_lname">Last Name</label> 
           </div>
           <div style="text-align: right">
-              <button type="submit" class="btn btn-custom">Save changes</button>
+              <button type="submit" class="btn btn-custom">Save Changes</button>
           </div>
         </form>
     </div>
