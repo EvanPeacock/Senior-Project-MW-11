@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Profile Page {% endblock %}
+{% block title %} Your Profile {% endblock %}
 
 {% block content %}
 
@@ -9,8 +9,8 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="card-title">Privacy Settings</h6>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <h6 class="card-title">Settings</h6>
+          <button type="button" class="close btn btn-outline-custom" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -18,39 +18,39 @@
             
             <div class="form-group">
               <h5 class="card-title">Username:</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{user.username}}</h6>
+              <div class="card-subtitle mb-2 text-muted">{{user.username}}</div>
               <br>
             </div>
 
             <div class="form-group">
               <h5 class ="card-title">Password:</h5>
-              <h6 class="card-subtitle mb-2 text-muted">***********</h6>
+              <div class="card-subtitle mb-2 text-muted">***********</div>
               <br>
             </div>
 
             <div class="form-group">
               <h5 class ="card-title">Email:</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{user.email}}</h6>
+              <div class="card-subtitle mb-2 text-muted">{{user.email}}</div>
               <br>
             </div>
 
             <div class="form-group">
                 <h5 class ="card-title">First Name:</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{user.first_name}}</h6>
+                <div class="card-subtitle mb-2 text-muted">{{user.first_name}}</div>
                 <br>
               </div>
 
             <div class="form-group">
                 <h5 class ="card-title">Last Name:</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{user.last_name}}</h6>
+                <div class="card-subtitle mb-2 text-muted">{{user.last_name}}</div>
                 <br>
               </div>
 
 
               <div class="modal-footer">
                 
-                <button type="button" class="btn btn-link-custom" data-dismiss="modal">Close</button>
-                <a href="{% url 'recommender:get_settings' %}" class="btn btn-link-custom">Change Settings</a>
+                {% comment %} <button type="button" class="btn btn-link-custom" data-dismiss="modal">Close</button> {% endcomment %}
+                <a href="{% url 'recommender:get_settings' %}" class="btn btn-custom">Change Settings</a>
               
               </div>
 
@@ -62,28 +62,18 @@
   </div>
 
 
-<div class="card" style="width: 100%; margin-bottom: 20px">
-    
-    <div class="card-body">
-        <a>
-            <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-        </a>
-        <div class="card-footer text-muted" style="text-align:right">
-            <a href="" class="btn btn-custom" style="text-align:right">Update</a>
-        </div>
-        <h5 class="card-title">{{user.username}}'s Profile</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Bio</h6>
-    </div>
+<div class="card" style="width: 100%; margin-bottom: 20px">  
+  <div class="card-body">
+      <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
+      <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
+      <h5 class="card-title">{{user.username}}'s Profile</h5>
+      <div class="card-subtitle mb-2 text-muted">(Bio)</div>
+      <div class="card-body" style="text-align: right;">
+        <a href="" class="btn btn-outline-custom" data-toggle = "modal" data-target="#editprofile" style="margin-right: 10px">View Settings</a> 
+        <a href="" class="btn btn-custom">Update</a>
+      </div>
+  </div>
 </div>
-
-<div class="card" style="width: 100%; margin-bottom: 20px">
-    <h5 class="card-title">Settings and Details</h5>
-    <div class="card-footer text-muted" style="text-align:right">
-        <a href="" class="btn btn-custom" data-toggle = "modal" data-target="#editprofile">View Settings</a> 
-    </div>
-    <br>
-</div>
-
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
     <div class="card-body">

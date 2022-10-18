@@ -50,10 +50,10 @@
             <a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a>
         </div>
     </div>
-    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;">
+    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;margin-right: 15px">
         {% if request.user.is_authenticated %}
             <div>
-                <a href="{% url 'recommender:get_profile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:25px;width:25px;margin-right:5px;">{{request.user.username}}</a>
+                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:25px;width:25px;margin-right:5px;">{{request.user.username}}</a>
             </div>
             <div>
                 <a href="{% url 'recommender:logout_view' %}" class="btn btn-custom">Logout</a>

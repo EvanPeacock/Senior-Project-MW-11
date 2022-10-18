@@ -193,7 +193,25 @@ def logout_view(request):
     else:
         raise Http404('Error logging out')
 
-def get_profile(request):
+def get_profile(request, user_name):
+    if request.method == 'GET':
+        if user_name is not None:
+            songs = Musicdata.objects.all().values('track_id')
+            sResp = list(songs)
+            random.shuffle(sResp)
+            albums = Musicdata.objects.all().values('track_id')
+            aResp = list(albums)
+            random.shuffle(aResp)
+            return render(request, 'recommender/myprofile.html',{
+                'songs': sResp[:3],
+                'albums': aResp[:3]
+                })
+        else:
+            return render(request, 'recommender/signin.html',{})
+    else:
+        raise render('Unable to access profile')
+
+def get_myprofile(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             songs = Musicdata.objects.all().values('track_id')

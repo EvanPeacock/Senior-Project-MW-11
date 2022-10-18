@@ -12642,7 +12642,6 @@ fieldset:disabled .btn {
   color: #ffffff !important;
   border: none !important;
   transition: .35s all;
-  margin-right: 15px;
   display: inline-block;
 }
 
@@ -12707,7 +12706,10 @@ body {
   font-family: 'Comfortaa', sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #E9437B;
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 40%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 #left {
@@ -12749,10 +12751,7 @@ h4 {
 }
 
 h5 {
-  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 60%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #E9437B;
 }
 
 h6 {
