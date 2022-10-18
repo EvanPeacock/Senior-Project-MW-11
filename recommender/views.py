@@ -1,12 +1,15 @@
-
-from recommender.forms import SearchForm
-from django.shortcuts import render
-from django.http import Http404
-from .models import Musicdata
-from .forms import RegisterForm, SearchForm, SigninForm
 import random
+
+from django.urls import URLResolver
+from recommender.forms import SearchForm
+from django.shortcuts import redirect, render
+from django.http import Http404, HttpResponseRedirect
+from .models import Musicdata
+from .forms import RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from django.contrib.auth import authenticate, login, logout
+
 
 
 def get_home(request):
@@ -23,26 +26,6 @@ def get_home(request):
         'songs': sResp[:3],
         'albums': aResp[:3],
         'playlists': pResp[:3]
-    })
-
-def get_explore(request):
-    songs = Musicdata.objects.all().values('track_id')
-    sResp = list(songs)
-    random.shuffle(sResp)
-    albums = Musicdata.objects.all().values('track_id')
-    aResp = list(albums)
-    random.shuffle(aResp)
-    playlists = Musicdata.objects.all().values('track_id')
-    pResp = list(playlists)
-    random.shuffle(pResp)
-    # userResp = User.objects.all().values('username')
-    uResp = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10']
-    # random.shuffle(uResp)
-    return render(request, "recommender/explore.html", {
-        'songs': sResp[:3],
-        'albums': aResp[:3],
-        'playlists': pResp[:3],
-        'users': uResp[:10]
     })
 
 def find_albums(artist, from_year = None, to_year = None):
@@ -130,6 +113,7 @@ def get_signin(request):
             if form.is_valid():
                 user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
+                    login(request,user)
                     return render(request, 'recommender/home.html', {'form':form, 'err':err})
                 else:
                     err = 'Unable to authenticate account'
@@ -165,3 +149,64 @@ def get_registration(request):
     else:
         form = RegisterForm()
         return render(request, 'recommender/register.html', {'form':form})
+
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return render(request, 'recommender/home.html', {})
+    else:
+        raise Http404('Error logging out')
+
+def get_profile(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            songs = Musicdata.objects.all().values('track_id')
+            sResp = list(songs)
+            random.shuffle(sResp)
+            albums = Musicdata.objects.all().values('track_id')
+            aResp = list(albums)
+            random.shuffle(aResp)
+            return render(request, 'recommender/myprofile.html',{
+                'songs': sResp[:3],
+                'albums': aResp[:3]
+                })
+        else:
+            return render(request, 'recommender/signin.html',{})
+    else:
+        raise render('Unable to access profile')
+
+def get_settings(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return render(request, 'recommender/edit_settings.html',{})
+    else:
+        return redirect('recommender/home/')
+
+
+def update_settings(request):
+    if request.method == 'POST':
+        form = UpdateSettingsForm(request.POST)
+        user = request.user
+        songs = Musicdata.objects.all().values('track_id')
+        sResp = list(songs)
+        random.shuffle(sResp)
+        albums = Musicdata.objects.all().values('track_id')
+        aResp = list(albums)
+        random.shuffle(aResp)
+        
+        if form.is_valid():
+            user.username = None if form.cleaned_data['username'] == None else form.cleaned_data['username']
+            user.set_password(None if form.cleaned_data['user_password'] == None else form.cleaned_data['user_password'])
+            user.email = None if form.cleaned_data['user_email'] == None else form.cleaned_data['user_email']
+            user.first_name = None if form.cleaned_data['user_fname'] == None else form.cleaned_data['user_fname']
+            user.last_name = None if form.cleaned_data['user_lname'] == None else form.cleaned_data['user_lname']
+            user.save()
+            form.save()
+            return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
+        else:
+             return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
+    else:
+        return render(request,'recommender/home.html',{})
+
+
+

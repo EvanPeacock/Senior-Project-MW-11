@@ -1,4 +1,7 @@
-from django.db import models  
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -24,6 +27,7 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
+
     
 # class User(models.Model):
 # #     username = models.CharField(max_length=25, Required=True)

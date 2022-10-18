@@ -10,7 +10,10 @@ urlpatterns = [
     path('track/', views.get_track, name='get_track'),
     path('registration/', views.get_registration, name='get_registration'),
     path('signin/', views.get_signin, name='get_signin'),
-    path('', views.get_home, name='get_home'),
-    path('explore/', views.get_explore, name='get_explore'),
+    path('home/', views.get_home, name='get_home'),
+    path('myprofile/', views.get_profile,name='get_profile'),
+    path('logout/',views.logout_view,name="logout_view"),
+    path('update-settings/',views.update_settings,name="update_settings"),
+    path('myprofile/settings/',views.get_settings,name="get_settings")
 ]
  
