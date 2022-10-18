@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Profile Page {% endblock %}
+
+{% block content %}
+
+<div class="card" style="width: 100%; margin-bottom: 20px">  
+  <div class="card-body">
+      <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
+      <h5 class="card-title">{{user.username}}'s Profile</h5>
+      <div class="card-subtitle mb-2 text-muted">(Bio)</div>
+  </div>
+</div>
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+    <div class="card-body text-muted">
+      <h5 class="card-title">Settings and Details</h5>
+
+        <form method='post' class="form" action="{% url 'recommender:update_settings' %}">
+
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <h5 style="text-align:left">Username:</h5> {{form.username}}
+            <input type="username" class="form-control" id="changeusername" >
+          </div>
+          <div class="mb-3">
+            <h5 style="text-align:left">Password</h5> {{form.user_password}}
+            <input type="password" class="form-control" id="changepassword" >
+          </div>
+          <div class="mb-3">
+            <h5 style="text-align:left">Email</h5> {{form.user_email}}
+            <input type="email" class="form-control" id="change_email" >
+          </div>
+          <div class="mb-3">
+            <h5 style="text-align:left">First Name</h5> {{form.user_fname}}
+              <input type="firstname" class="form-control" id="change_fname" >
+            </div>
+          <div class="mb-3">
+            <h5 style="text-align:left">Last Name</h5> {{form.user_lname}}
+              <input type="lastname" class="form-control" id="change_lname" >
+          </div>
+          <div style="text-align: right">
+              <button type="submit" class="btn btn-custom">Save changes</button>
+          </div>
+        </form>
+    </div>
+    <br>
+</div>
+
+{% endblock %}
+
