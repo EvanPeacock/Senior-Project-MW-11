@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Profile Page {% endblock %}
+
+{% block content %}
+
+<div class="modal" tabindex="-1" role="dialog" id="editprofile">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="card-title">Privacy Settings</h6>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="form-group">
+              <h5 class="card-title">Username:</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{user.username}}</h6>
+              <br>
+            </div>
+
+            <div class="form-group">
+              <h5 class ="card-title">Password:</h5>
+              <h6 class="card-subtitle mb-2 text-muted">***********</h6>
+              <br>
+            </div>
+
+            <div class="form-group">
+              <h5 class ="card-title">Email:</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{user.email}}</h6>
+              <br>
+            </div>
+
+            <div class="form-group">
+                <h5 class ="card-title">First Name:</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{user.first_name}}</h6>
+                <br>
+              </div>
+
+            <div class="form-group">
+                <h5 class ="card-title">Last Name:</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{user.last_name}}</h6>
+                <br>
+              </div>
+
+
+              <div class="modal-footer">
+                
+                <button type="button" class="btn btn-link-custom" data-dismiss="modal">Close</button>
+                <a href="{% url 'recommender:get_settings' %}" class="btn btn-link-custom">Change Settings</a>
+              
+              </div>
+
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+    
+    <div class="card-body">
+        <a>
+            <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
+        </a>
+        <div class="card-footer text-muted" style="text-align:right">
+            <a href="" class="btn btn-custom" style="text-align:right">Update</a>
+        </div>
+        <h5 class="card-title">{{user.username}}'s Profile</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Bio</h6>
+    </div>
+</div>
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+    <h5 class="card-title">Settings and Details</h5>
+    <div class="card-footer text-muted" style="text-align:right">
+        <a href="" class="btn btn-custom" data-toggle = "modal" data-target="#editprofile">View Settings</a> 
+    </div>
+    <br>
+</div>
+
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+    <div class="card-body">
+        <h5 class="card-title">Recommended Albums</h5>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            {% if albums %}
+            {% for album in albums %}
+            <td>
+            <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </td>
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+    <div class="card-body">
+        <h5 class="card-title">Recommended Songs</h5>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            {% if songs %}
+            {% for song in songs %}
+            <td>
+            <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </td>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+

@@ -18,6 +18,11 @@ urlpatterns = [
     path('playlist/<int:playlist_num>/', views.playlist_view, name='playlist_view'),
     path('playlist/<str:user_name>/', views.get_user_playlists, name='get_user_playlists'),
     path('playlist/create/<str:user_name>/', views.create_playlist, name='create_playlist'),
-    path('history/', views.get_history, name='get_history')
+    path('history/', views.get_history, name='get_history'),
+    path('home/', views.get_home, name='get_home'),
+    path('myprofile/', views.get_profile,name='get_profile'),
+    path('logout/',views.logout_view,name="logout_view"),
+    path('update-settings/',views.update_settings,name="update_settings"),
+    path('myprofile/settings/',views.get_settings,name="get_settings")
 ]
  
