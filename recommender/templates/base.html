@@ -1,0 +1,78 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+    
+</head>
+
+
+<!-- CSRF token added to htmx headers for htmx requests -->
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>      
+<div class='navbar fixed-top' style="display:flex;background-color:white;">   
+    <div class="nav-left" style="padding:4px;display:flex;gap:40px;justify-content:start;">    
+        <a class="navbar-brand" href='/'>
+            <img src="{% static 'logo.svg' %}" alt="logo" style="height:35px;width:212px;padding:1px">
+        </a>
+        <div>
+            <a href="{% url 'recommender:get_explore' %}" class="btn btn-link-custom">Explore</a>
+        </div>
+        <div>
+            <a href="{% url 'recommender:get_playlists' %}" class="btn btn-link-custom">Playlists</a>
+        </div>
+        <div>
+            <a href="{% url 'recommender:get_history' %}" class="btn btn-link-custom">History</a>
+        </div>
+        <div>
+            <a href="{% url 'recommender:get_artist' %}" class="btn btn-link-custom">Artist</a>
+        </div>
+        
+        <div>
+            <a href="{% url 'recommender:get_album' %}" class="btn btn-link-custom">Album</a>
+        </div>
+        <div>
+            <a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a>
+        </div>
+    </div>
+    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;margin-right: 15px">
+        {% if request.user.is_authenticated %}
+            <div>
+                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px; margin-bottom:3px;">{{request.user.username}}</a>
+            </div>
+            <div>
+                <a href="{% url 'recommender:logout_view' %}" class="btn btn-custom">Logout</a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{% url 'recommender:get_signin' %}" class="btn btn-outline-custom">Sign In</a>
+            </div>
+            <div>
+                <a href="{% url 'recommender:get_registration' %}" class="btn btn-custom" style="margin-right:15px">Register</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="container" style="margin-top:100px">
+    {% block content %}
+    {% endblock %}
+</div>
+</head>
+</body>
+</html>
