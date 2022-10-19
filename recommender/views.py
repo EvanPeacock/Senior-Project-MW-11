@@ -204,10 +204,11 @@ def get_profile(request, user_name):
             random.shuffle(aResp)
             return render(request, 'recommender/profile.html',{
                 'songs': sResp[:3],
-                'albums': aResp[:3]
+                'albums': aResp[:3],
+                'profile_user':user_name
                 })
         else:
-            return render(request, 'recommender/signin.html',{'user':user_name})
+            return render(request, 'recommender/signin.html',{})
     else:
         raise render('Unable to access profile')
 
