@@ -51,7 +51,7 @@
             <a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a>
         </div>
     </div>
-    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;margin-right: 15px">
+    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;margin-right: 25px">
         {% if request.user.is_authenticated %}
             <div>
                 <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px; margin-bottom:3px;">{{request.user.username}}</a>
