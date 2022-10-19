@@ -1,23 +1,12 @@
 
-from enum import unique
-from pickle import GET
 from recommender.forms import SearchForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import Http404
-from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm
-import random
-
-from django.urls import URLResolver
-from recommender.forms import SearchForm
-from django.shortcuts import redirect, render
-from django.http import Http404, HttpResponseRedirect
 from .models import Musicdata
-from .forms import RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
+from .forms import RegisterForm, SearchForm, SigninForm
+import random
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.contrib.auth import authenticate, login, logout
-
 
 
 def get_home(request):
@@ -46,9 +35,9 @@ def get_explore(request):
     playlists = Musicdata.objects.all().values('track_id')
     pResp = list(playlists)
     random.shuffle(pResp)
-    userResp = User.objects.all()
-    uResp = list(userResp)
-    random.shuffle(uResp)
+    # userResp = User.objects.all().values('username')
+    uResp = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10']
+    # random.shuffle(uResp)
     return render(request, "recommender/explore.html", {
         'songs': sResp[:3],
         'albums': aResp[:3],
@@ -104,14 +93,6 @@ def get_artist(request):
             answer = albums[:10]
             random.shuffle(answer)
             answer = list(answer)[:3] 
-            rs = RecentSearches.objects.create()
-            rs.artist = form.cleaned_data['artist']
-            rs.from_year = from_year
-            rs.to_year = to_year
-            rs.result1 = answer[0]
-            rs.result2 = answer[1]
-            rs.result3 = answer[2]
-            rs.save()
             return render(request, 'recommender/artist.html', {'form': form, 'albums': answer })
         else:
             raise Http404('Something went wrong')
@@ -142,6 +123,7 @@ def get_track(request):
             return render(request, "recommender/results2.html", tracks)
         
 def get_signin(request):
+    logout(request)
     err = ''
     if request.method == 'POST':
         try:
@@ -149,6 +131,7 @@ def get_signin(request):
             if form.is_valid():
                 user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
+                    err = 'Account Authenticated!'
                     login(request, user)
                     return render(request, 'recommender/home.html', {'form':form, 'err':err})
                 else:
@@ -158,8 +141,12 @@ def get_signin(request):
             return render(request, 'recommender/signin.html', {'form':SigninForm(), 'err':'Authentification failed'})
     else:
         form = SigninForm()
-        return render(request, "recommender/signin.html", {'form':form})
-    
+        return render(request, "recommender/signin.html", {'form':form, 'err':'Problem occured'})
+
+def get_logout(request):
+    logout(request)
+    return render(request, "recommender/home.html")
+
 def get_registration(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -175,7 +162,8 @@ def get_registration(request):
             user.last_name = lname
             user.set_password(password)
             user.save()
-            return render(request, "recommender/register.html", {'form':form, 'user':user, 'err':err})
+            logout(request)
+            return render(request, "recommender/home.html", {'form':form, 'user':user, 'err':err})
         else:
             err = 'All fields must be filled correctly.'
             return render(request, 'recommender/register.html', {
@@ -319,4 +307,3 @@ def get_history(request):
             raise Http404('Error with searches')
     else:
         raise Http404('Error')
-            

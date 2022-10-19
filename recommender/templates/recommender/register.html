@@ -11,17 +11,26 @@
     {% csrf_token %}
     <br>
     <center>
-        <h2>User Registration</h2>
-        <!-- {{ form.as_p }} -->
-        <p>Username: {{ form.username }}</p>
-        <p>First Name: {{ form.user_fname }}</p>
-        <p>Last Name: {{ form.user_lname }}</p>
-        <p>Email: {{ form.user_email }}</p>
-        <p>Password: {{ form.user_password }}</p>
-        <button class="btn btn-primary btn-lg"  type="submit">
-            Register
-        </button>
-    </center>
+        <h2 class="text-danger fw-bold">Ready to Listen?</h2>
+        <div class="shadow-lg p-3 mb-5 bg-body rounded-5" style="width: 50%; min-width: 650px">
+            <!-- {{ form.as_p }} -->
+            <p class="fw-bold">Sign up for a free account</p>
+            <p>Username: {{ form.username }}</p>
+            <p>First Name: {{ form.user_fname }}</p>
+            <p>Last Name: {{ form.user_lname }}</p>
+            <p>Email: {{ form.user_email }}</p>
+            <p>Password: {{ form.user_password }}</p>
+
+            <div class="d-grid">
+                <button class="btn btn-custom text-center"  type="submit">Register</button></br>
+                <button class="btn btn-success" type="submit">Sign in with Spotify</button></br>
+                <button class="btn btn-secondary" type="submit">Sign in with Google</button></br>
+                <button class="btn btn-dark" type="submit">Sign in with Apple</button></br>
+                <button class="btn btn-outline-custom" type="submit">Contact us</button></br>
+            </div>
+        </div>
+
+</center>
 </form>
 <br>
 
