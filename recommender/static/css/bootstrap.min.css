@@ -12760,3 +12760,8 @@ h6 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.form-control:focus {
+  border-color: #E9437B;
+  box-shadow: 0 0 0 0.2rem rgba(233, 67, 123, 0.25);
+} 

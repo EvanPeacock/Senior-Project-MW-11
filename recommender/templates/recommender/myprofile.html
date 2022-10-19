@@ -66,11 +66,11 @@
   <div class="card-body">
       <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
       <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
-      <h5 class="card-title">{{user.username}}'s Profile</h5>
+      <h5 class="card-title">Your Profile</h5>
       <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
       <div class="card-body" style="text-align: right;">
-        <a href="" class="btn btn-outline-custom" style="margin-right: 10px">Update</a>
-        <a href="" class="btn btn-custom" data-toggle = "modal" data-target="#editprofile">View Information</a> 
+        <a href="" class="btn btn-outline-custom">Update</a>
+        <a  class="btn btn-custom" data-toggle="modal" data-target="#editprofile" style="margin-left: 15px">View Information </a> 
       </div>
   </div>
 </div>
