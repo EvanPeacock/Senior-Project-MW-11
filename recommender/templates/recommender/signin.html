@@ -11,27 +11,28 @@
 -->
 
 
-<form method='post' class="form" action="{% url 'recommender:get_signin' %}">
-    {% csrf_token %}
-    <br>
-    <center>
-        <h2 class="text-danger fw-bold">Welcome Back!</h2>
-        <div class="shadow-lg p-3 mb-5 bg-body rounded-5" style="width: 40%; min-width: 500px">
-        <h6 class="fw-bold">Log in to your account</h6>
-            <!-- {{ form.as_p }} -->
-            <p>Username: {{ form.username }}</p>
-            <p>Password: {{ form.password }}</p>
-            <div class="d-grid">
-                <button class="btn btn-custom text-center"  type="submit">Log In</button></br>
-                <button class="btn btn-success" type="submit">Log in with Spotify</button></br>
-                <button class="btn btn-secondary" type="submit">Log in with Google</button></br>
-                <button class="btn btn-dark" type="submit">Log in with Apple</button></br>
-                <button class="btn btn-outline-custom" type="submit">Contact us</button></br>
-            </div>
-        </div>
 
+
+<center>
+    <h2 class="fw-bold">Welcome Back!</h2>
+    <div class="card" style="width: 50%; min-width: 650px">
+        <form method='post' class="form" action="{% url 'recommender:get_signin' %}">
+        {% csrf_token %}
+        <p class="fw-bold" style="margin-top: 25px">Log in to your account</p>
+            <!-- {{ form.as_p }} -->
+            <p>Username {{ form.username }}</p>
+            <p>Password: {{ form.password }}</p>          
+
+        <div class="d-grid" style="width: 50%">
+            <button class="btn btn-custom"  type="submit">Sign In</button></br>
+            <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
+            <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>
+            <button class="btn btn-custom" type="submit" style="background:#000000">Sign in with Apple</button></br>
+            {% comment %} <button class="btn btn-outline-custom" type="submit">Contact us</button></br> {% endcomment %}
+        </div>
+        </form>
+    </div>
 </center>
-</form>
 <br>
 
 {% endblock %}

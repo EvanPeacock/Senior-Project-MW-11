@@ -12736,6 +12736,13 @@ body {
   /* the rest of your styling */
 }
 
+h2 {
+  background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 h3 {
   background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 20%);
   background-clip: text;
