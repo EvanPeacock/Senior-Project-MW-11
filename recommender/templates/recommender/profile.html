@@ -19,5 +19,56 @@
   </div>
 </div>
 
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+  <div class="card-body">
+      <h5 class="card-title">{{profile_user}}'s playlists</h5>
+      <div class="row row-cols-1 row-cols-md-3 g-3">
+        {% if playlists %}
+        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+            {% for pl in playlists %}
+                <li style="width:30%;">
+                    <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black;">
+                        <div class="card">
+                            <div class="card-body" style ="height: 175px;"> 
+                            {% if pl.playlist_name %}
+                                <h5 class="card-title" >{{ pl.playlist_name }}</h5>
+                            {% endif %}
+                            {% if pl.creator %}
+                                <p>Owner: {{ pl.creator }}</p>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+      </div>
+  </div>
+
+</div>
+
+
+
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+  <div class="card-body">
+      <h5 class="card-title">Recommended Albums</h5>
+      <div class="row row-cols-1 row-cols-md-3 g-3">
+          {% if albums %}
+          {% for album in albums %}
+          <td>
+          <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+          frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+          </td>
+          {% endfor %}
+          {% endif %}
+
+      </div>
+  </div>
+
+</div>
 {% endblock %}
 

@@ -196,6 +196,8 @@ def logout_view(request):
 def get_profile(request, user_name):
     if request.method == 'GET':
         if user_name is not None:
+            owner = User.objects.get(username=user_name)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
             songs = Musicdata.objects.all().values('track_id')
             sResp = list(songs)
             random.shuffle(sResp)
@@ -205,7 +207,9 @@ def get_profile(request, user_name):
             return render(request, 'recommender/profile.html',{
                 'songs': sResp[:3],
                 'albums': aResp[:3],
-                'profile_user':user_name
+                'profile_user':user_name,
+                'user_object' : owner,
+                'playlists' : playlists
                 })
         else:
             return render(request, 'recommender/signin.html',{})
