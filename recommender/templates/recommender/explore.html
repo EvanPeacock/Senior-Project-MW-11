@@ -15,8 +15,8 @@
                     <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="...">
                 </a>
                 <div class="card-body" style="text-align: center;">
-                  <h5 class="card-title" style="background: linear-gradient(0.125turn, #D286F5 0%, #FF0000 70%); background-clip: text;">{{ user.first_name }} {{ user.last_name }}</h5>
-                  <h6 class="card-subtitle" style="margin-bottom: 20px; background: linear-gradient(0.125turn, #D286F5 20%, #FF0000 70%); background-clip: text;">@{{ user }}</h6>
+                  <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                  <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
                   <a href={% url 'recommender:get_profile' user %} class="btn btn-outline-custom">View Profile</a>
                   <a class="btn btn-custom" style="margin-left: 10px">Add Friend</a>
                 </div>
