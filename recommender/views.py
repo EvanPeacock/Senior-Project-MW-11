@@ -5,17 +5,11 @@ from recommender.forms import SearchForm
 from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm
+from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
 import random
-
-from django.urls import URLResolver
-from recommender.forms import SearchForm
-from django.shortcuts import redirect, render
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from .models import Musicdata
-from .forms import RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.contrib.auth import authenticate, login, logout
 
 
