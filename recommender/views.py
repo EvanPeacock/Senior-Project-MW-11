@@ -225,9 +225,13 @@ def get_myprofile(request):
             albums = Musicdata.objects.all().values('track_id')
             aResp = list(albums)
             random.shuffle(aResp)
+            owner = request.user
+            playlists = list(Playlist.objects.filter(playlist_owner=owner))
+            random.shuffle(playlists)
             return render(request, 'recommender/myprofile.html',{
                 'songs': sResp[:3],
-                'albums': aResp[:3]
+                'albums': aResp[:3],
+                'playlists':playlists
                 })
         else:
             return render(request, 'recommender/signin.html',{})
@@ -269,9 +273,9 @@ def update_settings(request):
 
 def playlist_view(request, playlist_num):
     # try:
-    print(playlist_num)
     playlist = Playlist.objects.get(playlist_id=playlist_num)
-    return render(request, 'recommender/playlist.html', {'playlist':playlist})
+    potential_songs = Musicdata.objects.all()
+    return render(request, 'recommender/playlist.html', {'playlist':playlist, 'potential_songs':potential_songs})
     # except:
     #     raise Http404('Could not display playlist')
     
