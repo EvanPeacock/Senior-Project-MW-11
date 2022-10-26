@@ -4,8 +4,48 @@
 
 {% block content %}
 
-<h3>{{ playlist.playlist_name }}</h3>
-<h5>{{ playlist.creator }}</h5>
+
+<div class="modal" tabindex="-1" role="dialog" id="addsongs">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="card-title">Add Songs</h6>
+          <button type="button" class="close btn btn-outline-custom" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                {% for song in potential_songs %}
+                <h5 class ="card-title">{{song.track_name}}</h5>
+                <div class="pot-song" style="display:flex;flex-direction:row;justify-content:space-between;">
+                    <div class="pot-song-left">
+                        <div class="card-subtitle mb-2 text-muted">{{song.track_artist}}</div>
+                    </div>
+                    <div class="pot-song-right">
+                        <button type="button" class="btn btn-outline-custom">Add</button>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>       
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="header" style="display:flex;flex-direction:row;justify-content:space-between;">
+    <div class="left-header">
+        <h3>{{ playlist.playlist_name }}</h3>
+        <h5>{{ playlist.creator }}</h5>
+    </div>
+    {% if playlist.creator == request.user.username %}
+    <div class="right-header">
+        <a  class="btn btn-custom" data-toggle="modal" data-target="#addsongs" style="margin-left: 15px">Add Songs</a> 
+    </div>
+    {% endif %}
+</div>
 {% for song in playlist.playlist_songs.all %}
     <br>
     <div class="card">    
