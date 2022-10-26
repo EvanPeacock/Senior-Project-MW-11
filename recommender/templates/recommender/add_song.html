@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Song by Search {% endblock %}
+
+{% block content %}
+
+<form method='post' class="form" action="{% url 'recommender:add_song' playlist_num %}">
+    {% csrf_token %}
+    <br>
+    <center>
+        <h2>Add Song by Search</h2>
+            <!-- {{ form.as_p }} -->
+
+            <p>Song Name: {{ form.song_name }}</p>
+            <p>Artist Name: {{ form.song_artist }}</p>
+            <button class="btn btn-primary btn-lg"  type="submit">
+                Search
+            </button>
+
+</center>
+</form>
+<br>
+
+<!-- -->
+
+{% if songs %}
+<table class="table">
+<tbody>
+<tr>
+
+{% for song in songs %}
+
+<td>
+<iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
+frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<button type="button">Add</button>
+</td>
+
+{% endfor %}
+
+</tr>
+</tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}

@@ -42,4 +42,6 @@ class UpdateSettingsForm(forms.Form):
     user_fname = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
     user_lname = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
     
-
+class AddSongForm(forms.Form):
+    song_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
+    song_artist = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
