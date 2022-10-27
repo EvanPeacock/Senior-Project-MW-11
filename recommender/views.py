@@ -10,7 +10,9 @@ import random
 from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout,update_session_auth_hash
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 
 
 
@@ -232,38 +234,33 @@ def get_myprofile(request):
     else:
         raise render('Unable to access profile')
 
-def get_settings(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            return render(request, 'recommender/edit_settings.html',{})
-    else:
-        return redirect('recommender/home/')
-
-
 def update_settings(request):
     if request.method == 'POST':
-        form = UpdateSettingsForm(request.POST)
-        user = request.user
-        songs = Musicdata.objects.all().values('track_id')
-        sResp = list(songs)
-        random.shuffle(sResp)
-        albums = Musicdata.objects.all().values('track_id')
-        aResp = list(albums)
-        random.shuffle(aResp)
+        form = UpdateSettingsForm(request.POST,instance=request.user)
         
         if form.is_valid():
-            user.username = None if form.cleaned_data['username'] == None else form.cleaned_data['username']
-            user.set_password(None if form.cleaned_data['user_password'] == None else form.cleaned_data['user_password'])
-            user.email = None if form.cleaned_data['user_email'] == None else form.cleaned_data['user_email']
-            user.first_name = None if form.cleaned_data['user_fname'] == None else form.cleaned_data['user_fname']
-            user.last_name = None if form.cleaned_data['user_lname'] == None else form.cleaned_data['user_lname']
-            user.save()
             form.save()
-            return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
-        else:
-             return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
+            return redirect('/recommender/myprofile/')
     else:
-        return render(request,'recommender/home.html',{})
+        form = UpdateSettingsForm(instance=request.user)
+        args = {'form':form}
+        return render(request,'recommender/edit_settings.html',args)
+
+@login_required
+def change_password(request):
+    if request.method =='POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            return redirect('/recommender/myprofile/')
+        else:
+            return redirect('/recommender/password/')
+    else:
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        args = {'form':form}
+        return render(request,'recommender/change_password.html',args)
 
 def playlist_view(request, playlist_num):
     # try:
