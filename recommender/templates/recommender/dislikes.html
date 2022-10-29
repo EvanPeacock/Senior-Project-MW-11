@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Dislikes {% endblock %}
+
+{% block content %}
+
+{% if dislikes %}
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+        {% for dislikedlist in dislikes %}
+            {% for songs in dislikedlist%}
+                <div class="card">
+                    <div class="card-body"> 
+                        <td>
+                            <iframe src="https://open.spotify.com/embed/track/{{ songs.track_id }}" width="300" height="380" 
+                            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        </td>
+                        <div class = "text-center">
+                            <a href="{% url 'recommender:undislike' user.username songs.track_id%}" class="btn btn-custom">☆</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </ol>
+{% endif %}
+
+{% endblock %}
