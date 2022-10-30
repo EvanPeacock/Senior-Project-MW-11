@@ -1,9 +1,6 @@
 from unicodedata import name
 from django.urls import path
 from . import views
-from django.contrib.auth import views as auth_views 
-from django.contrib.auth import urls
-
 
 app_name = 'recommender'
 
@@ -19,9 +16,9 @@ urlpatterns = [
 
     path('profile/<str:user_name>', views.get_profile, name='get_profile'),
     path('myprofile/', views.get_myprofile,name='get_myprofile'),
+    path('myprofile/settings/',views.get_settings,name="get_settings"),
     path('update-settings/',views.update_settings,name="update_settings"),
-    path('password/', views.change_password, name="change_password"),
-
+    
     path('history/', views.get_history, name='get_history'),
 
     path('artist/', views.get_artist, name='get_artist'),
