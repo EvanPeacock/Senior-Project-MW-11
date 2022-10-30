@@ -98,6 +98,10 @@ class album(models.Model):
     def __str__(self): 
         return self.album_name
 
+class DislikedMusic(models.Model):
+    user = models.ManyToManyField(User, null = True, blank = True)
+    music = models.ManyToManyField(Musicdata,null = True, blank = True)
+    
 #class songtoplaylist(models.Model):
    # track_id = models.ForeignKey('song', on_delete=models.CASCADE)
     #playlist_id = models.ForeignKey('playlist',  on_delete=models.CASCADE)

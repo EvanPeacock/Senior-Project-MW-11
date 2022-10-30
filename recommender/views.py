@@ -321,4 +321,40 @@ def get_history(request):
             raise Http404('Error with searches')
     else:
         raise Http404('Error')
+
+def dislike(request, user_name, song):
+    if request.method == 'GET':
+        curUser = User.objects.filter(username=user_name).first()
+        music = Musicdata.objects.filter(track_id__contains = song).first()
+        dislikedMusic = DislikedMusic.objects.get(user = curUser)
+        dislikedMusic.save()
+        music.save()
+        dislikedMusic.music.add(music)
+        return render(request, "recommender/track.html", {})
+    else:
+        return Http404('Error adding song to dislikes')
+
+def get_dislikes(request):
+    if request.method == 'GET':
+        disliked = DislikedMusic.objects.all()
+        songs = []
+        for song in disliked:
+            songs.append(song.music.values('track_id'))
+        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
+    else:
+        return Http404('Error getting dislikes')
+
+def undislike(request, user_name, song):
+    if request.method == 'GET':
+        curUser = User.objects.filter(username=user_name).first()
+        dislike = DislikedMusic.objects.get(user = curUser)
+        track = Musicdata.objects.filter(track_id = song).first()
+        dislike.music.remove(track)
+        disliked = DislikedMusic.objects.all()
+        songs = []
+        for song in disliked:
+            songs.append(song.music.values('track_id'))
+        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
+    else:
+        return Http404('Error removing song from dislikes')
             

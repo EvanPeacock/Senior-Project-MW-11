@@ -27,3 +27,4 @@ class albumAdmin(admin.ModelAdmin):
 class artistAdmin(admin.ModelAdmin):
      list_display = ['artist_name']
 
+admin.register(DislikedMusic)
