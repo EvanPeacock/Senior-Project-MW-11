@@ -10,9 +10,7 @@ import random
 from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout,update_session_auth_hash
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -234,33 +232,38 @@ def get_myprofile(request):
     else:
         raise render('Unable to access profile')
 
+def get_settings(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return render(request, 'recommender/edit_settings.html',{})
+    else:
+        return redirect('recommender/home/')
+
+
 def update_settings(request):
     if request.method == 'POST':
-        form = UpdateSettingsForm(request.POST,instance=request.user)
+        form = UpdateSettingsForm(request.POST)
+        user = request.user
+        songs = Musicdata.objects.all().values('track_id')
+        sResp = list(songs)
+        random.shuffle(sResp)
+        albums = Musicdata.objects.all().values('track_id')
+        aResp = list(albums)
+        random.shuffle(aResp)
         
         if form.is_valid():
+            user.username = None if form.cleaned_data['username'] == None else form.cleaned_data['username']
+            user.set_password(None if form.cleaned_data['user_password'] == None else form.cleaned_data['user_password'])
+            user.email = None if form.cleaned_data['user_email'] == None else form.cleaned_data['user_email']
+            user.first_name = None if form.cleaned_data['user_fname'] == None else form.cleaned_data['user_fname']
+            user.last_name = None if form.cleaned_data['user_lname'] == None else form.cleaned_data['user_lname']
+            user.save()
             form.save()
-            return redirect('/recommender/myprofile/')
-    else:
-        form = UpdateSettingsForm(instance=request.user)
-        args = {'form':form}
-        return render(request,'recommender/edit_settings.html',args)
-
-@login_required
-def change_password(request):
-    if request.method =='POST':
-        form = PasswordChangeForm(data=request.POST, user=request.user)
-
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request,form.user)
-            return redirect('/recommender/myprofile/')
+            return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
         else:
-            return redirect('/recommender/password/')
+             return render(request,'recommender/myprofile.html',{'form':form, 'songs': sResp[:3], 'albums': aResp[:3]})
     else:
-        form = PasswordChangeForm(data=request.POST, user=request.user)
-        args = {'form':form}
-        return render(request,'recommender/change_password.html',args)
+        return render(request,'recommender/home.html',{})
 
 def playlist_view(request, playlist_num):
     # try:
@@ -321,19 +324,32 @@ def get_history(request):
 
 def dislike(request, user_name, song):
     if request.method == 'GET':
-        curUser = User.objects.filter(username=user_name).first()
-        music = Musicdata.objects.filter(track_id__contains = song).first()
-        dislikedMusic = DislikedMusic.objects.get(user = curUser)
-        dislikedMusic.save()
-        music.save()
-        dislikedMusic.music.add(music)
-        return render(request, "recommender/track.html", {})
+        try:
+            curUser = User.objects.filter(username=user_name).first()
+            music = Musicdata.objects.filter(track_id__contains = song).first()
+            dislikedMusic = DislikedMusic.objects.get(user = curUser)
+            dislikedMusic.save()
+            music.save()
+            dislikedMusic.music.add(music)
+            return render(request, "recommender/track.html", {})
+        except:
+            curUser = User.objects.filter(username=user_name).first()
+            dislikedMusic = DislikedMusic()
+            dislikedMusic.save()
+            curUser.save()
+            dislikedMusic.user.add(curUser)
+            music = Musicdata.objects.filter(track_id__contains = song).first()
+            music.save()
+            dislikedMusic.music.add(music)   
+            return render(request, "recommender/track.html", {})
     else:
         return Http404('Error adding song to dislikes')
 
 def get_dislikes(request):
     if request.method == 'GET':
-        disliked = DislikedMusic.objects.all()
+        curUser = request.user
+        dislikes = DislikedMusic.objects.all()
+        disliked = dislikes.filter(user = curUser)
         songs = []
         for song in disliked:
             songs.append(song.music.values('track_id'))
@@ -347,7 +363,7 @@ def undislike(request, user_name, song):
         dislike = DislikedMusic.objects.get(user = curUser)
         track = Musicdata.objects.filter(track_id = song).first()
         dislike.music.remove(track)
-        disliked = DislikedMusic.objects.all()
+        disliked = DislikedMusic.objects.filter(user = curUser)
         songs = []
         for song in disliked:
             songs.append(song.music.values('track_id'))
