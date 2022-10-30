@@ -1,8 +1,6 @@
 
-from enum import unique
-from pickle import GET
 from recommender.forms import SearchForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import Http404
 from .models import *
 from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
@@ -11,7 +9,6 @@ from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
 
 
 def get_home(request):
@@ -40,9 +37,9 @@ def get_explore(request):
     playlists = Musicdata.objects.all().values('track_id')
     pResp = list(playlists)
     random.shuffle(pResp)
-    userResp = User.objects.all()
-    uResp = list(userResp)
-    random.shuffle(uResp)
+    # userResp = User.objects.all().values('username')
+    uResp = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10']
+    # random.shuffle(uResp)
     return render(request, "recommender/explore.html", {
         'songs': sResp[:3],
         'albums': aResp[:3],
@@ -58,7 +55,6 @@ def find_albums(artist, from_year = None, to_year = None):
         query = query.filter(track_album_release_date__lte = to_year)
     return list(query.order_by('-track_popularity').values('track_id'))
     
-
 def find_album_by_name(album):
     query = Musicdata.objects.filter(track_album_name__contains = album).values('track_id')
     resp = list(query)
@@ -98,14 +94,6 @@ def get_artist(request):
             answer = albums[:10]
             random.shuffle(answer)
             answer = list(answer)[:3] 
-            rs = RecentSearches.objects.create()
-            rs.artist = form.cleaned_data['artist']
-            rs.from_year = from_year
-            rs.to_year = to_year
-            rs.result1 = answer[0]
-            rs.result2 = answer[1]
-            rs.result3 = answer[2]
-            rs.save()
             return render(request, 'recommender/artist.html', {'form': form, 'albums': answer })
         else:
             raise Http404('Something went wrong')
@@ -143,7 +131,6 @@ def get_signin(request):
             if form.is_valid():
                 user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
-                    login(request, user)
                     return render(request, 'recommender/home.html', {'form':form, 'err':err})
                 else:
                     err = 'Unable to authenticate account'
@@ -152,7 +139,7 @@ def get_signin(request):
             return render(request, 'recommender/signin.html', {'form':SigninForm(), 'err':'Authentification failed'})
     else:
         form = SigninForm()
-        return render(request, "recommender/signin.html", {'form':form})
+        return render(request, "recommender/signin.html", {'form':form, 'err':'Problem occured'})
     
 def get_registration(request):
     if request.method == 'POST':
@@ -180,62 +167,40 @@ def get_registration(request):
         form = RegisterForm()
         return render(request, 'recommender/register.html', {'form':form})
 
-def logout_view(request):
-    if request.user.is_authenticated:
-        logout(request)
-        return render(request, 'recommender/home.html', {})
-    else:
-        raise Http404('Error logging out')
 
-def get_profile(request, user_name):
+def dislike(request, user_name, song):
     if request.method == 'GET':
-        if user_name is not None:
-            owner = User.objects.get(username=user_name)
-            playlists = Playlist.objects.filter(playlist_owner=owner)
-            songs = Musicdata.objects.all().values('track_id')
-            sResp = list(songs)
-            random.shuffle(sResp)
-            albums = Musicdata.objects.all().values('track_id')
-            aResp = list(albums)
-            random.shuffle(aResp)
-            return render(request, 'recommender/profile.html',{
-                'songs': sResp[:3],
-                'albums': aResp[:3],
-                'profile_user':user_name,
-                'user_object' : owner,
-                'playlists' : playlists
-                })
-        else:
-            return render(request, 'recommender/signin.html',{})
+        curUser = User.objects.filter(username=user_name).first()
+        music = Musicdata.objects.filter(track_id__contains = song).first()
+        dislikedMusic = DislikedMusic.objects.get(user = curUser)
+        dislikedMusic.save()
+        music.save()
+        dislikedMusic.music.add(music)
+        return render(request, "recommender/track.html", {})
     else:
-        raise render('Unable to access profile')
+        return Http404('Error adding song to dislikes')
 
-def get_myprofile(request):
+def get_dislikes(request):
     if request.method == 'GET':
-        if request.user.is_authenticated:
-            songs = Musicdata.objects.all().values('track_id')
-            sResp = list(songs)
-            random.shuffle(sResp)
-            albums = Musicdata.objects.all().values('track_id')
-            aResp = list(albums)
-            random.shuffle(aResp)
-            owner = request.user
-            playlists = list(Playlist.objects.filter(playlist_owner=owner))
-            random.shuffle(playlists)
-            return render(request, 'recommender/myprofile.html',{
-                'songs': sResp[:3],
-                'albums': aResp[:3],
-                'playlists':playlists
-                })
-        else:
-            return render(request, 'recommender/signin.html',{})
+        disliked = DislikedMusic.objects.all()
+        songs = []
+        for song in disliked:
+            songs.append(song.music.values('track_id'))
+        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
     else:
-        raise render('Unable to access profile')
+        return Http404('Error getting dislikes')
 
-def get_settings(request):
+def undislike(request, user_name, song):
     if request.method == 'GET':
-        if request.user.is_authenticated:
-            return render(request, 'recommender/edit_settings.html',{})
+        curUser = User.objects.filter(username=user_name).first()
+        dislike = DislikedMusic.objects.get(user = curUser)
+        track = Musicdata.objects.filter(track_id = song).first()
+        dislike.music.remove(track)
+        disliked = DislikedMusic.objects.all()
+        songs = []
+        for song in disliked:
+            songs.append(song.music.values('track_id'))
+        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
     else:
         return redirect('recommender/home/')
 
@@ -321,4 +286,3 @@ def get_history(request):
             raise Http404('Error with searches')
     else:
         raise Http404('Error')
-            
