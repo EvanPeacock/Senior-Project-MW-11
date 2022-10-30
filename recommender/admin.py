@@ -11,6 +11,7 @@ class MusicAdmin(admin.ModelAdmin):
 
 admin.site.register(RecentSearches)
 
+
 @admin.register(song)
 class songAdmin(admin.ModelAdmin):
      list_display = ['track_name', 'artist_id', 'duration_ms']
