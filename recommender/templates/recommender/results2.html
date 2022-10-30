@@ -1,12 +1,19 @@
 {% if tracks %}
-    <table>
-    <tr>
+    
     {% for track in tracks %}
-        <td>
-        <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
-        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        </td>
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+        <div class="card">
+            <div class="card-body"> 
+                <td>
+                    <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </td>
+                <div class = "text-center">
+                    <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
+                </div>
+            </div>
+        </div>
+    <ol>
     {% endfor %}
-    </tr>
-    </table>
+
 {% endif %}
