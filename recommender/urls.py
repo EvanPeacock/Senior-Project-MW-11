@@ -18,6 +18,7 @@ urlpatterns = [
     path('myprofile/', views.get_myprofile,name='get_myprofile'),
     path('myprofile/settings/',views.get_settings,name="get_settings"),
     path('update-settings/',views.update_settings,name="update_settings"),
+    path('password/', views.change_password, name="change_password"),
     
     path('history/', views.get_history, name='get_history'),
 

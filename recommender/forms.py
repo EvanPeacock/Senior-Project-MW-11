@@ -2,7 +2,7 @@ from dataclasses import field
 from secrets import choice
 from django import forms
 from . import models
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 from recommender.models import Musicdata, Playlist
