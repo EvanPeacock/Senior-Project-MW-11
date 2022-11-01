@@ -1,17 +1,19 @@
 
 from enum import unique
 from pickle import GET
+import re
 from recommender.forms import SearchForm
 from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm, PasswordChangeForm
+from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
 import random
 from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def get_home(request):
@@ -147,61 +149,36 @@ def get_track(request):
 
 
 def get_signin(request):
-    err = ''
-    if request.method == 'POST':
-        try:
-            form = SigninForm(request.POST)
-            if form.is_valid():
-                user = authenticate(
-                    username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-                if user is not None:
-                    login(request, user)
-                    return render(request, 'recommender/home.html', {'form': form, 'err': err})
-                else:
-                    err = 'Unable to authenticate account'
-                    return render(request, 'recommender/signin.html', {'form': form, 'err': err})
-        except:
-            return render(request, 'recommender/signin.html', {'form': SigninForm(), 'err': 'Authentification failed'})
+    if request.method=='POST':
+        form = SigninForm(request.POST)
+        username=request.POST['username']
+        password=request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/recommender/myprofile')
     else:
-        form = SigninForm()
-        return render(request, "recommender/signin.html", {'form': form})
-
+        form = SigninForm
+        args = {'form': form}
+        return render(request, 'recommender/signin.html', args)
+    return render(request, "recommender/signin.html")
 
 def get_registration(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        err = ''
-        if form.is_valid():
-            username = None if form.cleaned_data['username'] == None else str(
-                form.cleaned_data['username'])
-            fname = None if form.cleaned_data['user_fname'] == None else str(
-                form.cleaned_data['user_fname'])
-            lname = None if form.cleaned_data['user_lname'] == None else str(
-                form.cleaned_data['user_lname'])
-            email = None if form.cleaned_data['user_email'] == None else str(
-                form.cleaned_data['user_email'])
-            password = None if form.cleaned_data['user_password'] == None else form.cleaned_data['user_password']
-            user = User.objects.create_user(username, email)
-            user.first_name = fname
-            user.last_name = lname
-            user.set_password(password)
-            user.save()
-            return render(request, "recommender/register.html", {'form': form, 'user': user, 'err': err})
-        else:
-            err = 'All fields must be filled correctly.'
-            return render(request, 'recommender/register.html', {
-                'form': form,
-                'err': err,
-            })
-    else:
-        form = RegisterForm()
-        return render(request, 'recommender/register.html', {'form': form})
 
+        if form.is_valid():
+            form.save()
+            return redirect('/recommender/myprofile/')
+    else:
+        form = RegisterForm
+        args = {'form': form}
+        return render(request, 'recommender/register.html', args)
 
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
-        return render(request, 'recommender/home.html', {})
+        return redirect('/')
     else:
         raise Http404('Error logging out')
 

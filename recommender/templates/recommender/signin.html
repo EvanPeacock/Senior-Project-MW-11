@@ -1,38 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %} Sign in {% endblock %}
+{% block title %} Sign In {% endblock %}
 
 {% block content %}
 
-<!---
 {% if err %}
     <p>{{ err }}</p>
 {% endif %}
--->
-
-
-
 
 <center>
     <h2 class="fw-bold">Welcome Back!</h2>
     <div class="card" style="width: 50%; min-width: 650px">
-        <form method='post' class="form" action="{% url 'recommender:get_signin' %}">
-        {% csrf_token %}
-        <p class="fw-bold" style="margin-top: 25px">Log in to your account</p>
-            <!-- {{ form.as_p }} -->
-            <p>Username {{ form.username }}</p>
-            <p>Password: {{ form.password }}</p>          
+        <div class="card-body text-muted">
+        <form method='post' class="form">
+            {% csrf_token %}
+        
+            <div class="form-floating mb-3">
+                {{form.username}}
+                <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{form.password}}
+                <label for="floatingPassword">Password</label>
+            </div>
+                   
 
-        <div class="d-grid" style="width: 50%">
-            <button class="btn btn-custom"  type="submit">Sign In</button></br>
-            <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
-            <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>
-            <button class="btn btn-custom" type="submit" style="background:#000000">Sign in with Apple</button></br>
-            {% comment %} <button class="btn btn-outline-custom" type="submit">Contact us</button></br> {% endcomment %}
-        </div>
+            <div class="d-grid" style="width: 50%">
+                <button class="btn btn-custom"  type="submit">Sign In</button></br>
+                <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
+                <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>
+                <button class="btn btn-custom" type="submit" style="background:#000000">Sign in with Apple</button></br>
+                {% comment %} <button class="btn btn-outline-custom" type="submit">Contact us</button></br> {% endcomment %}
+            </div>
         </form>
+        </div>
     </div>
 </center>
-<br>
 
 {% endblock %}

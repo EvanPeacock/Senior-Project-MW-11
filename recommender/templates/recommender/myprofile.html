@@ -65,12 +65,12 @@
 <div class="card" style="width: 100%; margin-bottom: 20px">  
   <div class="card-body">
       <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-      <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
+      <a  class="btn btn-outline-custom" data-toggle="modal" data-target="#editprofile">View Information </a>
       <h5 class="card-title">Your Profile</h5>
       <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
       <div class="card-body" style="text-align: right;">
-        <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">Dislikes</a>
-        <a  class="btn btn-custom" data-toggle="modal" data-target="#editprofile" style="margin-left: 15px">View Information </a> 
+        <a href="{% url "recommender:get_dislikes" %}" class="btn btn-custom">My Dislikes</a>
+        <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-custom" style="margin-left: 15px">My Playlists</a>
       </div>
   </div>
 </div>
