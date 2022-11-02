@@ -321,25 +321,6 @@ def get_history(request):
             raise Http404('Error with searches')
     else:
         raise Http404('Error')
-            
-def add_song(request, playlist_num):
-    if request.method == "POST":
-        form = AddSongForm(request.POST)
-        if form.is_valid():
-            song_name = None if form.cleaned_data['song_name'] == None else form.cleaned_data['song_name']
-            song_artist = None if form.cleaned_data['song_artist'] == None else form.cleaned_data['song_artist']
-            if not song_artist:
-                query = Musicdata.objects.filter(track_name__contains = song_name)
-            else:
-                query = Musicdata.objects.filter(track_artist__contains = song_artist, track_name__contains = song_name)
-            querylist = list(query.order_by('-track_popularity').values('track_id'))
-            songs = list(querylist)[:1]
-            return render(request, 'recommender/add_song.html', {'form':form, 'playlist_num':playlist_num, 'songs':songs})                
-        else:
-            raise Http404('Something went wrong')
-    else:
-        form = AddSongForm()
-        return render(request, 'recommender/add_song.html', {'form':form, 'playlist_num':playlist_num})
     
 def add_song_update(request, playlist_num):
     if request.method == 'GET':
