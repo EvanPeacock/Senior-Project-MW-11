@@ -354,3 +354,14 @@ def add_song_update(request, playlist_num):
                 songs = list([*set([item['track_id'] for item in tracks[:3]])])
             return render(request, "recommender/results3.html", {'songs':songs, 'playlist_num':playlist_num})
     
+def playlist_append(request, playlist_num, song_id):
+    if request.method == 'GET':
+        song = Musicdata.objects.filter(track_id=song_id)
+        song = list(song.order_by('-track_popularity'))
+        playlist = Playlist.objects.get(playlist_id=playlist_num)
+        playlist.playlist_songs.add(song[0])
+        playlist.save()
+        args = {'playlist_num':playlist_num, 'song_id':song_id}
+        return render(request, "recommender/add_song_update.html", args)
+    else:
+        raise Http404('Error')
