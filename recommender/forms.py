@@ -178,3 +178,7 @@ class UpdatePasswordForm(PasswordChangeForm):
             'new_password1': forms.PasswordInput(attrs={'class':'form-control'}),
             'new_password2': forms.PasswordInput(attrs={'class':'form-control'})
         }
+    
+class AddSongForm(forms.Form):
+    song_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
+    song_artist = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
