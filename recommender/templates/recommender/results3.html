@@ -1,0 +1,13 @@
+{% if songs %}
+    <table>
+    <tr>
+    {% for song in songs %}
+        <td>
+        <iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
+        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </td>
+        <button type='button'>Add</button>
+    {% endfor %}
+    </tr>
+    </table>
+{% endif %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Songs by Search {% endblock %}
+
+{% block content %}
+
+
+    <br>
+    <center>
+        <h2>Add Songs by Search</h2>
+    
+        <br>
+        <input class="form-text col-8" type="text"
+        name="song" hx-get="{% url 'recommender:get_song_update' playlist_num %}" 
+        hx-trigger="keyup" hx-target="#search-results">
+        </input>
+        <br>
+        
+        <div id="search-results">
+        </div>
+
+    </center>
+
+</br>
+
+
+
+{% endblock %}

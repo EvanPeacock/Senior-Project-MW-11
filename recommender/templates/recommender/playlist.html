@@ -11,7 +11,7 @@
     </div>
     {% if playlist.creator == request.user.username %}
     <div class="right-header">
-        <a  class="btn btn-custom" href="{% url 'recommender:add_song' playlist.playlist_id %}" style="margin-left: 15px">Add Songs</a> 
+        <a  class="btn btn-custom" href="{% url 'recommender:add_song_update' playlist.playlist_id %}" style="margin-left: 15px">Add Songs</a> 
     </div>
     {% endif %}
 </div>

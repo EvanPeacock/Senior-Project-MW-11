@@ -340,3 +340,17 @@ def add_song(request, playlist_num):
     else:
         form = AddSongForm()
         return render(request, 'recommender/add_song.html', {'form':form, 'playlist_num':playlist_num})
+    
+def add_song_update(request, playlist_num):
+    if request.method == 'GET':
+        track = request.GET.get('song', None)
+        if track is None:
+            return render(request, "recommender/add_song_update.html", {'playlist_num':playlist_num})
+        else:
+            tracks = {}
+            if track != "":
+                query = Musicdata.objects.filter(track_name__contains = track).values('track_id')
+                tracks = list(query)
+                songs = list([*set([item['track_id'] for item in tracks[:3]])])
+            return render(request, "recommender/results3.html", {'songs':songs, 'playlist_num':playlist_num})
+    
