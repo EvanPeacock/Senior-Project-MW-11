@@ -1,9 +1,8 @@
-from dataclasses import field
-import email
-from secrets import choice
 from django import forms
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
+
+from recommender.models import ProfileItems
 
 class SearchForm(forms.Form):
     artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
@@ -85,8 +84,24 @@ class PlaylistForm(forms.Form):
 #         } 
 
 class UpdateSettingsForm(UserChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdateSettingsForm, self).__init__(*args, **kwargs)
+
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'First Name'
+
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Last Name'
+
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['placeholder'] = 'Email'
+        
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'Username'
+
     class Meta:
         model = User
+
         fields = (
             'username',
             'email',
@@ -99,4 +114,67 @@ class UpdateSettingsForm(UserChangeForm):
             'email': forms.EmailInput(attrs={'class':'form-control'}),
             'first_name': forms.TextInput(attrs={'class':'form-control'}),
             'last_name': forms.TextInput(attrs={'class':'form-control'})
+        }
+
+class UpdateProfileItemsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileItemsForm, self).__init__(*args, **kwargs)
+
+        self.fields['profile_items'].widget.attrs['class'] = 'form-control'
+        self.fields['profile_items'].widget.attrs['placeholder'] = 'Profile Items'
+
+    class Meta:
+        model = ProfileItems
+        fields = (
+            'profile_pic',
+            'bio'
+        )
+        
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'class':'form-control'}),
+            'bio': forms.Textarea(attrs={'class':'form-control'})
+        }
+
+class UpdateProfilePictureForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfilePictureForm, self).__init__(*args, **kwargs)
+
+        self.fields['profile_pic'].widget.attrs['class'] = 'form-control'
+        self.fields['profile_pic'].widget.attrs['placeholder'] = 'Profile Picture'
+
+    class Meta:
+        model = ProfileItems
+        fields = (
+            'profile_pic',
+        )
+        
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'class':'form-control'}),
+        }
+
+class UpdatePasswordForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdatePasswordForm, self).__init__(*args, **kwargs)
+
+        self.fields['old_password'].widget.attrs['class'] = 'form-control'
+        self.fields['old_password'].widget.attrs['placeholder'] = 'Old Password'
+
+        self.fields['new_password1'].widget.attrs['class'] = 'form-control'
+        self.fields['new_password1'].widget.attrs['placeholder'] = 'New Password'
+
+        self.fields['new_password2'].widget.attrs['class'] = 'form-control'
+        self.fields['new_password2'].widget.attrs['placeholder'] = 'Confirm New Password'
+
+    class Meta:
+        model = User
+        fields = (
+            'old_password',
+            'new_password1',
+            'new_password2'
+        )
+
+        widgets = {
+            'old_password': forms.PasswordInput(attrs={'class':'form-control'}),
+            'new_password1': forms.PasswordInput(attrs={'class':'form-control'}),
+            'new_password2': forms.PasswordInput(attrs={'class':'form-control'})
         }

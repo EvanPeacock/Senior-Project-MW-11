@@ -27,34 +27,39 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>      
 <div class='navbar fixed-top' style="display:flex;background-color:white;">   
-    <div class="nav-left" style="padding:4px;display:flex;gap:40px;justify-content:start;">    
+    <div class="nav-left" style="padding:4px;display:flex;gap:30px;justify-content:start;">    
         <a class="navbar-brand" href='/'>
             <img src="{% static 'logo.svg' %}" alt="logo" style="height:35px;width:212px;padding:1px">
         </a>
         <div>
             <a href="{% url 'recommender:get_explore' %}" class="btn btn-link-custom">Explore</a>
         </div>
+
         <div>
             <a href="{% url 'recommender:get_playlists' %}" class="btn btn-link-custom">Playlists</a>
         </div>
+
         <div>
             <a href="{% url 'recommender:get_history' %}" class="btn btn-link-custom">History</a>
         </div>
-        <div>
-            <a href="{% url 'recommender:get_artist' %}" class="btn btn-link-custom">Artist</a>
-        </div>
-        
-        <div>
-            <a href="{% url 'recommender:get_album' %}" class="btn btn-link-custom">Album</a>
-        </div>
-        <div>
-            <a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a>
-        </div>
+
+        <div class="dropdown text-center">
+            <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Search
+            </button>
+            <ul class="dropdown-menu dropdown-menu-center">
+              <li><a href="{% url 'recommender:get_artist' %}" class="btn btn-link-custom">Artist</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a href="{% url 'recommender:get_album' %}" class="btn btn-link-custom">Album</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a></li>
+            </ul>
+          </div>
     </div>
-    <div class="nav-right" style="padding:4px;display:flex;gap:40px;justify-content:start;margin-right: 25px">
+    <div class="nav-right" style="display:flex;gap:15px;justify-content:start;margin-right:25px">
         {% if request.user.is_authenticated %}
             <div>
-                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px; margin-bottom:3px;">{{request.user.username}}</a>
+                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{request.user.username}}</a>
             </div>
             <div>
                 <a href="{% url 'recommender:logout_view' %}" class="btn btn-custom">Logout</a>

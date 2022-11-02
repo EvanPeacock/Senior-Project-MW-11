@@ -1,20 +1,16 @@
 
-from enum import unique
 from pickle import GET
-import re
 from recommender.forms import SearchForm
 from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm
+from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm, UpdatePasswordForm
 import random
 from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required 
-from django.contrib.auth.forms import PasswordChangeForm
-
 
 def get_home(request):
     songs = Musicdata.objects.all().values('track_id')
@@ -149,6 +145,7 @@ def get_track(request):
 
 
 def get_signin(request):
+    err = ''
     if request.method=='POST':
         form = SigninForm(request.POST)
         username=request.POST['username']
@@ -161,7 +158,10 @@ def get_signin(request):
         form = SigninForm
         args = {'form': form}
         return render(request, 'recommender/signin.html', args)
-    return render(request, "recommender/signin.html")
+    form = SigninForm
+    err = 'Invalid Username or Password'
+    args = {'form': form, 'err': err}
+    return render(request, 'recommender/signin.html', args)
 
 def get_registration(request):
     if request.method == 'POST':
@@ -254,16 +254,16 @@ def update_settings(request):
 @login_required
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(data=request.POST, user=request.user)
+        form = UpdatePasswordForm(data=request.POST, user=request.user)
 
         if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
+            user = form.save()
+            update_session_auth_hash(request, user)
             return redirect('/recommender/myprofile/')
         else:
             return redirect('/recommender/password/')
     else:
-        form = PasswordChangeForm(data=request.POST, user=request.user)
+        form = UpdatePasswordForm(data=request.POST, user=request.user)
         args = {'form':form}
         return render(request,'recommender/change_password.html',args)
 

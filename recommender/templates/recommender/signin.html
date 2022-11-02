@@ -4,15 +4,14 @@
 
 {% block content %}
 
-{% if err %}
-    <p>{{ err }}</p>
-{% endif %}
-
 <center>
     <h2 class="fw-bold">Welcome Back!</h2>
     <div class="card" style="width: 50%; min-width: 650px">
-        <div class="card-body text-muted">
-        <form method='post' class="form">
+        <div class="card-body">
+            {% if err %}
+             <p class="text-danger">{{ err }}</p>
+            {% endif %}
+            <form method='post' class="form" style="margin-left:50px;margin-right:50px">
             {% csrf_token %}
         
             <div class="form-floating mb-3">
@@ -25,7 +24,7 @@
             </div>
                    
 
-            <div class="d-grid" style="width: 50%">
+            <div class="d-grid" style="width: 75%">
                 <button class="btn btn-custom"  type="submit">Sign In</button></br>
                 <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
                 <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>

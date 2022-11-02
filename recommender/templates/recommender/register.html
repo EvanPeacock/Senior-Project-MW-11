@@ -12,12 +12,8 @@
     <h2 class="fw-bold">Ready to Listen?</h2>
     <div class="card" style="width: 50%; min-width: 650px">
         <div class="card-body text-muted">
-        <form method='post' class="form">
+        <form method='post' class="form" style="margin-left:50px;margin-right:50px">
             {% csrf_token %}
-        
-            {% comment %} <div class="form-floating mb-3">
-                {{form.as_p}}
-            </div> {% endcomment %}
 
             <div class="form-floating mb-3">
                 {{form.first_name}}
@@ -51,7 +47,7 @@
 
 
 
-            <div class="d-grid" style="width: 50%">
+            <div class="d-grid" style="width: 75%">
                 <button class="btn btn-custom"  type="submit">Register</button></br>
                 <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
                 <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Profile Page {% endblock %}
+{% block title %} Edit Profile {% endblock %}
 
 {% block content %}
 
@@ -14,17 +14,30 @@
 </div>
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
-    <div class="card-body text-muted">
-      <h5 class="card-title">Settings and Details</h5>
-
-        <form method='post' class="form">
+    <div class="card-body">
+      <h5 class="card-title" style="margin-bottom:20px">Your Details</h5>
+        <form method='post' class="form" style="margin-left:50px;margin-right:50px">
 
           {% csrf_token %}
 
           <div class="form-floating mb-3">
-            
-            {{form.as_p}}
+            {{form.first_name}}
+            <label for="floatingInput">First Name</label>
+          </div>
 
+          <div class="form-floating mb-3">
+            {{form.last_name}}
+            <label for="floatingInput">Last Name</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            {{form.username}}
+            <label for="floatingInput">Username</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            {{form.email}}
+            <label for="floatingInput">Email</label>
           </div>
           
           

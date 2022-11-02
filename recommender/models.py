@@ -101,7 +101,14 @@ class album(models.Model):
 class DislikedMusic(models.Model):
     user = models.ManyToManyField(User, null = True, blank = True)
     music = models.ManyToManyField(Musicdata,null = True, blank = True)
-    
+
+
+class ProfileItems(models.Model):
+    user = models.ManyToManyField(User, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+
+
 #class songtoplaylist(models.Model):
    # track_id = models.ForeignKey('song', on_delete=models.CASCADE)
     #playlist_id = models.ForeignKey('playlist',  on_delete=models.CASCADE)
