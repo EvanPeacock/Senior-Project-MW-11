@@ -15,18 +15,27 @@
     </div>
     {% endif %}
 </div>
+<table>
+    <tr>
 {% for song in playlist.playlist_songs.all %}
-    <br>
+<br>
+<td>
     <div class="card">    
         <div class="card-body">
-            {% if song.track_name %}    
-            <h5 class="card-title">{{ song.track_name }}</h5>
-            {% endif %}
-            {% if song.track_artist %} 
-            <p>{{ song.track_artist }}</p>        
-            {% endif %}
+            
+    
+        <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
+        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        
+        <div class = "text-center">
+            <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-custom">☆</a>
+        </div>    
+
         </div>
     </div>
+</td>
 {% endfor %}
+</tr>
+</table>
 
 {% endblock %}
