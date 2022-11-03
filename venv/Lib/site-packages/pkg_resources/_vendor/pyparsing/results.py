@@ -287,7 +287,7 @@ class ParseResults:
             print(numlist.parse_string("0 123 321")) # -> ['123', '321']
 
             label = Word(alphas)
-            patt = label("LABEL") + Word(nums)[1, ...]
+            patt = label("LABEL") + OneOrMore(Word(nums))
             print(patt.parse_string("AAB 123 321").dump())
 
             # Use pop() in a parse action to remove named result (note that corresponding value is not
@@ -394,7 +394,7 @@ class ParseResults:
 
         Example::
 
-            patt = Word(alphas)[1, ...]
+            patt = OneOrMore(Word(alphas))
 
             # use a parse action to append the reverse of the matched strings, to make a palindrome
             def make_palindrome(tokens):
@@ -487,7 +487,7 @@ class ParseResults:
 
         Example::
 
-            patt = Word(alphas)[1, ...]
+            patt = OneOrMore(Word(alphas))
             result = patt.parse_string("sldkj lsdkj sldkj")
             # even though the result prints in string-like form, it is actually a pyparsing ParseResults
             print(type(result), result) # -> <class 'pyparsing.ParseResults'> ['sldkj', 'lsdkj', 'sldkj']
@@ -554,7 +554,7 @@ class ParseResults:
             user_data = (Group(house_number_expr)("house_number")
                         | Group(ssn_expr)("ssn")
                         | Group(integer)("age"))
-            user_info = user_data[1, ...]
+            user_info = OneOrMore(user_data)
 
             result = user_info.parse_string("22 111-22-3333 #221B")
             for item in result:
