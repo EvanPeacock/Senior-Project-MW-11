@@ -10,6 +10,17 @@
                 </td>
                 <div class = "text-center">
                     <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
+                    {% comment %} <div class="dropdown text-center">
+                        <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Add to Playlist
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-center">
+                            {% for playlist in playlists %}
+                                <li><a class="dropdown-item" href="{% url 'recommender:add_to_playlist' user.username track playlist.id %}">{{ playlist.name }}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            {% endfor %}
+                        </ul>
+                    </div> {% endcomment %}
                 </div>
             </div>
         </div>

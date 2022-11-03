@@ -4,13 +4,12 @@
 
 {% block content %}
 
-
     <br>
     <center>
         <h2>Track Search</h2>
     
         <br>
-        <input class="form-text col-8" style="margin-bottom:20px" type="text"
+        <input class="form-text col-8" style="margin-bottom:25px" type="text"
         name="track" hx-get="{% url 'recommender:get_track' %}" 
         hx-trigger="keyup" hx-target="#search-results">
         </input>
@@ -18,11 +17,7 @@
         
         <div id="search-results">
         </div>
-
     </center>
-
-<br>
-
-
+    <br>
 
 {% endblock %}

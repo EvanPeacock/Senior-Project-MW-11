@@ -1,13 +1,17 @@
 {% if songs %}
-    <table>
-    <tr>
     {% for song in songs %}
-        <td>
-        <a href={% url "recommender:playlist_append" playlist_num song %}>Add</a>
-        <iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
-        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        </td>
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+        <div class="card">
+            <div class="card-body"> 
+                <td>
+                    <iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </td>
+                <div class = "text-center">
+                    <a class="btn btn-custom" href={% url "recommender:playlist_append" playlist_num song %}>Add Song</a>
+                </div>
+            </div>
+        </div>
+    <ol>
     {% endfor %}
-    </tr>
-    </table>
 {% endif %}

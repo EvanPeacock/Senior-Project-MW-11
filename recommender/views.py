@@ -307,7 +307,7 @@ def create_playlist(request, user_name):
             
             playlist.save()
             
-            return render(request, "recommender/playlists.html", {'form':form, 'user':p_owner})
+            return redirect('/recommender/playlist/' + str(playlist.playlist_id))
         else:
             return Http404('Error: Invalid form')
     else:

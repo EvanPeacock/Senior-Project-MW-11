@@ -12,38 +12,25 @@
     }
 </script>
 <div class="header" style="display:flex;justify-content:space-between;">     
-    <h4 class="card-title">Playlists - {{ owner }}</h4>
+    <h4 class="card-title">Your Playlists</h4>
     <div class="dep-header" style="display:flex;flex-direction:column;gap:10px;">   
-        <div>
-            <button onclick="showForm()" class="btn btn-custom">Create Playlist</button>
-        </div>
-        <div class="hidden-form" id="hidden-form" style="display:none;">
-            <form method='post' class="form" action="{% url 'recommender:create_playlist' user.username %}">
-                {% csrf_token %}
-                <br>
-                <center>
-                    {% comment %} {{ form.as_p }} {% endcomment %}
-        
-                    <div>
-                        <label for="playlist_name">Playlist Name: </label>
-                        <input id="playlist_name" type="text" name="playlist_name">
-                    </div>
-                    {% comment %} <div>
-                        <label for="playlist_songs">Playlist Songs: </label>
-                        <select id="playlist_songs" name="playlist_songs">
-                            {% for song in songs %}
-                            <option>{{song.track_name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div> {% endcomment %}
-        
-                    {% comment %} <p>Playlist Name: {{ form.playlist_name }}</p>
-                    <p>Playlist Songs: {{ form.playlist_songs }}</p> {% endcomment %}
-        
-                    <input href="{url 'recommender:get_playlists' user.username}" class="btn btn-custom" type="submit" value="Create"> 
-                </center>
-            </form>
-        </div>
+        <div class="dropdown">
+            <button class="btn btn-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false">Create Playlist</button>
+            <ul class="dropdown-menu" style="text-align:center">
+              <li>
+                <form method='post' class="form" action="{% url 'recommender:create_playlist' user.username %}">
+                    {% csrf_token %}
+                    <center>
+                        <div>
+                            <label for="playlist_name">Playlist Name: </label>
+                            <input id="playlist_name" type="text" name="playlist_name" style="margin:10px">
+                        </div>
+                        <input href="{url 'recommender:get_playlists' user.username}" class="btn btn-custom" type="submit" value="Create"> 
+                    </center>
+                </form>
+              </li>
+            </ul>
+          </div>
     </div>
 </div>
 {% else %}
