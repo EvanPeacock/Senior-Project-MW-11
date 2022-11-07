@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 
-# Create your models here.
-
 def unique_rand():
         index = random.randint(1,100000000)
         while True:
