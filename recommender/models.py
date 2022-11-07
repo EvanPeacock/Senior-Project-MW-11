@@ -76,26 +76,27 @@ class song(models.Model):
 
     def __str__(self): 
         return self.track_name
-
-class artist(models.Model):
+    
+class Artist(models.Model):
     artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    artist_name = models.TextField( null=True, blank=True)
-    genre = models.TextField( null=True, blank=True)
-    subgenre = models.TextField( null=True, blank=True)
-    track_id = models.ManyToManyField(song, null=True, blank=True)
+    artist_name = models.CharField(max_length=25, blank=True, null=True)
+    # artist_albums = models.ManyToManyField(Album, blank=True, null=True)
+    artist_tracks = models.ManyToManyField(Musicdata, blank=True, null=True)
+    artist_genre = models.CharField(max_length=25, blank=True, null=True)
+    artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
+    
+    def __str__(self):
+        return self.artist_name
 
-    def __str__(self): 
-        return self.artist_name 
-
-class album(models.Model):
-    album_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    album_name = models.TextField( null=True, blank=True)
-    track_id = models.ManyToManyField(song, null=True, blank=True)
-    artist_id = models.ManyToManyField(artist, null=True, blank=True)
-    genre = models.TextField()
-    subgenre = models.TextField()
-
-    def __str__(self): 
+class Album(models.Model):
+    album_id = models.CharField(max_length=8, blank=True, null=True)
+    album_name = models.CharField(max_length=50, blank=True, null=True)
+    album_tracks = models.ManyToManyField(Musicdata, blank=True, null=True)
+    album_artist = models.ManyToManyField(Artist, blank=True, null=True)
+    album_genre = models.CharField(max_length=25, blank=True, null=True)
+    album_subgenre = models.CharField(max_length=25, blank=True, null=True)
+    
+    def __str__(self):
         return self.album_name
 
 class DislikedMusic(models.Model):

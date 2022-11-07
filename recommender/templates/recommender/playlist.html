@@ -28,7 +28,9 @@
         frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         
         <div class = "text-center">
+            {% if request.user.is_authenticated %}
             <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-custom">☆</a>
+            {% endif %}
         </div>    
 
         </div>

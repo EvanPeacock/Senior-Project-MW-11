@@ -9,7 +9,10 @@
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 </td>
                 <div class = "text-center">
+                    {% if request.user.is_authenticated %}
                     <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
+                    {% endif %}
+
                     {% comment %} <div class="dropdown text-center">
                         <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           Add to Playlist

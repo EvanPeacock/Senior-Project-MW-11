@@ -20,11 +20,11 @@ class songAdmin(admin.ModelAdmin):
 class playlisttAdmin(admin.ModelAdmin):
      list_display = ['playlist_name']
 
-@admin.register(album)
+@admin.register(Album)
 class albumAdmin(admin.ModelAdmin):
      list_display = ['album_name']
 
-@admin.register(artist)
+@admin.register(Artist)
 class artistAdmin(admin.ModelAdmin):
      list_display = ['artist_name']
 
