@@ -11,6 +11,7 @@ from .models import Musicdata
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required 
+from django.http import HttpResponseRedirect
 
 def get_home(request):
     songs = Musicdata.objects.all().values('track_id')
@@ -134,14 +135,20 @@ def get_album(request):
 
 def get_track(request):
     if request.method == 'GET':
+        owner = User.objects.get(username=request.user.username)
+        playlists = Playlist.objects.filter(playlist_owner=owner)
         track = request.GET.get('track', None)
         if track is None:
-            return render(request, "recommender/track.html", {})
+            return render(request, "recommender/track.html", {'playlists': playlists})
         else:
             tracks = {}
             if track != "":
                 tracks = find_track_by_name(track)
-            return render(request, "recommender/results2.html", tracks)
+            args = {
+                'tracks': tracks['tracks'],
+                'playlists': playlists
+            }
+            return render(request, "recommender/results2.html", args)
 
 
 def get_signin(request):
@@ -333,7 +340,7 @@ def dislike(request, user_name, song):
             dislikedMusic.save()
             music.save()
             dislikedMusic.music.add(music)
-            return render(request, "recommender/track.html", {})
+            return redirect(request.META.get('HTTP_REFERER'))
         except:
             curUser = User.objects.filter(username=user_name).first()
             dislikedMusic = DislikedMusic()
@@ -343,7 +350,7 @@ def dislike(request, user_name, song):
             music = Musicdata.objects.filter(track_id__contains = song).first()
             music.save()
             dislikedMusic.music.add(music)   
-            return render(request, "recommender/track.html", {})
+            return redirect(request.META.get('HTTP_REFERER'))
     else:
         return Http404('Error adding song to dislikes')
 
@@ -395,6 +402,6 @@ def playlist_append(request, playlist_num, song_id):
         playlist.playlist_songs.add(song[0])
         playlist.save()
         args = {'playlist_num':playlist_num, 'song_id':song_id}
-        return render(request, "recommender/add_song_update.html", args)
+        return redirect(request.META.get('HTTP_REFERER'), args)
     else:
         raise Http404('Error')

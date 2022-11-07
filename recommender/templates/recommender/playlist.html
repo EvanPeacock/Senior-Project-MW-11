@@ -15,13 +15,12 @@
     </div>
     {% endif %}
 </div>
-<table>
-    <tr>
-{% for song in playlist.playlist_songs.all %}
 <br>
-<td>
+<ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+{% for song in playlist.playlist_songs.all %}
+<li style="width:30%;">
     <div class="card">    
-        <div class="card-body">
+        <center class="card-body">
             
     
         <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
@@ -31,11 +30,9 @@
             <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-custom">☆</a>
         </div>    
 
-        </div>
+    </center>
     </div>
-</td>
+</li>
 {% endfor %}
-</tr>
-</table>
 
 {% endblock %}

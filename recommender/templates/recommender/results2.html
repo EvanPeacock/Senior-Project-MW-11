@@ -8,19 +8,19 @@
                     <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 </td>
-                <div class = "text-center">
+                <div class = "container">
                     <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
-                    {% comment %} <div class="dropdown text-center">
+                     <div class="dropdown text-center">
                         <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           Add to Playlist
                         </button>
                         <ul class="dropdown-menu dropdown-menu-center">
                             {% for playlist in playlists %}
-                                <li><a class="dropdown-item" href="{% url 'recommender:add_to_playlist' user.username track playlist.id %}">{{ playlist.name }}</a></li>
+                                <li><a class="btn btn-link-custom" href="{% url 'recommender:playlist_append' playlist.playlist_id track %}">{{ playlist.playlist_name }}</a></li>
                                 <li><hr class="dropdown-divider"></li>
                             {% endfor %}
                         </ul>
-                    </div> {% endcomment %}
+                    </div> 
                 </div>
             </div>
         </div>
