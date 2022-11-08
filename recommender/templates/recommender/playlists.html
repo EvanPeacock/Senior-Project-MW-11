@@ -25,7 +25,9 @@
                             <label for="playlist_name">Playlist Name: </label>
                             <input id="playlist_name" type="text" name="playlist_name" style="margin:10px">
                         </div>
+                        {% if request.user.is_authenticated %}
                         <input href="{url 'recommender:get_playlists' user.username}" class="btn btn-custom" type="submit" value="Create"> 
+                        {% endif %}
                     </center>
                 </form>
               </li>
