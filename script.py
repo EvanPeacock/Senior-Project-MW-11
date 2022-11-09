@@ -1,14 +1,9 @@
 # Script being written to populate Album and Artist tables with data 
 # by iterating through the Musicdata objects. It then will check for 
 # if there already is an Artist or Album with those specifications.
-# If so, it will .
 
 # Import models from models.py and time for timer
 from recommender.models import Musicdata, Album, Artist
-import time
-
-# Instantiate Timer
-timeStart = time.time()
 
 # --  Start Artist Portion -- 
 print(f"\n\n *** Starting Artist Portion *** ")
@@ -113,20 +108,10 @@ for song in songList:
     # Increment totalCounter to keep track of object number
     totalAlbumCounter = totalAlbumCounter + 1     
     
-# Calculate timer
-timeStop = time.time()
-timer = timeStop - timeStart
-
-# Timer calculations
-hours = int(timer/3600)
-minutes = int((timer/60) - (hours*60))
-seconds = int(timer - (hours*3600) - (minutes*60))
-    
 # Print ending details
 albumQuery = Album.objects.all()
 albumList = list(albumQuery)
 print(f"\n\n****************************************\n\t -- End Metrics -- \n")
-print(f" - Total Time: {hours}h:{minutes}m:{seconds}s")
 print(f" - Total Artists: {artistList.length}")
 print(f"\t - Total Artist Iterations: {totalArtistCounter} - \n\t - Total Artist Additions: {totalArtistAdditions} - \n\t - Total Artist Creations: {totalArtistCreations} - ")
 print(f" - Total Albums: {albumList.length}")
