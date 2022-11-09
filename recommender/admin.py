@@ -11,21 +11,16 @@ class MusicAdmin(admin.ModelAdmin):
 
 admin.site.register(RecentSearches)
 
-
-@admin.register(song)
-class songAdmin(admin.ModelAdmin):
-     list_display = ['track_name', 'artist_id', 'duration_ms']
-
 @admin.register(Playlist)
 class playlisttAdmin(admin.ModelAdmin):
-     list_display = ['playlist_name']
+     list_display = ['playlist_id', 'playlist_name']
 
 @admin.register(Album)
 class albumAdmin(admin.ModelAdmin):
-     list_display = ['album_name']
+     list_display = ['album_id', 'album_name']
 
 @admin.register(Artist)
 class artistAdmin(admin.ModelAdmin):
-     list_display = ['artist_name']
+     list_display = ['artist_id', 'artist_name']
 
 admin.site.register(DislikedMusic)

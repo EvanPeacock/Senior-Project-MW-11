@@ -47,7 +47,6 @@ class Musicdata(models.Model):
     duration_ms = models.IntegerField()
         
 class Playlist(models.Model):
-    # playlist_id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
     playlist_name = models.CharField(max_length=50, null=True, blank=False, default='New Playlist')
     playlist_owner = models.ManyToManyField(User, null=True, blank=True)
@@ -65,18 +64,6 @@ class RecentSearches(models.Model):
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
     
-class song(models.Model):
-    track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    track_name = models.TextField()
-    artist_id = models.TextField()
-    track_album_id  = models.TextField()
-    track_album_release_date = models.IntegerField() 
-    playlist_id = models.ManyToManyField('playlist')
-    duration_ms = models.IntegerField()
-
-    def __str__(self): 
-        return self.track_name
-    
 class Artist(models.Model):
     artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
@@ -89,10 +76,11 @@ class Artist(models.Model):
         return self.artist_name
 
 class Album(models.Model):
-    album_id = models.CharField(max_length=8, blank=True, null=True)
+    album_id = models.TextField(null=True, blank=True)
     album_name = models.CharField(max_length=50, blank=True, null=True)
     album_tracks = models.ManyToManyField(Musicdata, blank=True, null=True)
     album_artist = models.ManyToManyField(Artist, blank=True, null=True)
+    album_release_date = models.IntegerField(null=True, blank=True)
     album_genre = models.CharField(max_length=25, blank=True, null=True)
     album_subgenre = models.CharField(max_length=25, blank=True, null=True)
     
