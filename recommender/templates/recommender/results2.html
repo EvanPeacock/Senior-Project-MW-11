@@ -1,3 +1,4 @@
+{% load static %}
 {% if tracks %}
     
     {% for track in tracks %}
@@ -8,10 +9,9 @@
                     <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 </td>
-                <div class = "container">
-                    <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
-                     <div class="dropdown text-center">
-                        <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div style="display:flex;gap:40px;justify-content:center">
+                     <div class="dropdown text-center" style="margin-top:12px">
+                        <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           Add to Playlist
                         </button>
                         <ul class="dropdown-menu dropdown-menu-center">
@@ -20,7 +20,16 @@
                                 <li><hr class="dropdown-divider"></li>
                             {% endfor %}
                         </ul>
-                    </div> 
+                    </div>
+                    <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-link-custom" style="margin-left:25px;">
+                        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
+                    </a>
+
+                    {% comment %} this is for if a song is already disliked  {% endcomment %}
+                    {% comment %} <a href="{% url 'recommender:undislike' user.username track%}" class="btn btn-link-custom" style="margin-left:25px;">
+                        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;">
+                    </a> {% endcomment %}
+                     
                 </div>
             </div>
         </div>

@@ -85,6 +85,8 @@ def find_track_by_name(track):
 
 
 def get_artist(request):
+    owner = User.objects.get(username=request.user.username)
+    playlists = Playlist.objects.filter(playlist_owner=owner)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.POST)
@@ -113,7 +115,12 @@ def get_artist(request):
             rs.result2 = answer[1]
             rs.result3 = answer[2]
             rs.save()
-            return render(request, 'recommender/artist.html', {'form': form, 'albums': answer})
+            args = {
+                'form': form,
+                'albums': answer,
+                'playlists': playlists
+            }
+            return render(request, 'recommender/artist.html', args)
         else:
             raise Http404('Something went wrong')
     else:
@@ -275,12 +282,9 @@ def change_password(request):
         return render(request,'recommender/change_password.html',args)
 
 def playlist_view(request, playlist_num):
-    # try:
     playlist = Playlist.objects.get(playlist_id=playlist_num)
     potential_songs = Musicdata.objects.all()
     return render(request, 'recommender/playlist.html', {'playlist':playlist, 'potential_songs':potential_songs})
-    # except:
-    #     raise Http404('Could not display playlist')
     
 def get_playlists(request):
     if request.method == 'GET':
@@ -392,6 +396,7 @@ def add_song_update(request, playlist_num):
                 query = Musicdata.objects.filter(track_name__contains = track).values('track_id')
                 tracks = list(query)
                 songs = list([*set([item['track_id'] for item in tracks[:3]])])
+                args = {'playlist_num':playlist_num, 'songs':songs}
             return render(request, "recommender/results3.html", {'songs':songs, 'playlist_num':playlist_num})
     
 def playlist_append(request, playlist_num, song_id):
