@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 
 from recommender.models import ProfileItems
 
+
 class SearchForm(forms.Form):
     artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
     from_year = forms.IntegerField(required=False)
     to_year = forms.IntegerField(required=False)
+
 
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -21,7 +23,7 @@ class RegisterForm(UserCreationForm):
 
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['placeholder'] = 'Email'
-        
+
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['placeholder'] = 'Username'
 
@@ -41,11 +43,12 @@ class RegisterForm(UserCreationForm):
 
         )
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control',}),
-            'email': forms.EmailInput(attrs={'class':'form-control'}),
-            'first_name': forms.TextInput(attrs={'class':'form-control'}),
-            'last_name': forms.TextInput(attrs={'class':'form-control'})
+            'username': forms.TextInput(attrs={'class': 'form-control', }),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'})
         }
+
 
 class SigninForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -65,13 +68,14 @@ class SigninForm(AuthenticationForm):
         )
 
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control'}),
-            'password': forms.PasswordInput(attrs={'class':'form-control'})
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'})
         }
-        
-    
+
+
 class PlaylistForm(forms.Form):
-    playlist_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
+    playlist_name = forms.CharField(
+        widget=forms.TextInput(attrs={'size': '50'}))
     # playlist_songs = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=[(song.track_id, song.__str__()) for song in Musicdata.objects.all()])
 
 # class PlaylistForm(forms.ModelForm):
@@ -81,7 +85,8 @@ class PlaylistForm(forms.Form):
 #         widgets = {
 #             'playlist_name': forms.TextInput(attrs={'placeholder': 'Playlist Name'}),
 #             'playlist_songs': forms.SelectMultiple(choices=Musicdata.objects.all()),
-#         } 
+#         }
+
 
 class UpdateSettingsForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
@@ -95,7 +100,7 @@ class UpdateSettingsForm(UserChangeForm):
 
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['placeholder'] = 'Email'
-        
+
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['placeholder'] = 'Username'
 
@@ -110,11 +115,12 @@ class UpdateSettingsForm(UserChangeForm):
         )
 
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control',}),
-            'email': forms.EmailInput(attrs={'class':'form-control'}),
-            'first_name': forms.TextInput(attrs={'class':'form-control'}),
-            'last_name': forms.TextInput(attrs={'class':'form-control'})
+            'username': forms.TextInput(attrs={'class': 'form-control', }),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'})
         }
+
 
 class UpdateProfileItemsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -129,11 +135,12 @@ class UpdateProfileItemsForm(forms.ModelForm):
             'profile_pic',
             'bio'
         )
-        
+
         widgets = {
-            'profile_pic': forms.FileInput(attrs={'class':'form-control'}),
-            'bio': forms.Textarea(attrs={'class':'form-control'})
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'})
         }
+
 
 class UpdateProfilePictureForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -147,10 +154,11 @@ class UpdateProfilePictureForm(forms.ModelForm):
         fields = (
             'profile_pic',
         )
-        
+
         widgets = {
-            'profile_pic': forms.FileInput(attrs={'class':'form-control'}),
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
 
 class UpdatePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
@@ -174,11 +182,12 @@ class UpdatePasswordForm(PasswordChangeForm):
         )
 
         widgets = {
-            'old_password': forms.PasswordInput(attrs={'class':'form-control'}),
-            'new_password1': forms.PasswordInput(attrs={'class':'form-control'}),
-            'new_password2': forms.PasswordInput(attrs={'class':'form-control'})
+            'old_password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'new_password1': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'new_password2': forms.PasswordInput(attrs={'class': 'form-control'})
         }
-    
+
+
 class AddSongForm(forms.Form):
-    song_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
-    song_artist = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}))
+    song_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
+    song_artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))

@@ -1,53 +1,48 @@
 {% extends 'base.html' %}
-
-{% block title %} SoundLogic {% endblock %}
-
+{% load static %}
+{% block title %}SoundLogic{% endblock %}
 {% block content %}
-<div class='nav' style="margin:25px;padding:10px;display:flex;flex-direction:column;gap:20px;justify-content:center;">
-    <div class="card" style="width: 100%;">
-        <div class="card-body">
-          <h5 class="card-title">Popular Songs Today</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Today's most popular songs</h6>
-          <div class="row row-cols-1 row-cols-md-3 g-3">
-            {% if songs %}
-            {% for song in songs %}
-              <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
-              frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-            {% endfor %}
-            {% endif %}
-          </div>
-      </div>
-    </div>
+<div class='nav' style="margin:5px;
+              padding:5px;
+              display:flex;
+              flex-direction:column;
+              gap:30px;
+              justify-content:center">
+  <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title">Popular Songs Today</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Today's most popular songs</h6>
+      
+      <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+        {% for song in songs%}
+          {% include "recommender/songcards.html" %}
+        {% endfor %}
+      </ol>
 
-    <div class="card" style="width: 100%;">
-      <div class="card-body">
-        <h5 class="card-title">Popular Albums Today</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Today's most popular albums</h6>
-        <div class="row row-cols-1 row-cols-md-3 g-3">
-          {% if albums %}
-          {% for album in albums %}
-          <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
-          frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
+  </div>
+  <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title">Popular Playlists Today</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Today's most popular playlists</h6>
+        {% if popularPlaylists %}
+         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:5px">
+          {% for pl in popularPlaylists %}
+          <li style="width:30%;">
+            <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black">
+              <div class="card">
+                <div class="card-body">
+                  {% if pl.playlist_name %}<h5 class="card-title">{{ pl.playlist_name }}</h5>{% endif %}
+                  {% if pl.creator %}<p>Owner: {{ pl.creator }}</p>{% endif %}
+                </div>
+              </div>
+            </a>
+          </li>
           {% endfor %}
-          {% endif %}
-        </div>
+        </ol> 
+        {% endif %}
       </div>
     </div>
-
-    <div class="card" style="width: 100%;">
-        <div class="card-body">
-          <h5 class="card-title">Popular Playlists Today</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Today's most popular playlists</h6>
-          <div class="row row-cols-1 row-cols-md-3 g-3">
-            {% if playlists %}
-            {% for playlist in playlists %}
-            <iframe src="https://open.spotify.com/embed/track/{{ playlist.track_id }}" width="300" height="380" 
-            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-            {% endfor %}
-            {% endif %}
-          </div>
-      </div>
-    </div>
+  </div>
 </div>
-
 {% endblock %}

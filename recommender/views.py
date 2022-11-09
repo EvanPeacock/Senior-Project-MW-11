@@ -10,24 +10,33 @@ from django.http import Http404
 from .models import Musicdata
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
+
+
 def get_home(request):
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        playlists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        playlists = []
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
     albums = Musicdata.objects.all().values('track_id')
     aResp = list(albums)
     random.shuffle(aResp)
-    playlists = Musicdata.objects.all().values('track_id')
-    pResp = list(playlists)
+    popularPlaylists = Playlist.objects.all()
+    pResp = list(popularPlaylists)
     random.shuffle(pResp)
-    return render(request, "recommender/home.html", {
-        'songs': sResp[:3],
-        'albums': aResp[:3],
-        'playlists': pResp[:3]
-    })
+    args = {
+        'songs': sResp[:6],
+        'albums': aResp[:6],
+        'popularPlaylists': pResp[:6],
+        'playlists': playlists
+    }
+    return render(request, "recommender/home.html", args)
 
 
 def get_explore(request):
@@ -101,10 +110,10 @@ def get_artist(request):
             to_year = None if form.cleaned_data['to_year'] == None else int(
                 form.cleaned_data['to_year'])
             albums = find_albums(
-                    form.cleaned_data['artist'],
-                    from_year,
-                    to_year
-                )
+                form.cleaned_data['artist'],
+                from_year,
+                to_year
+            )
 
             # Random 3 of top 10 popular albums
             answer = albums[:10]
@@ -166,10 +175,10 @@ def get_track(request):
 
 def get_signin(request):
     err = ''
-    if request.method=='POST':
+    if request.method == 'POST':
         form = SigninForm(request.POST)
-        username=request.POST['username']
-        password=request.POST['password']
+        username = request.POST['username']
+        password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -183,6 +192,7 @@ def get_signin(request):
     args = {'form': form, 'err': err}
     return render(request, 'recommender/signin.html', args)
 
+
 def get_registration(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -194,6 +204,7 @@ def get_registration(request):
         form = RegisterForm
         args = {'form': form}
         return render(request, 'recommender/register.html', args)
+
 
 def logout_view(request):
     if request.user.is_authenticated:
@@ -220,7 +231,7 @@ def get_profile(request, user_name):
                 'profile_user': user_name,
                 'user_object': owner,
                 'playlists': playlists
-                })
+            })
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -243,7 +254,7 @@ def get_myprofile(request):
                 'songs': sResp[:3],
                 'albums': aResp[:3],
                 'playlists': playlists
-                })
+            })
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -259,16 +270,16 @@ def get_settings(request):
 
 
 def update_settings(request):
-     if request.method == 'POST':
-         form = UpdateSettingsForm(request.POST, instance=request.user)
+    if request.method == 'POST':
+        form = UpdateSettingsForm(request.POST, instance=request.user)
 
-         if form.is_valid():
-             form.save()
-             return redirect('/recommender/myprofile/')
-     else:
-         form = UpdateSettingsForm(instance=request.user)
-         args = {'form': form}
-         return render(request, 'recommender/edit_settings.html', args)
+        if form.is_valid():
+            form.save()
+            return redirect('/recommender/myprofile/')
+    else:
+        form = UpdateSettingsForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'recommender/edit_settings.html', args)
 
 
 @login_required
@@ -284,69 +295,94 @@ def change_password(request):
             return redirect('/recommender/password/')
     else:
         form = UpdatePasswordForm(data=request.POST, user=request.user)
-        args = {'form':form}
-        return render(request,'recommender/change_password.html',args)
+        args = {'form': form}
+        return render(request, 'recommender/change_password.html', args)
+
 
 def playlist_view(request, playlist_num):
     playlist = Playlist.objects.get(playlist_id=playlist_num)
-    potential_songs = Musicdata.objects.all()
-    return render(request, 'recommender/playlist.html', {'playlist':playlist, 'potential_songs':potential_songs})
-    
+
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        if owner == playlist.playlist_owner:
+            getPlaylists = Playlist.objects.filter(playlist_owner=owner)
+            playlists = list(getPlaylists)
+            playlists.remove(playlist)
+        else:
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        playlists = []
+
+    disliked_songs = get_disliked_music(request)
+        
+
+    args = {
+        'playlist': playlist,
+        'playlists': playlists,
+        'disliked_songs': disliked_songs
+    }
+    return render(request, 'recommender/playlist.html', args)
+
+
 def get_playlists(request):
     if request.method == 'GET':
         playlists = Playlist.objects.all()
-        return render(request, 'recommender/playlists.html', {'playlists':playlists})
+        return render(request, 'recommender/playlists.html', {'playlists': playlists})
     else:
         return Http404('Error getting playlists')
-    
+
+
 def get_user_playlists(request, user_name):
     if request.method == 'GET':
         owner = User.objects.get(username=user_name)
         playlists = Playlist.objects.filter(playlist_owner=owner)
-        return render(request, 'recommender/playlists.html', {'playlists':playlists, 'owner':owner})
+        return render(request, 'recommender/playlists.html', {'playlists': playlists, 'owner': owner})
     else:
         return Http404('Error finding user playlists')
+
 
 def create_playlist(request, user_name):
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
-        if form.is_valid():             
+        if form.is_valid():
             p_name = None if form.cleaned_data['playlist_name'] == None else form.cleaned_data['playlist_name']
             # p_id = None if form.cleaned_data['playlist_id'] == None else form.cleaned_data['playlist_id']
             p_owner = User.objects.filter(username=user_name)
             p_songs = []
             # p_songs = None if form.cleaned_data['playlist_songs'] == None else form.cleaned_data['playlist_songs']
-            
+
             playlist = Playlist.objects.create()
             playlist.playlist_name = p_name
             playlist.playlist_owner.set(p_owner)
             playlist.playlist_songs.set(p_songs)
-            
+
             playlist.save()
-            
+
             return redirect('/recommender/playlist/' + str(playlist.playlist_id))
         else:
             return Http404('Error: Invalid form')
     else:
         form = PlaylistForm()
-        return render(request, "recommender/playlists.html", {'form':form})
-    
+        return render(request, "recommender/playlists.html", {'form': form})
+
+
 def get_history(request):
     if request.method == "GET":
         try:
             searches = RecentSearches.objects.all()
-            return render(request, "recommender/history.html", {'searches':searches})
+            return render(request, "recommender/history.html", {'searches': searches})
         except:
             raise Http404('Error with searches')
     else:
         raise Http404('Error')
 
+
 def dislike(request, user_name, song):
     if request.method == 'GET':
         try:
             curUser = User.objects.filter(username=user_name).first()
-            music = Musicdata.objects.filter(track_id__contains = song).first()
-            dislikedMusic = DislikedMusic.objects.get(user = curUser)
+            music = Musicdata.objects.filter(track_id__contains=song).first()
+            dislikedMusic = DislikedMusic.objects.get(user=curUser)
             dislikedMusic.save()
             music.save()
             dislikedMusic.music.add(music)
@@ -357,54 +393,74 @@ def dislike(request, user_name, song):
             dislikedMusic.save()
             curUser.save()
             dislikedMusic.user.add(curUser)
-            music = Musicdata.objects.filter(track_id__contains = song).first()
+            music = Musicdata.objects.filter(track_id__contains=song).first()
             music.save()
-            dislikedMusic.music.add(music)   
+            dislikedMusic.music.add(music)
             return redirect(request.META.get('HTTP_REFERER'))
     else:
         return Http404('Error adding song to dislikes')
 
-def get_dislikes(request):
-    if request.method == 'GET':
-        curUser = request.user
-        dislikes = DislikedMusic.objects.all()
-        disliked = dislikes.filter(user = curUser)
+
+def get_disliked_music(request):
+        disliked = DislikedMusic.objects.all().filter(user=request.user)
         songs = []
         for song in disliked:
             songs.append(song.music.values('track_id'))
-        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
+
+        args = {
+            'dislikes': songs
+        }
+        return args
+
+def get_dislikes(request):
+    if request.method == 'GET':
+        disliked = DislikedMusic.objects.all().filter(user=request.user)
+        songs = []
+        for song in disliked:
+            songs.append(song.music.values('track_id'))
+
+        args = {
+            'dislikes': songs
+        }
+        return render(request, 'recommender/dislikes.html', args)
     else:
         return Http404('Error getting dislikes')
+
 
 def undislike(request, user_name, song):
     if request.method == 'GET':
         curUser = User.objects.filter(username=user_name).first()
-        dislike = DislikedMusic.objects.get(user = curUser)
-        track = Musicdata.objects.filter(track_id = song).first()
+        dislike = DislikedMusic.objects.get(user=curUser)
+        track = Musicdata.objects.filter(track_id=song).first()
         dislike.music.remove(track)
-        disliked = DislikedMusic.objects.filter(user = curUser)
+        disliked = DislikedMusic.objects.filter(user=curUser)
         songs = []
         for song in disliked:
             songs.append(song.music.values('track_id'))
-        return render(request, 'recommender/dislikes.html', {'dislikes':songs})
+        args = {
+            'dislikes': songs
+        }
+        return render(request, 'recommender/dislikes.html', args)
     else:
         return Http404('Error removing song from dislikes')
-            
-    
+
+
 def add_song_update(request, playlist_num):
     if request.method == 'GET':
         track = request.GET.get('song', None)
         if track is None:
-            return render(request, "recommender/add_song_update.html", {'playlist_num':playlist_num})
+            return render(request, "recommender/add_song_update.html", {'playlist_num': playlist_num})
         else:
             tracks = {}
             if track != "":
-                query = Musicdata.objects.filter(track_name__contains = track).values('track_id')
+                query = Musicdata.objects.filter(
+                    track_name__contains=track).values('track_id')
                 tracks = list(query)
                 songs = list([*set([item['track_id'] for item in tracks[:3]])])
-                args = {'playlist_num':playlist_num, 'songs':songs}
-            return render(request, "recommender/results3.html", {'songs':songs, 'playlist_num':playlist_num})
-    
+                args = {'playlist_num': playlist_num, 'songs': songs}
+            return render(request, "recommender/results3.html", {'songs': songs, 'playlist_num': playlist_num})
+
+
 def playlist_append(request, playlist_num, song_id):
     if request.method == 'GET':
         song = Musicdata.objects.filter(track_id=song_id)
@@ -412,7 +468,22 @@ def playlist_append(request, playlist_num, song_id):
         playlist = Playlist.objects.get(playlist_id=playlist_num)
         playlist.playlist_songs.add(song[0])
         playlist.save()
-        args = {'playlist_num':playlist_num, 'song_id':song_id}
+        args = {'playlist_num': playlist_num, 'song_id': song_id}
         return redirect(request.META.get('HTTP_REFERER'), args)
+    else:
+        raise Http404('Error')
+
+def songcards(request):
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
+
+        args = {
+            'playlists': playlists
+        }
+        return render(request, "recommender/songcards.html", args)
     else:
         raise Http404('Error')
