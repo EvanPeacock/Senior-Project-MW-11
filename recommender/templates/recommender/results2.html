@@ -9,6 +9,7 @@
                     <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 </td>
+                {% if request.user.is_authenticated %}
                 <div style="display:flex;gap:40px;justify-content:center">
                      <div class="dropdown text-center" style="margin-top:12px">
                         <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -29,8 +30,9 @@
                     {% comment %} <a href="{% url 'recommender:undislike' user.username track%}" class="btn btn-link-custom" style="margin-left:25px;">
                         <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;">
                     </a> {% endcomment %}
-                     
+                    
                 </div>
+                {% endif %}
             </div>
         </div>
     <ol>

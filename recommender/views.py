@@ -85,9 +85,12 @@ def find_track_by_name(track):
 
 
 def get_artist(request):
-    owner = User.objects.get(username=request.user.username)
-    playlists = Playlist.objects.filter(playlist_owner=owner)
     if request.method == 'POST':
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.POST)
         # check whether it's valid:
@@ -142,8 +145,11 @@ def get_album(request):
 
 def get_track(request):
     if request.method == 'GET':
-        owner = User.objects.get(username=request.user.username)
-        playlists = Playlist.objects.filter(playlist_owner=owner)
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
         track = request.GET.get('track', None)
         if track is None:
             return render(request, "recommender/track.html", {'playlists': playlists})
