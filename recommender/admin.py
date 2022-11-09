@@ -17,7 +17,7 @@ class playlisttAdmin(admin.ModelAdmin):
 
 @admin.register(Album)
 class albumAdmin(admin.ModelAdmin):
-     list_display = ['album_id', 'album_name']
+     list_display = ['album_id', 'album_name', 'album_artist']
 
 @admin.register(Artist)
 class artistAdmin(admin.ModelAdmin):

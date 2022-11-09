@@ -1,10 +1,6 @@
 from django.db import models  
-import random
-from email.policy import default
-from enum import unique
+import random, uuid
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-
 
 # Create your models here.
 
@@ -24,6 +20,13 @@ def unique_rand():
             return index
         else:
             index += 1
+            
+def uniqueIDArtist():
+    randList = []
+    for _ in range(random.randint(10,100)):
+        randList.append(random.randint(100000000000, 999999999999))
+    return random.choice(randList)
+
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -45,6 +48,9 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
+    
+    def __str__(self):
+        return self.track_name
         
 class Playlist(models.Model):
     playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
@@ -64,22 +70,27 @@ class RecentSearches(models.Model):
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
     
+# For some reason, when Artist or Album object is created, the  
+# track lists are created with a full list. 
+#   - I got around this by reseting them on creation in script.py
+#   - Maybe can be fixed by altering __init__?
+
 class Artist(models.Model):
-    artist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
     # artist_albums = models.ManyToManyField(Album, blank=True, null=True)
-    artist_tracks = models.ManyToManyField(Musicdata, blank=True, null=True)
+    artist_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
     artist_genre = models.CharField(max_length=25, blank=True, null=True)
     artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
     
     def __str__(self):
-        return self.artist_name
+        return str(self.artist_name)
 
 class Album(models.Model):
     album_id = models.TextField(null=True, blank=True)
     album_name = models.CharField(max_length=50, blank=True, null=True)
-    album_tracks = models.ManyToManyField(Musicdata, blank=True, null=True)
-    album_artist = models.ManyToManyField(Artist, blank=True, null=True)
+    album_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    album_artist = models.TextField(blank=True, null=True)
     album_release_date = models.IntegerField(null=True, blank=True)
     album_genre = models.CharField(max_length=25, blank=True, null=True)
     album_subgenre = models.CharField(max_length=25, blank=True, null=True)
