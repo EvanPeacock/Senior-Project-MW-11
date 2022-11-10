@@ -38,7 +38,7 @@ for song in songList:
     if Artist.objects.filter(artist_name=artist_name):
         
         # Check to see if song already added
-        if not Artist.objects.filter(artist_tracks__track_id=song.track_id):
+        if not Artist.objects.get(artist_tracks__track_id=song.track_id):
             
             # Add song to artist's tracks
             currArtist = Artist.objects.get(artist_name=artist_name)
@@ -91,7 +91,7 @@ for song in songList:
     if Album.objects.filter(album_id=album_id):
         
         # Check to see if song already added
-        if not Album.objects.filter(album_tracks__track_id=song.track_id):
+        if not Album.objects.get(album_tracks__track_id=song.track_id):
             
             # Add song to album's tracks
             currAlbum = Album.objects.get(album_id=album_id)

@@ -38,6 +38,6 @@ urlpatterns = [
     path('undislike/<slug:user_name>/<slug:song>/', views.undislike, name='undislike'),
     
     path('album/<str:album_id>/', views.view_album, name="view_album"),
-    path('artist/<str:artist_id>/', views.view_artist, name="view_artist"),
+    path('artist/<str:artist_name>/', views.view_artist, name="view_artist"),
 ]
  
