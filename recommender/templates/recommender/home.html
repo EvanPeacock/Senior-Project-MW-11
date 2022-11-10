@@ -2,17 +2,12 @@
 {% load static %}
 {% block title %}SoundLogic{% endblock %}
 {% block content %}
-<div class='nav' style="margin:5px;
-              padding:5px;
-              display:flex;
-              flex-direction:column;
-              gap:30px;
-              justify-content:center">
+<div class='nav' style="margin:5px;padding:5px;display:flex;flex-direction:column;gap:30px;justify-content:center">
   <div class="card" style="width: 100%;">
     <div class="card-body">
       <h5 class="card-title">Popular Songs Today</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Today's most popular songs</h6>
-      
+      <h6 class="card-subtitle mb-3 text-muted">Today's most popular songs</h6>
+
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
         {% for song in songs%}
           {% include "recommender/songcards.html" %}
@@ -24,20 +19,11 @@
   <div class="card" style="width: 100%;">
     <div class="card-body">
       <h5 class="card-title">Popular Playlists Today</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Today's most popular playlists</h6>
+      <h6 class="card-subtitle mb-3 text-muted">Today's most popular playlists</h6>
         {% if popularPlaylists %}
-         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:5px">
-          {% for pl in popularPlaylists %}
-          <li style="width:30%;">
-            <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black">
-              <div class="card">
-                <div class="card-body">
-                  {% if pl.playlist_name %}<h5 class="card-title">{{ pl.playlist_name }}</h5>{% endif %}
-                  {% if pl.creator %}<p>Owner: {{ pl.creator }}</p>{% endif %}
-                </div>
-              </div>
-            </a>
-          </li>
+         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+          {% for playlist in popularPlaylists %}
+            {% include "recommender/playlistcards.html" %}
           {% endfor %}
         </ol> 
         {% endif %}

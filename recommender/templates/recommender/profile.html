@@ -22,26 +22,15 @@
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">{{profile_user}}'s Playlists</h5>
+      <h5 class="card-title">{{profile_user}}Your Playlists</h5>
         {% if playlists %}
-        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
-            {% for pl in playlists %}
-                <li style="width:30%;">
-                    <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black;">
-                        <div class="card">
-                            <div class="card-body" style ="height: 175px;"> 
-                            {% if pl.playlist_name %}
-                                <h5 class="card-title" >{{ pl.playlist_name }}</h5>
-                            {% endif %}
-                            </div>
-                        </div>
-                    </a>
-                </li>
+        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+            {% for playlist in playlists %}
+              {% include "recommender/playlistcards.html" %}
             {% endfor %}
         </ol>
     {% endif %}
   </div>
-
 </div>
 
 

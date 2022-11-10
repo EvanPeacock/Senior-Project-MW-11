@@ -43,22 +43,9 @@
 <hr>
 
 {% if playlists %}
-    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
-        {% for pl in playlists.all %}
-            <li style="width:30%;">
-                <a href="{% url "recommender:playlist_view" pl.playlist_id %}" style="text-decoration:none;color:black;">
-                    <div class="card">
-                        <div class="card-body"> 
-                        {% if pl.playlist_name %}
-                            <h5 class="card-title">{{ pl.playlist_name }}</h5>
-                        {% endif %}
-                        {% if pl.creator %}
-                            <p>Owner: {{ pl.creator }}</p>
-                        {% endif %}
-                        </div>
-                    </div>
-                </a>
-            </li>
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+        {% for playlist in playlists.all %}
+                {% include "recommender/playlistcards.html" %}
         {% endfor %}
     </ol>
 {% endif %}

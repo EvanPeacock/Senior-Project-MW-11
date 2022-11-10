@@ -75,7 +75,7 @@ class SigninForm(AuthenticationForm):
 
 class PlaylistForm(forms.Form):
     playlist_name = forms.CharField(
-        widget=forms.TextInput(attrs={'size': '50'}))
+        widget=forms.TextInput(attrs={'size': '20'}))
     # playlist_songs = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=[(song.track_id, song.__str__()) for song in Musicdata.objects.all()])
 
 # class PlaylistForm(forms.ModelForm):
