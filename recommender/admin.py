@@ -17,10 +17,10 @@ class playlisttAdmin(admin.ModelAdmin):
 
 @admin.register(Album)
 class albumAdmin(admin.ModelAdmin):
-     list_display = ['album_id', 'album_name', 'album_artist']
+     list_display = ['album_name', 'album_artist', 'album_id']
 
 @admin.register(Artist)
 class artistAdmin(admin.ModelAdmin):
-     list_display = ['artist_id', 'artist_name']
+     list_display = ['artist_name', 'artist_id']
 
 admin.site.register(DislikedMusic)

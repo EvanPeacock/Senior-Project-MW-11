@@ -46,6 +46,7 @@ for song in songList:
             
             # Save the object
             currArtist.save()
+            Artist.save()
             
             # Increment totalAdditions
             totalArtistAdditions = totalArtistAdditions + 1
@@ -58,6 +59,7 @@ for song in songList:
         
         # Save the object
         newArtist.save()
+        Artist.save()
         
         # Increment totalCreations and totalAdditions
         totalArtistCreations = totalArtistCreations + 1
@@ -91,8 +93,13 @@ for song in songList:
         # Check to see if song already added
         if not Album.objects.filter(album_tracks__track_id=song.track_id):
             
-            # Add song to artist's tracks
-            Album.objects.get(album_id=album_id).album_tracks.add(song)
+            # Add song to album's tracks
+            currAlbum = Album.objects.get(album_id=album_id)
+            currAlbum.album_tracks.add(song)
+            
+            # Save the object
+            currAlbum.save()
+            Album.save()
             
             # Increment totalAdditions
             totalAlbumAdditions = totalAlbumAdditions + 1
@@ -108,6 +115,7 @@ for song in songList:
         
         # Save the object
         newAlbum.save()
+        Album.save()
         
         # Increment totalCreations and totalAdditions
         totalAlbumCreations = totalAlbumCreations + 1

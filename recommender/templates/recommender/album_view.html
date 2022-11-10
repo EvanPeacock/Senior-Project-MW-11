@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} {{album.album_name}} - @{{album.album_artist}} {% endblock %}
+
+{% block content %}
+
+<div class="header" style="display:flex;flex-direction:row;justify-content:space-between;">
+    <div class="left-header">
+        <h3>{{ album.album_name }}</h3>
+        <h5>{{ album.album_artist }}</h5>
+    </div>
+</div>
+<table>
+    <tr>
+{% for song in album.album_tracks.all %}
+<br>
+<td>
+    <div class="card">    
+        <div class="card-body">
+            
+    
+        <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
+        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        
+        <div class = "text-center">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-custom">☆</a>
+            {% endif %}
+        </div>    
+
+        </div>
+    </div>
+</td>
+{% endfor %}
+</tr>
+</table>
+
+{% endblock %}
