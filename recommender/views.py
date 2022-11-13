@@ -199,7 +199,14 @@ def get_registration(request):
 
         if form.is_valid():
             form.save()
-            return redirect('/recommender/myprofile/')
+            username = request.POST['username']
+            password = request.POST['password1']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/recommender/myprofile')
+        else:
+            return redirect('/recommender/registration/')
     else:
         form = RegisterForm
         args = {'form': form}
