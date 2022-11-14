@@ -2,9 +2,9 @@ from django.db import models
 import random
 from email.policy import default
 from enum import unique
+from django.db import models  
+import random, uuid
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-
 
 def unique_rand():
     index = random.randint(1, 100000000)
@@ -23,6 +23,13 @@ def unique_rand():
             return index
         else:
             index += 1
+            
+def uniqueIDArtist():
+    randList = []
+    for _ in range(random.randint(10,100)):
+        randList.append(random.randint(100000000000, 999999999999))
+    return random.choice(randList)
+
 
 
 class Musicdata(models.Model):
@@ -45,17 +52,16 @@ class Musicdata(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     duration_ms = models.IntegerField()
-
-
+    
+    def __str__(self):
+        return self.track_name
+        
 class Playlist(models.Model):
-    # playlist_id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
-    playlist_id = models.CharField(
-        max_length=8, unique=True, default=unique_rand)
-    playlist_name = models.CharField(
-        max_length=50, null=True, blank=False, default='New Playlist')
-    playlist_owner = models.ManyToManyField(User, blank=True)
-    playlist_songs = models.ManyToManyField('Musicdata', blank=True)
-
+    playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    playlist_name = models.CharField(max_length=50, null=True, blank=False, default='New Playlist')
+    playlist_owner = models.ManyToManyField(User, null=True, blank=True)
+    playlist_songs = models.ManyToManyField('Musicdata', blank=True, null=True)
+    
     def creator(self):
         author = list(self.playlist_owner.all())
         return str(author[0].username)
@@ -68,7 +74,34 @@ class RecentSearches(models.Model):
     result1 = models.CharField(max_length=25, null=True, blank=True)
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
+    
+# For some reason, when Artist or Album object is created, the  
+# track lists are created with a full list. 
+#   - I got around this by reseting them on creation in script.py
+#   - Maybe can be fixed by altering __init__?
 
+class Artist(models.Model):
+    artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
+    artist_name = models.CharField(max_length=25, blank=True, null=True)
+    # artist_albums = models.ManyToManyField(Album, blank=True, null=True)
+    artist_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    artist_genre = models.CharField(max_length=25, blank=True, null=True)
+    artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
+    
+    def __str__(self):
+        return str(self.artist_name)
+
+class Album(models.Model):
+    album_id = models.TextField(null=True, blank=True)
+    album_name = models.CharField(max_length=50, blank=True, null=True)
+    album_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    album_artist = models.TextField(blank=True, null=True)
+    album_release_date = models.IntegerField(null=True, blank=True)
+    album_genre = models.CharField(max_length=25, blank=True, null=True)
+    album_subgenre = models.CharField(max_length=25, blank=True, null=True)
+    
+    def __str__(self):
+        return self.album_name
 
 class song(models.Model):
     track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
@@ -81,30 +114,6 @@ class song(models.Model):
 
     def __str__(self):
         return self.track_name
-
-
-class artist(models.Model):
-    artist_id = models.CharField(
-        max_length=8, unique=True, default=unique_rand)
-    artist_name = models.TextField(null=True, blank=True)
-    genre = models.TextField(null=True, blank=True)
-    subgenre = models.TextField(null=True, blank=True)
-    track_id = models.ManyToManyField(song, blank=True)
-
-    def __str__(self):
-        return self.artist_name
-
-
-class album(models.Model):
-    album_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    album_name = models.TextField(null=True, blank=True)
-    track_id = models.ManyToManyField(song, blank=True)
-    artist_id = models.ManyToManyField(artist, blank=True)
-    genre = models.TextField()
-    subgenre = models.TextField()
-
-    def __str__(self):
-        return self.album_name
 
 
 class DislikedMusic(models.Model):
