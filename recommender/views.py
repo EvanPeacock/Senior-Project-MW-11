@@ -321,13 +321,13 @@ def playlist_view(request, playlist_num):
         playlists = []
 
     disliked_songs = get_disliked_music(request)
-        
 
     args = {
         'playlist': playlist,
         'playlists': playlists,
         'disliked_songs': disliked_songs
     }
+    
     return render(request, 'recommender/playlist.html', args)
 
 
@@ -492,17 +492,35 @@ def songcards(request):
             'playlists': playlists
         }
         return render(request, "recommender/songcards.html", args)
-        
+
 def view_album(request, album_id):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
         album = Album.objects.get(album_id=album_id)
-        return render(request, 'recommender/album_view.html', {'album':album})
+        args = {
+            'album': album,
+            'playlists': playlists
+        }
+        return render(request, 'recommender/album_view.html', args)
     else:
         raise Http404('Error')
 
 def view_artist(request, artist_name):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
         artist = Artist.objects.get(artist_name=artist_name)
-        return render(request, 'recommender/artist_view.html', {'artist':artist})
+        args = {
+            'artist': artist,
+            'playlists': playlists
+        }
+        return render(request, 'recommender/artist_view.html', args)
     else:
         raise Http404('Error')

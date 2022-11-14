@@ -10,9 +10,12 @@
                         Add to Playlist
                         </button>
                         <ul class="dropdown-menu dropdown-menu-center">
+                            <p>Playlists</p>
                         {% for playlist in playlists %}
+                        <li><hr class="dropdown-divider"></li>
                             <li><a class="btn btn-link-custom" href="{% url 'recommender:playlist_append' playlist.playlist_id song.track_id %}">{{playlist.playlist_name }}</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            
+                            
                         {% endfor %}
                         </ul>
                     </div>

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %} {{album.album_name}} - @{{album.album_artist}} {% endblock %}
+{% block title %} {{album.album_name}} - {{album.album_artist}} {% endblock %}
 
 {% block content %}
 
@@ -9,29 +10,21 @@
         <h3>{{ album.album_name }}</h3>
         <h5>{{ album.album_artist }}</h5>
     </div>
-</div>
-<table>
-    <tr>
-{% for song in album.album_tracks.all %}
-<td>
-    <div class="card">    
-        <div class="card-body">
-            
-    
-        <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
-        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        
-        <div class = "text-center">
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-custom">☆</a>
-            {% endif %}
-        </div>    
-
-        </div>
+    {% if request.user.is_authenticated %}
+    <div class="right-header" style="display:flex;flex-direction:row;justify-content:right;gap:15px">
+        <div><a href="" class="btn btn-link-custom">
+            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
+        </a></div>
     </div>
-</td>
-{% endfor %}
-</tr>
-</table>
+    {% endif %}
+</div>
+
+<hr/>
+
+<ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+    {% for song in album.album_tracks.all%}
+        {% include "recommender/songcards.html" %}
+    {% endfor %}
+</ol>
 
 {% endblock %}
