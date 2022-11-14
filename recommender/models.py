@@ -103,6 +103,18 @@ class Album(models.Model):
     def __str__(self):
         return self.album_name
 
+class song(models.Model):
+    track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
+    track_name = models.TextField()
+    artist_id = models.TextField()
+    track_album_id = models.TextField()
+    track_album_release_date = models.IntegerField()
+    playlist_id = models.ManyToManyField('playlist')
+    duration_ms = models.IntegerField()
+
+    def __str__(self):
+        return self.track_name
+
 
 class DislikedMusic(models.Model):
     user = models.ManyToManyField(User, blank=True)
