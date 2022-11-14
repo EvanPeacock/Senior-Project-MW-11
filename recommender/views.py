@@ -492,5 +492,17 @@ def songcards(request):
             'playlists': playlists
         }
         return render(request, "recommender/songcards.html", args)
+        
+def view_album(request, album_id):
+    if request.method == 'GET':
+        album = Album.objects.get(album_id=album_id)
+        return render(request, 'recommender/album_view.html', {'album':album})
+    else:
+        raise Http404('Error')
+
+def view_artist(request, artist_name):
+    if request.method == 'GET':
+        artist = Artist.objects.get(artist_name=artist_name)
+        return render(request, 'recommender/artist_view.html', {'artist':artist})
     else:
         raise Http404('Error')
