@@ -39,10 +39,6 @@
             <a href="{% url 'recommender:get_playlists' %}" class="btn btn-link-custom">Playlists</a>
         </div>
 
-        <div>
-            <a href="{% url 'recommender:get_history' %}" class="btn btn-link-custom">History</a>
-        </div>
-
         <div class="dropdown text-center">
             <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               Search
@@ -53,6 +49,8 @@
               <li><a href="{% url 'recommender:get_album' %}" class="btn btn-link-custom">Album</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <a href="{% url 'recommender:get_history' %}" class="btn btn-link-custom">Search History</a>
             </ul>
         </div>
     </div>

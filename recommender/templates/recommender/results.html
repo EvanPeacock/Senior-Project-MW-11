@@ -1,18 +1,9 @@
-{% if albums %}
-    <table>
-    <tr>
+{% if albums %} 
+<ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
     {% for album in albums %}
-
-    <td>
-    
-    <iframe src="https://open.spotify.com/embed/track/{{ album }}" width="300" height="380" 
-    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-    </button>
-    </td>
+        
+            {% include "recommender/albumcards.html" %}
         
     {% endfor %}
-    </tr>
-    </table>
-
-
+</ol>  
 {% endif %}

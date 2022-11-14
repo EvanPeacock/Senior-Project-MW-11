@@ -70,14 +70,13 @@ def find_albums(artist, from_year=None, to_year=None):
 
 
 def find_album_by_name(album):
-    query = Musicdata.objects.filter(
-        track_album_name__contains=album).values('track_id')
+    query = Album.objects.filter(album_name__contains=album)
     resp = list(query)
     # Randomize to get different results each time
     random.shuffle(resp)
     # Return the id of up to 3 albums
     return {
-        'albums': [item['track_id'] for item in resp[:3]]
+        'albums': resp[:3]
     }
 
 
