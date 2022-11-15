@@ -21,8 +21,8 @@
 <hr/>
 
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-    {% for song in artist.artist_tracks.all%}
-        {% include "recommender/songcards.html" %}
+    {% for album in artist_albums.all%}
+        {% include "recommender/albumcards.html" %}
     {% endfor %}
 </ol>
 

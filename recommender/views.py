@@ -516,9 +516,12 @@ def view_artist(request, artist_name):
         else:
             playlists = []
         artist = Artist.objects.get(artist_name=artist_name)
+        artist_albums = Album.objects.filter(album_artist=artist)
+        artist_albums = artist_albums.order_by('album_name')
         args = {
             'artist': artist,
-            'playlists': playlists
+            'playlists': playlists,
+            'artist_albums': artist_albums
         }
         return render(request, 'recommender/artist_view.html', args)
     else:

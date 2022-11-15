@@ -1,9 +1,7 @@
 {% if albums %} 
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
     {% for album in albums %}
-        
             {% include "recommender/albumcards.html" %}
-        
     {% endfor %}
 </ol>  
 {% endif %}
