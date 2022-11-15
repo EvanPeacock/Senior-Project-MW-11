@@ -1,21 +1,21 @@
 {% if tracks %}
-{% comment %} <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-    {% for song in tracks %}
-        {% include "recommender/songcards.html" %}
-    {% endfor %}
-    </ol>    {% endcomment %}
-    {% for track in tracks %}
+    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+        {% for song in tracks %}
+            {% include "recommender/songcards.html" %}
+        {% endfor %}
+    </ol>    
+    {% comment %} {% for song in tracks %}
     <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
         <div class="card">
             <div class="card-body"> 
                 <td>
-                    <iframe src="https://open.spotify.com/embed/track/{{ track }}" width="300" height="380" 
+                    <iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 </td>
                 <div class = "text-center">
                     {% if request.user.is_authenticated %}
-                    <a href="{% url 'recommender:dislike' user.username track%}" class="btn btn-custom">☆</a>
-                    {% endif %}
+                    <a href="{% url 'recommender:dislike' user.username song%}" class="btn btn-custom">☆</a>
+                    {% endif %} {% endcomment %}
 
                     {% comment %} <div class="dropdown text-center">
                         <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,10 +28,10 @@
                             {% endfor %}
                         </ul>
                     </div> {% endcomment %}
-                </div>
+                {% comment %} </div>
             </div>
         </div>
     <ol>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
 {% endif %}
