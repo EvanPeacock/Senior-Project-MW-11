@@ -10,6 +10,8 @@
         {% endblock %}
     </title>
 
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
@@ -49,8 +51,10 @@
               <li><a href="{% url 'recommender:get_album' %}" class="btn btn-link-custom">Album</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a href="{% url 'recommender:get_track' %}" class="btn btn-link-custom">Track</a></li>
+              {% if request.user.is_authenticated %}
               <li><hr class="dropdown-divider"></li>
               <a href="{% url 'recommender:get_history' %}" class="btn btn-link-custom">Search History</a>
+              {% endif %}
             </ul>
         </div>
     </div>

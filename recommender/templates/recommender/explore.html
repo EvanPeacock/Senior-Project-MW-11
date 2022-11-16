@@ -31,14 +31,48 @@
                 <div class="card-body">
                   <h5 class="card-title">Recomended Songs</h5>
                   <h6 class="card-subtitle mb-2 text-muted">Songs you might like</h6>
-                  <div class="row row-cols-1 row-cols-md-3 g-3">
+                  
                     {% if songs %}
-                    {% for song in songs %}
-                      <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" 
-                      frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                    {% endfor %}
+                    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+                      {% for song in songs%}
+                      <li style="width:30%;">
+                        <div class="card">
+                            <center class="card-body">
+                                <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="230" height="260" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                                {% if request.user.is_authenticated %}
+                                    <div style="display:flex;gap:10px;justify-content:center">
+                                        <div class="dropdown text-center" style="margin-top:12px">
+                                            <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Add to Playlist
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-center">
+                                                <p>Playlists</p>
+                                            {% for playlist in userPlaylists %}
+                                            <li><hr class="dropdown-divider"></li>
+                                                <li><a class="btn btn-link-custom" href="{% url 'recommender:playlist_append' playlist.playlist_id song.track_id %}">{{playlist.playlist_name }}</a></li>
+                                                
+                                                
+                                            {% endfor %}
+                                            </ul>
+                                        </div>
+                    
+                                        {% comment %} this doesnt really work rn {% endcomment %}
+                                        {% if song in dislikedlist %}
+                                            <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom">
+                                            <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
+                                        {% else %}
+                                            <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom">
+                                            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
+                                        {% endif %}
+                                    </div> 
+                                {% endif %}
+                            </center>
+                        </div>
+                    </li>
+                      {% endfor %}
+                    </ol>
                     {% endif %}
-                  </div>
+                  
               </div>
             </div>
         
@@ -46,14 +80,46 @@
               <div class="card-body">
                 <h5 class="card-title">Recomended Albums</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Albums you might like</h6>
-                <div class="row row-cols-1 row-cols-md-3 g-3">
                   {% if albums %}
-                  {% for album in albums %}
-                  <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
-                  frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                  <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+                  {% for album in albums %}           
+                  <li style="width:30%;">
+                        <div class="card">
+                          <div class="card-body">
+                            {% if album.album_name %}<h5 class="card-title">{{ album.album_name }}</h5>{% endif %}
+                          
+                          
+                              {% for song in album.album_tracks.all|slice:":3" %}
+                                  <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="240" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
+                              {% endfor %}
+
+                              
+                                  <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
+                                      <div style="margin-top:12px"><a href={% url 'recommender:view_artist' album.album_artist %} class="btn btn-outline-custom">{{album.album_artist}}</a></div>
+
+                                      <div style="margin-top:12px"><a href="{% url 'recommender:view_album' album.album_id %}" class="btn btn-custom">View Album</a></div>
+                                      {% if request.user.is_authenticated %}  
+                                      <div><a href="" class="btn btn-link-custom">
+                                          <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
+                                      </a></div>
+                                      {% comment %} this doesnt really work rn {% endcomment %}
+                                      {% if song in dislikedlist %}
+                                          {% comment %} <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom" style="margin-left:25px;">
+                                          <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a> {% endcomment %}
+                                      
+                                      {% else %}
+                                          {% comment %} <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom" style="margin-left:25px;">
+                                          <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a>  {% endcomment %}
+                                      {% endif %}
+                                  </div> 
+                              {% endif %}
+                              </div>
+                        </div>
+                      {% comment %} </a> {% endcomment %}
+                    </li>
                   {% endfor %}
+                  </ol>
                   {% endif %}
-                </div>
               </div>
             </div>
         
@@ -61,14 +127,51 @@
                 <div class="card-body">
                   <h5 class="card-title">Recomended Playlists</h5>
                   <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
-                  <div class="row row-cols-1 row-cols-md-3 g-3">
+                  
                     {% if playlists %}
-                    {% for playlist in playlists %}
-                    <iframe src="https://open.spotify.com/embed/track/{{ playlist.track_id }}" width="300" height="380" 
-                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                    {% endfor %}
+                    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+                      {% for playlist in playlists %}
+                      {% load static %}           
+                      <li style="width:30%;">
+                          {% comment %} <a href="{% url "recommender:playlist_view" playlist.playlist_id %}" style="text-decoration:none"> {% endcomment %}
+                            <div class="card">
+                              <div class="card-body">
+                                {% if playlist.playlist_name %}<h5 class="card-title">{{ playlist.playlist_name }}</h5>{% endif %}
+                                {% comment %} {% if playlist.creator %} <p class="text-muted"> Owner: {{ playlist.creator }} </p> {% endif %} {% endcomment %}
+                              
+                              
+                                  {% for song in playlist.playlist_songs.all|slice:":3" %}
+                                      <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="240" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
+                                  {% endfor %}
+                      
+                                  
+                                      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
+                                          <div style="margin-top:12px"><a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{playlist.creator}}</a></div>
+                      
+                                          <div style="margin-top:12px"><a href="{% url 'recommender:playlist_view' playlist.playlist_id %}" class="btn btn-custom">View Playlist</a></div>
+                                          {% if request.user.is_authenticated %}  
+                                          <div><a href="" class="btn btn-link-custom">
+                                              <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
+                                          </a></div>
+                                          {% comment %} this doesnt really work rn {% endcomment %}
+                                          {% if song in dislikedlist %}
+                                              {% comment %} <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom" style="margin-left:25px;">
+                                              <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a> {% endcomment %}
+                                          
+                                          {% else %}
+                                              {% comment %} <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom" style="margin-left:25px;">
+                                              <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a>  {% endcomment %}
+                                          {% endif %}
+                                      </div> 
+                                  {% endif %}
+                                  </div>
+                            </div>
+                          {% comment %} </a> {% endcomment %}
+                        </li>
+                      {% endfor %}
+                    </ol> 
                     {% endif %}
-                  </div>
+                  
               </div>
             </div>
         </div>

@@ -18,23 +18,31 @@ from django.http import HttpResponseRedirect
 def get_home(request):
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
-        playlists = Playlist.objects.filter(playlist_owner=owner)
+        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
     else:
-        playlists = []
+        userPlaylists = []
+
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
-    albums = Musicdata.objects.all().values('track_id')
-    aResp = list(albums)
-    random.shuffle(aResp)
+
+    albums = Album.objects.all()
+    alResp = list(albums)
+    random.shuffle(alResp)
+
+    artists = Artist.objects.all()
+    arResp = list(artists)
+    random.shuffle(arResp)
+    
     popularPlaylists = Playlist.objects.all()
     pResp = list(popularPlaylists)
     random.shuffle(pResp)
     args = {
-        'songs': sResp[:6],
-        'albums': aResp[:6],
-        'popularPlaylists': pResp[:6],
-        'playlists': playlists
+        'songs': sResp[:3],
+        'albums': alResp[:3],
+        'artists': arResp[:3],
+        'playlists': pResp[:3],
+        'userPlaylists': userPlaylists
     }
     return render(request, "recommender/home.html", args)
 
@@ -43,21 +51,34 @@ def get_explore(request):
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
-    albums = Musicdata.objects.all().values('track_id')
-    aResp = list(albums)
-    random.shuffle(aResp)
-    playlists = Musicdata.objects.all().values('track_id')
+    albums = Album.objects.all()
+    alResp = list(albums)
+    random.shuffle(alResp)
+    playlists = Playlist.objects.all()
     pResp = list(playlists)
     random.shuffle(pResp)
+    artists = Artist.objects.all()
+    arResp = list(artists)
+    random.shuffle(arResp)
     userResp = User.objects.all()
     uResp = list(userResp)
     random.shuffle(uResp)
-    return render(request, "recommender/explore.html", {
+
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        playlists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        playlists = []
+
+    args = {
         'songs': sResp[:3],
-        'albums': aResp[:3],
+        'albums': alResp[:3],
         'playlists': pResp[:3],
-        'users': uResp[:10]
-    })
+        'artists': arResp[:3],
+        'users': uResp[:10],
+        'userPlaylists': playlists
+    }
+    return render(request, "recommender/explore.html", args)
 
 
 def find_albums(artist, from_year=None, to_year=None):

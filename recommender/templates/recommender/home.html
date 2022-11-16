@@ -7,22 +7,45 @@
     <div class="card-body">
       <h5 class="card-title">Popular Songs Today</h5>
       <h6 class="card-subtitle mb-3 text-muted">Today's most popular songs</h6>
-
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
         {% for song in songs%}
           {% include "recommender/songcards.html" %}
         {% endfor %}
       </ol>
-
     </div>
   </div>
+
+  <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title">Popular Albums Today</h5>
+      <h6 class="card-subtitle mb-3 text-muted">Today's most popular songs</h6>
+      <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+        {% for album in albums%}
+          {% include "recommender/albumcards.html" %}
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+
+  {% comment %} <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title">Popular Artists Today</h5>
+      <h6 class="card-subtitle mb-3 text-muted">Today's most popular songs</h6>
+      <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+        {% for artist in artists%}
+          {% include "recommender/artistcards.html" %}
+        {% endfor %}
+      </ol>
+    </div>
+  </div> {% endcomment %}
+  
   <div class="card" style="width: 100%;">
     <div class="card-body">
       <h5 class="card-title">Popular Playlists Today</h5>
       <h6 class="card-subtitle mb-3 text-muted">Today's most popular playlists</h6>
-        {% if popularPlaylists %}
+        {% if playlists %}
          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-          {% for playlist in popularPlaylists %}
+          {% for playlist in playlists %}
             {% include "recommender/playlistcards.html" %}
           {% endfor %}
         </ol> 
