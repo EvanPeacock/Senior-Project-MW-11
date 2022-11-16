@@ -4,13 +4,6 @@ from django.contrib.auth.models import User
 from recommender.models import ProfilePicture, Bio
 
 
-
-class SearchForm(forms.Form):
-    artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
-    from_year = forms.IntegerField(required=False)
-    to_year = forms.IntegerField(required=False)
-
-
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -72,22 +65,6 @@ class SigninForm(AuthenticationForm):
             'password': forms.PasswordInput(attrs={'class': 'form-control'})
         }
 
-
-class PlaylistForm(forms.Form):
-    playlist_name = forms.CharField(
-        widget=forms.TextInput(attrs={'size': '20'}))
-    # playlist_songs = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=[(song.track_id, song.__str__()) for song in Musicdata.objects.all()])
-
-# class PlaylistForm(forms.ModelForm):
-#     class Meta:
-#         model = Playlist
-#         fields = ['playlist_name', 'playlist_songs']
-#         widgets = {
-#             'playlist_name': forms.TextInput(attrs={'placeholder': 'Playlist Name'}),
-#             'playlist_songs': forms.SelectMultiple(choices=Musicdata.objects.all()),
-#         }
-
-
 class UpdateSettingsForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super(UpdateSettingsForm, self).__init__(*args, **kwargs)
@@ -148,6 +125,20 @@ class UpdatePasswordForm(PasswordChangeForm):
             'new_password2': forms.PasswordInput(attrs={'class': 'form-control'})
         }
 
+class SearchForm(forms.Form):
+    artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
+    from_year = forms.IntegerField(required=False)
+    to_year = forms.IntegerField(required=False)
+
+class PlaylistForm(forms.Form):
+    playlist_name = forms.CharField(widget=forms.TextInput(attrs={'size': '20'}))
+
 class AddSongForm(forms.Form):
     song_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
     song_artist = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
+
+class ProfilePictureForm(forms.Form):
+    profile_picture = forms.ImageField()
+
+class BioForm(forms.Form):
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 50}))

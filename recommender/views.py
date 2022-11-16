@@ -614,3 +614,27 @@ def view_artist(request, artist_name):
         return render(request, 'recommender/artist_view.html', args)
     else:
         raise Http404('Error')
+
+def update_profile_pic(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            user.profile_pic = form.cleaned_data['profile_pic']
+            user.save()
+            return redirect('recommender:profile')
+    else:
+        form = ProfilePictureForm()
+    return render(request, 'recommender/profile_pic.html', {'form': form})
+
+def update_bio(request):
+    if request.method == 'POST':
+        form = BioForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            user.bio = form.cleaned_data['bio']
+            user.save()
+            return redirect('recommender:profile')
+    else:
+        form = BioForm()
+    return render(request, 'recommender/bio.html', {'form': form})
