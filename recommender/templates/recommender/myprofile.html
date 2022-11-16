@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pfp_exists %}
 
 {% block title %} Your Profile {% endblock %}
 
@@ -59,8 +60,8 @@
   <div class="card-body">
     <div class="dropdown">
       <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-      </button>
+        <img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 80px; height: 80px; object-fit: cover">
+    </button>
       <ul class="dropdown-menu" style="text-align:center">
         <li>
           <div class="mb-3" style="margin:10px">

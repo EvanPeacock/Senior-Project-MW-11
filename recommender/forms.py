@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from recommender.models import ProfileItems, FriendsList
+from recommender.models import ProfilePicture, Bio
 
 
 
@@ -120,45 +120,6 @@ class UpdateSettingsForm(UserChangeForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'})
         }
-
-
-class UpdateProfileItemsForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UpdateProfileItemsForm, self).__init__(*args, **kwargs)
-
-        self.fields['profile_items'].widget.attrs['class'] = 'form-control'
-        self.fields['profile_items'].widget.attrs['placeholder'] = 'Profile Items'
-
-    class Meta:
-        model = ProfileItems
-        fields = (
-            'profile_pic',
-            'bio'
-        )
-
-        widgets = {
-            'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control'})
-        }
-
-
-class UpdateProfilePictureForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UpdateProfilePictureForm, self).__init__(*args, **kwargs)
-
-        self.fields['profile_pic'].widget.attrs['class'] = 'form-control'
-        self.fields['profile_pic'].widget.attrs['placeholder'] = 'Profile Picture'
-
-    class Meta:
-        model = ProfileItems
-        fields = (
-            'profile_pic',
-        )
-
-        widgets = {
-            'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
-        }
-
 
 class UpdatePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pfp_exists %}
 
 {% block title %} Explore {% endblock %}
 
@@ -11,9 +12,9 @@
             {% for user in users %}
             <div class="card" style="width: 100%; margin-bottom: 20px">
                 <div class="row">
-                <a>    
-                    <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." title={{user}}>
-                </a>
+                  <center style="padding:30px">    
+                    <img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" style="object-fit: cover; height:225px;width:225px;">
+                  </center>
                 <div class="card-body" style="text-align: center;">
                   <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
                   <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
