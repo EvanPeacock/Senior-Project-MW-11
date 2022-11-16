@@ -14,7 +14,7 @@
       <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
       <div class="card-body" style="text-align: right;">
         {% comment %} <a class="btn btn-outline-custom" style="margin-right: 10px">Button</a>  {% endcomment %}
-        <a class="btn btn-custom">Add Friend</a>
+        <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Add Friend</a>
       </div>
   </div>
 </div>

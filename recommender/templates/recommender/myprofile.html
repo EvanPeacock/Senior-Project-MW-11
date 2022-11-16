@@ -77,6 +77,7 @@
       <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
       <div style="display:flex;gap:25px;justify-content:center">
         <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">My Dislikes</a>
+        <a href="{% url "recommender:get_friends" request.user.username %}" class="btn btn-outline-custom" style="margin-left: 15px">My Friends</a>
         <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom" style="margin-left: 15px">My Playlists</a>
         <a class="btn btn-outline-custom" data-toggle="modal" style="margin-left: 10px" data-target="#editprofile">My Information</a>
       </div>

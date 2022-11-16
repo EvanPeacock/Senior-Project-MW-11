@@ -66,6 +66,13 @@ class Playlist(models.Model):
         author = list(self.playlist_owner.all())
         return str(author[0].username)
 
+class FriendsList(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    friends = models.ManyToManyField(User, blank=True, related_name='friends')
+    
+    def __str__(self):
+        return self.user.username
+
 
 class RecentSearches(models.Model):
     artist = models.CharField(max_length=50)

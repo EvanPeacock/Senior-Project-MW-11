@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}SoundLogic{% endblock %}
+{% block content %}
+
+<div class="header" style="display:flex;flex-direction:row;justify-content:space-between;">
+    <div class="left-header">
+        <h3>Your Friends</h3>
+    </div>
+</div>
+
+<hr/>
+
+        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+            {% for friend in friends %}
+            <div class="card" style="width: 30%; margin-bottom: 20px">
+                <div class="row">
+                <a>    
+                    <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." title={{friend}}>
+                </a>
+                <div class="card-body" style="text-align: center;">
+                  <h5 class="card-title">{{ friend.first_name }} {{ friend.last_name }}</h5>
+                  <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ friend }}</h6>
+                  <a href={% url 'recommender:get_profile' friend %} class="btn btn-outline-custom">View Profile</a>
+                  <a href={% url 'recommender:remove_friend' friend %} class="btn btn-custom" style="margin-left: 10px">Remove Friend</a>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ol>
+
+
+{% endblock %}

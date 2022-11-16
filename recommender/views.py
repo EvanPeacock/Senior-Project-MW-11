@@ -393,6 +393,69 @@ def create_playlist(request, user_name):
         form = PlaylistForm()
         return render(request, "recommender/playlists.html", {'form': form})
 
+def get_friends(request, user_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            getFriends = FriendsList.objects.filter(user=user).values_list('friends', flat=True)
+            print (getFriends)
+            friends = []
+            for friend in getFriends:
+                friends.append(User.objects.get(id=friend))
+            return render(request, 'recommender/friendslist.html', {'friends': friends})
+        else:
+            return render(request, 'recommender/signin.html', {})
+    else:
+        return Http404('Error getting friends')
+
+def friends_list_append(request, friend_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            friend = User.objects.get(username=friend_name)
+            if FriendsList.objects.filter(user=user).exists():
+                print('User already has a friends list')
+                friends_list = FriendsList.objects.get(user=user)
+                friends_list.friends.add(friend)
+                print('Friend added to friends list')
+                print(friend)
+                print(friends_list.friends.all())
+                friends_list.save()
+            else:
+                print("Creating new friends list")
+                friends_list = FriendsList.objects.create(user=user)
+                friends_list.friends.add(friend)
+                friends_list.save()
+            return redirect('/recommender/friends/' + request.user.username)
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def friends_list_remove(request, friend_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            friend = User.objects.get(username=friend_name)
+            if FriendsList.objects.filter(user=user).exists():
+                print('User already has a friends list')
+                friends_list = FriendsList.objects.get(user=user)
+                friends_list.friends.remove(friend)
+                print('Friend removed from friends list')
+                print(friend)
+                print(friends_list.friends.all())
+                friends_list.save()
+            else:
+                print("Creating new friends list")
+                friends_list = FriendsList.objects.create(user=user)
+                friends_list.friends.remove(friend)
+                friends_list.save()
+            return redirect('/recommender/friends/' + request.user.username)
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
 
 def get_history(request):
     if request.method == "GET":
@@ -515,21 +578,6 @@ def playlist_append(request, playlist_num, song_id):
         return redirect(request.META.get('HTTP_REFERER'), args)
     else:
         raise Http404('Error')
-
-
-def songcards(request):
-    if request.method == "GET":
-        if request.user.is_authenticated:
-            owner = User.objects.get(username=request.user.username)
-            playlists = Playlist.objects.filter(playlist_owner=owner)
-        else:
-            playlists = []
-
-        args = {
-            'playlists': playlists
-        }
-        return render(request, "recommender/songcards.html", args)
-
 
 def view_album(request, album_id):
     if request.method == 'GET':
