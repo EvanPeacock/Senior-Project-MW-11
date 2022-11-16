@@ -1,17 +1,12 @@
-
-from pickle import GET
-from recommender.forms import SearchForm
-from django.shortcuts import render, redirect
-from django.http import Http404
-from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm, UpdatePasswordForm, AddSongForm
 import random
-from django.http import Http404
-from .models import Musicdata
+from pickle import GET
+from .models import *
+from .forms import RegisterForm, SigninForm, UpdateSettingsForm, UpdatePasswordForm, SearchForm, PlaylistForm, ProfilePictureForm, BioForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import Http404
+from django.shortcuts import render, redirect
 
 
 def get_home(request):
@@ -253,13 +248,16 @@ def get_profile(request, user_name):
             albums = Musicdata.objects.all().values('track_id')
             aResp = list(albums)
             random.shuffle(aResp)
-            return render(request, 'recommender/profile.html', {
+            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            bio = getBio[0] if len(getBio) > 0 else None
+            args = {
+                'profile_user': owner,
+                'playlists': playlists,
                 'songs': sResp[:3],
                 'albums': aResp[:3],
-                'profile_user': user_name,
-                'user_object': owner,
-                'playlists': playlists
-            })
+                'bio': bio
+            }
+            return render(request, 'recommender/profile.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -269,20 +267,18 @@ def get_profile(request, user_name):
 def get_myprofile(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            songs = Musicdata.objects.all().values('track_id')
-            sResp = list(songs)
-            random.shuffle(sResp)
-            albums = Musicdata.objects.all().values('track_id')
-            aResp = list(albums)
-            random.shuffle(aResp)
             owner = request.user
             playlists = list(Playlist.objects.filter(playlist_owner=owner))
             random.shuffle(playlists)
-            return render(request, 'recommender/myprofile.html', {
-                'songs': sResp[:3],
-                'albums': aResp[:3],
-                'playlists': playlists
-            })
+
+            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            bio = getBio[0] if len(getBio) > 0 else None
+
+            args = {
+                'playlists': playlists[:3],
+                'bio': bio,
+            }
+            return render(request, 'recommender/myprofile.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -615,26 +611,40 @@ def view_artist(request, artist_name):
     else:
         raise Http404('Error')
 
-def update_profile_pic(request):
+def update_profile_picture(request):
     if request.method == 'POST':
         form = ProfilePictureForm(request.POST, request.FILES)
         if form.is_valid():
             user = User.objects.get(username=request.user.username)
-            user.profile_pic = form.cleaned_data['profile_pic']
-            user.save()
-            return redirect('recommender:profile')
+            if ProfilePicture.objects.filter(user=user).exists():
+                profile_picture = ProfilePicture.objects.get(user=user)
+                profile_picture.delete()
+            else:
+                profile_picture = ProfilePicture(user=user)
+            
+            profile_picture = ProfilePicture(user=user, profile_picture=request.FILES['profile_picture'])
+            profile_picture.save()
+            return redirect('recommender:get_myprofile')
     else:
         form = ProfilePictureForm()
-    return render(request, 'recommender/profile_pic.html', {'form': form})
+    return render(request, 'recommender/my_profile.html', {'form': form})
 
 def update_bio(request):
     if request.method == 'POST':
         form = BioForm(request.POST)
         if form.is_valid():
             user = User.objects.get(username=request.user.username)
-            user.bio = form.cleaned_data['bio']
-            user.save()
-            return redirect('recommender:profile')
+            if Bio.objects.filter(user=user).exists():
+                bio = Bio.objects.get(user=user)
+                bio.delete()
+            else:
+                bio = Bio(user=user)
+                
+            bio = Bio(user=user, bio=request.POST['bio'])
+            bio.save()
+            return redirect('recommender:get_myprofile')
     else:
-        form = BioForm()
-    return render(request, 'recommender/bio.html', {'form': form})
+        print('not post')
+        form = UpdateSettingsForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'recommender/edit_bio.html', args)

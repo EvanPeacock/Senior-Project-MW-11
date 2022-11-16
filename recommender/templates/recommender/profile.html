@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pfp_exists %}
 
-{% block title %} {{profile_user}}'s Profile {% endblock %}
+{% block title %} {{profile_user.username}}'s Profile {% endblock %}
 
 {% block content %}
 
@@ -9,16 +10,18 @@
           
 <div class="card" style="width: 100%; margin-bottom: 20px">  
   <div class="card-body">
-      <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-      <h5 class="card-title">@{{profile_user}}</h5>
-      <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
-      <div class="card-body" style="text-align: right;">
-        {% comment %} <a class="btn btn-outline-custom" style="margin-right: 10px">Button</a>  {% endcomment %}
-        <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Add Friend</a>
-      </div>
+    <div style="display:flex;gap:20px;justify-content:left">
+        <img src="{% get_static_prefix %}{{ profile_user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 80px; height: 80px; object-fit: cover">
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <h5 class="card-title">{{profile_user.first_name}} {{profile_user.last_name}}</h5>
+      <h6 class="card-text">@{{profile_user}}</h6>
+    </div>
   </div>
+  {% if bio %}
+    <div class="card-text text-muted" style="margin:15px">{{bio}}</div>
+  {% endif %}
 </div>
-
+</div>
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">

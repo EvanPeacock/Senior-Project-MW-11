@@ -1,4 +1,6 @@
-{% load static %}           
+{% load static %}        
+{% load pfp_exists %}
+
 <li style="width:30%;">
     {% comment %} <a href="{% url "recommender:playlist_view" playlist.playlist_id %}" style="text-decoration:none"> {% endcomment %}
       <div class="card">
@@ -13,7 +15,11 @@
 
             
                 <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
-                    <div style="margin-top:12px"><a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{playlist.creator}}</a></div>
+                    <div style="margin-top:12px">
+                        <a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom">
+                            <img src="{% get_static_prefix %}{{ playlist.creator|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 22px; height: 22px; margin-right:5px; margin-bottom:3px; object-fit: cover">{{playlist.creator}}
+                        </a>
+                    </div>
 
                     <div style="margin-top:12px"><a href="{% url 'recommender:playlist_view' playlist.playlist_id %}" class="btn btn-custom">View Playlist</a></div>
                     

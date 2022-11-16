@@ -80,7 +80,7 @@ class ProfilePicture(models.Model):
         return new_filename
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(upload_to=pfp_rename, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to=pfp_rename, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
