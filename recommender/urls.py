@@ -32,6 +32,7 @@ urlpatterns = [
     path('playlist/create/<str:user_name>/', views.create_playlist, name='create_playlist'),
     path('playlist/<int:playlist_num>/add_song_update', views.add_song_update, name='add_song_update'),
     path('playlist/<int:playlist_num>/add_song_update/<str:song_id>', views.playlist_append, name="playlist_append"),
+    path('playlist/<int:playlist_num>/remove_song_update/<str:song_id>', views.remove_song, name="remove_song"),
 
     path('dislikes/', views.get_dislikes, name= 'get_dislikes'),
     path('dislike/<slug:user_name>/<slug:song>/',views.dislike, name='dislike'),

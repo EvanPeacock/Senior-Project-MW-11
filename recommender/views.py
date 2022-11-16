@@ -485,7 +485,20 @@ def add_song_update(request, playlist_num):
                 tracks = list(query)
                 songs = list([*set([item['track_id'] for item in tracks[:3]])])
                 args = {'playlist_num': playlist_num, 'songs': songs}
-            return render(request, "recommender/results3.html", {'songs': songs, 'playlist_num': playlist_num})
+            return render(request, "recommender/results3.html", args)
+
+def remove_song(request, playlist_num, song_id):
+    if request.method == 'GET':
+        playlist = Playlist.objects.filter(playlist_id=playlist_num).first()
+        song = Musicdata.objects.filter(track_id=song_id).first()
+        playlist.playlist_songs.remove(song)
+        args = {
+            'playlist': playlist,
+            'song_id': song_id
+        }
+        return render(request, 'recommender/playlist.html', args)
+    else:
+        return Http404('Error removing song from playlist')
 
 
 def playlist_append(request, playlist_num, song_id):
