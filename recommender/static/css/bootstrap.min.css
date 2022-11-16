@@ -12712,7 +12712,7 @@ body {
 #left {
   padding: 20px;
   float: left;
-  height: 756px;
+  height: 100vh;
   width: 25%;
   overflow-y: scroll;
   /* text-align: center; */
@@ -12721,7 +12721,7 @@ body {
 #right {
   padding: 20px;
   float: left;
-  height: 756px;
+  height: 100vh;
   width: 75%;
   overflow-y: scroll;
   /* text-align: center; */

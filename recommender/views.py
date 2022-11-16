@@ -14,14 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 
-
 def get_home(request):
-    if request.user.is_authenticated:
-        owner = User.objects.get(username=request.user.username)
-        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
-    else:
-        userPlaylists = []
-
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
@@ -33,17 +26,25 @@ def get_home(request):
     artists = Artist.objects.all()
     arResp = list(artists)
     random.shuffle(arResp)
-    
+
     popularPlaylists = Playlist.objects.all()
     pResp = list(popularPlaylists)
     random.shuffle(pResp)
+
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        userPlaylists = []
+
     args = {
         'songs': sResp[:3],
         'albums': alResp[:3],
         'artists': arResp[:3],
-        'playlists': pResp[:3],
-        'userPlaylists': userPlaylists
+        'popularPlaylists': pResp[:3],
+        'playlists': userPlaylists
     }
+
     return render(request, "recommender/home.html", args)
 
 
@@ -347,7 +348,7 @@ def playlist_view(request, playlist_num):
         'playlists': playlists,
         'disliked_songs': disliked_songs
     }
-    
+
     return render(request, 'recommender/playlist.html', args)
 
 
@@ -429,15 +430,16 @@ def dislike(request, user_name, song):
 
 
 def get_disliked_music(request):
-        disliked = DislikedMusic.objects.all().filter(user=request.user)
-        songs = []
-        for song in disliked:
-            songs.append(song.music.values('track_id'))
+    disliked = DislikedMusic.objects.all().filter(user=request.user)
+    songs = []
+    for song in disliked:
+        songs.append(song.music.values('track_id'))
 
-        args = {
-            'dislikes': songs
-        }
-        return args
+    args = {
+        'dislikes': songs
+    }
+    return args
+
 
 def get_dislikes(request):
     if request.method == 'GET':
@@ -487,6 +489,7 @@ def add_song_update(request, playlist_num):
                 args = {'playlist_num': playlist_num, 'songs': songs}
             return render(request, "recommender/results3.html", args)
 
+
 def remove_song(request, playlist_num, song_id):
     if request.method == 'GET':
         playlist = Playlist.objects.filter(playlist_id=playlist_num).first()
@@ -513,6 +516,7 @@ def playlist_append(request, playlist_num, song_id):
     else:
         raise Http404('Error')
 
+
 def songcards(request):
     if request.method == "GET":
         if request.user.is_authenticated:
@@ -525,6 +529,7 @@ def songcards(request):
             'playlists': playlists
         }
         return render(request, "recommender/songcards.html", args)
+
 
 def view_album(request, album_id):
     if request.method == 'GET':
@@ -541,6 +546,7 @@ def view_album(request, album_id):
         return render(request, 'recommender/album_view.html', args)
     else:
         raise Http404('Error')
+
 
 def view_artist(request, artist_name):
     if request.method == 'GET':

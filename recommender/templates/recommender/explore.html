@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class='nav'>
-    <div class="row" style="margin-top: -30px" >
+    <div class="row" style="margin-top: -30px;">
         <div class="col-md-4" id="left">
             {% if users %}
             {% for user in users %}
@@ -40,7 +40,7 @@
                             <center class="card-body">
                                 <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="230" height="260" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                                 {% if request.user.is_authenticated %}
-                                    <div style="display:flex;gap:10px;justify-content:center">
+                                    <div style="display:flex;gap:5px;justify-content:center">
                                         <div class="dropdown text-center" style="margin-top:12px">
                                             <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Add to Playlist
@@ -94,7 +94,7 @@
                               {% endfor %}
 
                               
-                                  <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
+                                  <div style="display:flex;gap:5px;justify-content:center;margin-bottom:5px;">
                                       <div style="margin-top:12px"><a href={% url 'recommender:view_artist' album.album_artist %} class="btn btn-outline-custom">{{album.album_artist}}</a></div>
 
                                       <div style="margin-top:12px"><a href="{% url 'recommender:view_album' album.album_id %}" class="btn btn-custom">View Album</a></div>
@@ -145,7 +145,7 @@
                                   {% endfor %}
                       
                                   
-                                      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
+                                      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:5px;">
                                           <div style="margin-top:12px"><a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{playlist.creator}}</a></div>
                       
                                           <div style="margin-top:12px"><a href="{% url 'recommender:playlist_view' playlist.playlist_id %}" class="btn btn-custom">View Playlist</a></div>

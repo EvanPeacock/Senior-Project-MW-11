@@ -8,7 +8,7 @@
         
         
             {% for song in playlist.playlist_songs.all|slice:":3" %}
-                <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="330" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
+                <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
             {% endfor %}
 
             

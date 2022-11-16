@@ -43,9 +43,9 @@
     <div class="card-body">
       <h5 class="card-title">Popular Playlists Today</h5>
       <h6 class="card-subtitle mb-3 text-muted">Today's most popular playlists</h6>
-        {% if playlists %}
+        {% if popularPlaylists %}
          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-          {% for playlist in playlists %}
+          {% for playlist in popularPlaylists %}
             {% include "recommender/playlistcards.html" %}
           {% endfor %}
         </ol> 
