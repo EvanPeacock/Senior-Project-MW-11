@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Edit Bio {% endblock %}
+
+{% block content %}
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title" style="margin-bottom:20px">Edit Your Bio</h5>
+      <form action="{% url 'recommender:update_bio' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom:20px">
+          <textarea class="form-control" id="bio" name="bio" rows="5" placeholder="Enter your bio here..."></textarea>
+        </div>
+        <div style="text-align: right">
+            <button type="submit" class="btn btn-custom">Save Changes</button>
+        </div>
+      </form>
+    </div>
+    <br>
+</div>
+
+{% endblock %}
+

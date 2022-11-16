@@ -15,10 +15,14 @@ urlpatterns = [
     path('logout_view/', views.logout_view, name='logout_view'),
 
     path('profile/<str:user_name>', views.get_profile, name='get_profile'),
+
     path('myprofile/', views.get_myprofile,name='get_myprofile'),
+    path('myprofile/profile_pic/', views.update_profile_picture, name='update_profile_picture'),
+    path('myprofile/edit_bio/', views.update_bio, name='edit_bio'),
+    path('myprofile/update_bio/', views.update_bio, name='update_bio'),
     path('myprofile/settings/',views.get_settings,name="get_settings"),
-    path('update-settings/',views.update_settings,name="update_settings"),
-    path('password/', views.change_password, name="change_password"),
+    path('myprofile/update_settings/',views.update_settings,name="update_settings"),
+    path('myprofile/password/', views.change_password, name="change_password"),
     
     path('history/', views.get_history, name='get_history'),
 

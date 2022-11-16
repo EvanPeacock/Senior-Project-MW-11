@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pfp_exists %}
 
 
 {% block title %} {{playlist.playlist_name}} - @{{playlist.creator}} {% endblock %}
@@ -17,7 +18,11 @@
     </div>
     {% else %}
     <div class="right-header" style="display:flex;flex-direction:row;justify-content:right;gap:15px">
-        <div style="margin-top:12px"><a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{playlist.creator}}</a></div>
+        <div style="margin-top:12px">
+            <a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom">
+                <img src="{% get_static_prefix %}{{ playlist.creator|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 22px; height: 22px; margin-right:5px; margin-bottom:3px; object-fit: cover">{{playlist.creator}}
+            </a>
+        </div>
 
         <div><a href="" class="btn btn-link-custom">
             <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">

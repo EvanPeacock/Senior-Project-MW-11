@@ -1,13 +1,13 @@
 {% load static %}
-<!doctype html>
+{% load pfp_exists %}
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
-        {% block title %}
-        {% endblock %}
+        {% block title %}{% endblock %}
     </title>
 
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
@@ -61,7 +61,7 @@
     <div class="nav-right" style="display:flex;gap:15px;justify-content:start;margin-right:25px">
         {% if request.user.is_authenticated %}
             <div>
-                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% static 'pfp.jpg' %}" style="height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{request.user.username}}</a>
+                <a href="{% url 'recommender:get_myprofile' %}" class="btn btn-outline-custom"><img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" style="object-fit:cover;height:22px;width:22px;margin-right:5px;margin-bottom:3px;">{{request.user.username}}</a>
             </div>
             <div>
                 <a href="{% url 'recommender:logout_view' %}" class="btn btn-custom">Logout</a>

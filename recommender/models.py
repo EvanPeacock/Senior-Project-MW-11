@@ -73,6 +73,25 @@ class FriendsList(models.Model):
     def __str__(self):
         return self.user.username
 
+class ProfilePicture(models.Model):
+    def pfp_rename(instance, filename):
+        extension = filename.split('.')[-1]
+        new_filename = "%s.%s" % (instance.user.username, extension)
+        return new_filename
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to=pfp_rename, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+class Bio(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
 
 class RecentSearches(models.Model):
     artist = models.CharField(max_length=50)
@@ -126,13 +145,6 @@ class song(models.Model):
 class DislikedMusic(models.Model):
     user = models.ManyToManyField(User, blank=True)
     music = models.ManyToManyField(Musicdata, blank=True)
-
-
-class ProfileItems(models.Model):
-    user = models.ManyToManyField(User, blank=True)
-    profile_pic = models.ImageField(
-        upload_to='profile_pics', blank=True, null=True)
-    bio = models.TextField(max_length=500, blank=True, null=True)
 
 
 # class songtoplaylist(models.Model):
