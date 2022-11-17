@@ -42,10 +42,10 @@
             </div>
 
 
-              <div class="modal-footer">
+              <div class="modal-footer" style="display:flex;gap:5px;justify-content:center">
                 <a href="{% url 'recommender:change_password' %}" class="btn btn-outline-custom">Change Password</a>
                 <a href="{% url 'recommender:edit_bio' %}" class="btn btn-outline-custom">Edit Bio</a>
-                <a href="{% url 'recommender:update_settings' %}" class="btn btn-custom" style="margin-left:15px">Edit Information</a>
+                <a href="{% url 'recommender:update_settings' %}" class="btn btn-custom">Edit Profile</a>
               </div>
 
           
@@ -88,9 +88,9 @@
   
       <div style="display:flex;gap:25px;justify-content:center;margin-top:25px">
         <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">My Dislikes</a>
-        <a href="{% url "recommender:get_friends" request.user.username %}" class="btn btn-outline-custom" style="margin-left: 15px">My Friends</a>
-        <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom" style="margin-left: 15px">My Playlists</a>
-        <a class="btn btn-outline-custom" data-toggle="modal" style="margin-left: 10px" data-target="#editprofile">My Information</a>
+        <a href="{% url "recommender:get_friends" request.user.username %}" class="btn btn-outline-custom">My Friends</a>
+        <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
+        <a class="btn btn-outline-custom" data-toggle="modal" data-target="#editprofile">My Information</a>
       </div>
   </div>
 </div>
