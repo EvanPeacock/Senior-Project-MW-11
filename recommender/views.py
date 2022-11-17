@@ -398,7 +398,12 @@ def get_friends(request, user_name):
             friends = []
             for friend in getFriends:
                 friends.append(User.objects.get(id=friend))
-            return render(request, 'recommender/friendslist.html', {'friends': friends})
+
+            args = {
+                'friends': friends,
+                'user_name': user_name
+            }
+            return render(request, 'recommender/friendslist.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:

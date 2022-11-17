@@ -20,6 +20,10 @@
   {% if bio %}
     <div class="card-text text-muted" style="margin:15px">{{bio}}</div>
   {% endif %}
+  <div class="card-body" style="text-align: right;">
+    <a href="{% url "recommender:get_friends" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">View @{{profile_user}}'s Friends</a>
+    <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Add Friend</a>
+  </div>
 </div>
 </div>
 
