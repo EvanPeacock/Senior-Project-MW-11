@@ -1,10 +1,8 @@
-from django.db import models
 import random
-from email.policy import default
-from enum import unique
 from django.db import models  
-import random, uuid
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+
 
 def unique_rand():
     index = random.randint(1, 100000000)
@@ -30,7 +28,14 @@ def uniqueIDArtist():
         randList.append(random.randint(100000000000, 999999999999))
     return random.choice(randList)
 
+class OverwriteStorage(FileSystemStorage):
+    def _save(self, name, content):
+        if self.exists(name):
+            self.delete(name)
+        return super(OverwriteStorage, self)._save(name, content)
 
+    def get_available_name(self, name, max_length=None):
+        return name
 
 class Musicdata(models.Model):
     track_id = models.TextField()
@@ -75,12 +80,11 @@ class FriendsList(models.Model):
 
 class ProfilePicture(models.Model):
     def pfp_rename(instance, filename):
-        extension = filename.split('.')[-1]
-        new_filename = "%s.%s" % (instance.user.username, extension)
+        new_filename = "%s.jpg" % (instance.user.username)
         return new_filename
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to=pfp_rename, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to=pfp_rename, storage=OverwriteStorage(), blank=True, null=True)
 
     def __str__(self):
         return self.user.username

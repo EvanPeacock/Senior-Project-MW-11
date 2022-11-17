@@ -617,6 +617,7 @@ def update_profile_picture(request):
         if form.is_valid():
             user = User.objects.get(username=request.user.username)
             if ProfilePicture.objects.filter(user=user).exists():
+                print("exists")
                 profile_picture = ProfilePicture.objects.get(user=user)
                 profile_picture.delete()
             else:
