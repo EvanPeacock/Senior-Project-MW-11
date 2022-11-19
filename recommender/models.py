@@ -64,8 +64,8 @@ class Musicdata(models.Model):
 class Playlist(models.Model):
     playlist_id = models.CharField(max_length=8, unique=True, default=unique_rand)
     playlist_name = models.CharField(max_length=50, null=True, blank=False, default='New Playlist')
-    playlist_owner = models.ManyToManyField(User, null=True, blank=True)
-    playlist_songs = models.ManyToManyField('Musicdata', blank=True, null=True)
+    playlist_owner = models.ManyToManyField(User, blank=True)
+    playlist_songs = models.ManyToManyField('Musicdata', blank=True)
     
     def creator(self):
         author = list(self.playlist_owner.all())
@@ -114,7 +114,7 @@ class Artist(models.Model):
     artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
     # artist_albums = models.ManyToManyField(Album, blank=True, null=True)
-    artist_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    artist_tracks = models.ManyToManyField('Musicdata', blank=True)
     artist_genre = models.CharField(max_length=25, blank=True, null=True)
     artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
     
@@ -124,7 +124,7 @@ class Artist(models.Model):
 class Album(models.Model):
     album_id = models.TextField(null=True, blank=True)
     album_name = models.CharField(max_length=50, blank=True, null=True)
-    album_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    album_tracks = models.ManyToManyField('Musicdata', blank=True)
     album_artist = models.TextField(blank=True, null=True)
     album_release_date = models.IntegerField(null=True, blank=True)
     album_genre = models.CharField(max_length=25, blank=True, null=True)
