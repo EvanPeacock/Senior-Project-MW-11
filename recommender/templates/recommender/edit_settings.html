@@ -5,17 +5,9 @@
 
 {% block content %}
 
-<div class="card" style="width: 100%; margin-bottom: 20px">  
-  <div class="card-body">
-      <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-      <h5 class="card-title">{{user.username}}'s Profile</h5>
-      <div class="card-subtitle mb-2 text-muted">(Bio)</div>
-  </div>
-</div>
-
 <div class="card" style="width: 100%; margin-bottom: 20px">
     <div class="card-body">
-      <h5 class="card-title" style="margin-bottom:20px">Your Details</h5>
+      <h5 class="card-title" style="margin-bottom:20px">Edit Your Details</h5>
         <form method='post' class="form" style="margin-left:50px;margin-right:50px">
 
           {% csrf_token %}

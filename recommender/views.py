@@ -1,41 +1,45 @@
-
-from pickle import GET
-from recommender.forms import SearchForm
-from django.shortcuts import render, redirect
-from django.http import Http404
-from .models import *
-from .forms import PlaylistForm, RegisterForm, SearchForm, SigninForm, UpdateSettingsForm, UpdatePasswordForm, AddSongForm
 import random
-from django.http import Http404
-from .models import Musicdata
+from pickle import GET
+from .models import *
+from .forms import RegisterForm, SigninForm, UpdateSettingsForm, UpdatePasswordForm, SearchForm, PlaylistForm, ProfilePictureForm, BioForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-
+from django.http import Http404
+from django.shortcuts import render, redirect
 
 
 def get_home(request):
-    if request.user.is_authenticated:
-        owner = User.objects.get(username=request.user.username)
-        playlists = Playlist.objects.filter(playlist_owner=owner)
-    else:
-        playlists = []
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
-    albums = Musicdata.objects.all().values('track_id')
-    aResp = list(albums)
-    random.shuffle(aResp)
+
+    albums = Album.objects.all()
+    alResp = list(albums)
+    random.shuffle(alResp)
+
+    artists = Artist.objects.all()
+    arResp = list(artists)
+    random.shuffle(arResp)
+
     popularPlaylists = Playlist.objects.all()
     pResp = list(popularPlaylists)
     random.shuffle(pResp)
+
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        userPlaylists = []
+
     args = {
-        'songs': sResp[:6],
-        'albums': aResp[:6],
-        'popularPlaylists': pResp[:6],
-        'playlists': playlists
+        'songs': sResp[:3],
+        'albums': alResp[:3],
+        'artists': arResp[:3],
+        'popularPlaylists': pResp[:3],
+        'playlists': userPlaylists
     }
+
     return render(request, "recommender/home.html", args)
 
 
@@ -43,21 +47,34 @@ def get_explore(request):
     songs = Musicdata.objects.all().values('track_id')
     sResp = list(songs)
     random.shuffle(sResp)
-    albums = Musicdata.objects.all().values('track_id')
-    aResp = list(albums)
-    random.shuffle(aResp)
-    playlists = Musicdata.objects.all().values('track_id')
+    albums = Album.objects.all()
+    alResp = list(albums)
+    random.shuffle(alResp)
+    playlists = Playlist.objects.all()
     pResp = list(playlists)
     random.shuffle(pResp)
+    artists = Artist.objects.all()
+    arResp = list(artists)
+    random.shuffle(arResp)
     userResp = User.objects.all()
     uResp = list(userResp)
     random.shuffle(uResp)
-    return render(request, "recommender/explore.html", {
+
+    if request.user.is_authenticated:
+        owner = User.objects.get(username=request.user.username)
+        playlists = Playlist.objects.filter(playlist_owner=owner)
+    else:
+        playlists = []
+
+    args = {
         'songs': sResp[:3],
-        'albums': aResp[:3],
+        'albums': alResp[:3],
         'playlists': pResp[:3],
-        'users': uResp[:10]
-    })
+        'artists': arResp[:3],
+        'users': uResp[:10],
+        'userPlaylists': playlists
+    }
+    return render(request, "recommender/explore.html", args)
 
 
 def find_albums(artist, from_year=None, to_year=None):
@@ -70,26 +87,25 @@ def find_albums(artist, from_year=None, to_year=None):
 
 
 def find_album_by_name(album):
-    query = Musicdata.objects.filter(
-        track_album_name__contains=album).values('track_id')
+    query = Album.objects.filter(album_name__contains=album)
     resp = list(query)
     # Randomize to get different results each time
     random.shuffle(resp)
     # Return the id of up to 3 albums
     return {
-        'albums': [item['track_id'] for item in resp[:3]]
+        'albums': resp[:3]
     }
 
 
 def find_track_by_name(track):
     query = Musicdata.objects.filter(
-        track_name__contains=track).values('track_id')
+        track_name__contains=track)
     resp = list(query)
     # Randomize to get different results each time
     random.shuffle(resp)
     # Return the id of up to 3 albums
     return {
-        'tracks': [*set([item['track_id'] for item in resp[:3]])]
+        'tracks': [*set([item for item in resp[:3]])]
     }
 
 
@@ -232,13 +248,16 @@ def get_profile(request, user_name):
             albums = Musicdata.objects.all().values('track_id')
             aResp = list(albums)
             random.shuffle(aResp)
-            return render(request, 'recommender/profile.html', {
+            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            bio = getBio[0] if len(getBio) > 0 else None
+            args = {
+                'profile_user': owner,
+                'playlists': playlists,
                 'songs': sResp[:3],
                 'albums': aResp[:3],
-                'profile_user': user_name,
-                'user_object': owner,
-                'playlists': playlists
-            })
+                'bio': bio
+            }
+            return render(request, 'recommender/profile.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -248,20 +267,18 @@ def get_profile(request, user_name):
 def get_myprofile(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            songs = Musicdata.objects.all().values('track_id')
-            sResp = list(songs)
-            random.shuffle(sResp)
-            albums = Musicdata.objects.all().values('track_id')
-            aResp = list(albums)
-            random.shuffle(aResp)
             owner = request.user
             playlists = list(Playlist.objects.filter(playlist_owner=owner))
             random.shuffle(playlists)
-            return render(request, 'recommender/myprofile.html', {
-                'songs': sResp[:3],
-                'albums': aResp[:3],
-                'playlists': playlists
-            })
+
+            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            bio = getBio[0] if len(getBio) > 0 else None
+
+            args = {
+                'playlists': playlists[:3],
+                'bio': bio,
+            }
+            return render(request, 'recommender/myprofile.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:
@@ -321,13 +338,13 @@ def playlist_view(request, playlist_num):
         playlists = []
 
     disliked_songs = get_disliked_music(request)
-        
 
     args = {
         'playlist': playlist,
         'playlists': playlists,
         'disliked_songs': disliked_songs
     }
+
     return render(request, 'recommender/playlist.html', args)
 
 
@@ -372,6 +389,74 @@ def create_playlist(request, user_name):
         form = PlaylistForm()
         return render(request, "recommender/playlists.html", {'form': form})
 
+def get_friends(request, user_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            getFriends = FriendsList.objects.filter(user=user).values_list('friends', flat=True)
+            print (getFriends)
+            friends = []
+            for friend in getFriends:
+                friends.append(User.objects.get(id=friend))
+
+            args = {
+                'friends': friends,
+                'user_name': user_name
+            }
+            return render(request, 'recommender/friendslist.html', args)
+        else:
+            return render(request, 'recommender/signin.html', {})
+    else:
+        return Http404('Error getting friends')
+
+def friends_list_append(request, friend_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            friend = User.objects.get(username=friend_name)
+            if FriendsList.objects.filter(user=user).exists():
+                print('User already has a friends list')
+                friends_list = FriendsList.objects.get(user=user)
+                friends_list.friends.add(friend)
+                print('Friend added to friends list')
+                print(friend)
+                print(friends_list.friends.all())
+                friends_list.save()
+            else:
+                print("Creating new friends list")
+                friends_list = FriendsList.objects.create(user=user)
+                friends_list.friends.add(friend)
+                friends_list.save()
+            return redirect('/recommender/friends/' + request.user.username)
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def friends_list_remove(request, friend_name):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            friend = User.objects.get(username=friend_name)
+            if FriendsList.objects.filter(user=user).exists():
+                print('User already has a friends list')
+                friends_list = FriendsList.objects.get(user=user)
+                friends_list.friends.remove(friend)
+                print('Friend removed from friends list')
+                print(friend)
+                print(friends_list.friends.all())
+                friends_list.save()
+            else:
+                print("Creating new friends list")
+                friends_list = FriendsList.objects.create(user=user)
+                friends_list.friends.remove(friend)
+                friends_list.save()
+            return redirect('/recommender/friends/' + request.user.username)
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
 
 def get_history(request):
     if request.method == "GET":
@@ -409,15 +494,16 @@ def dislike(request, user_name, song):
 
 
 def get_disliked_music(request):
-        disliked = DislikedMusic.objects.all().filter(user=request.user)
-        songs = []
-        for song in disliked:
-            songs.append(song.music.values('track_id'))
+    disliked = DislikedMusic.objects.all().filter(user=request.user)
+    songs = []
+    for song in disliked:
+        songs.append(song.music.values('track_id'))
 
-        args = {
-            'dislikes': songs
-        }
-        return args
+    args = {
+        'dislikes': songs
+    }
+    return args
+
 
 def get_dislikes(request):
     if request.method == 'GET':
@@ -465,7 +551,21 @@ def add_song_update(request, playlist_num):
                 tracks = list(query)
                 songs = list([*set([item['track_id'] for item in tracks[:3]])])
                 args = {'playlist_num': playlist_num, 'songs': songs}
-            return render(request, "recommender/results3.html", {'songs': songs, 'playlist_num': playlist_num})
+            return render(request, "recommender/results3.html", args)
+
+
+def remove_song(request, playlist_num, song_id):
+    if request.method == 'GET':
+        playlist = Playlist.objects.filter(playlist_id=playlist_num).first()
+        song = Musicdata.objects.filter(track_id=song_id).first()
+        playlist.playlist_songs.remove(song)
+        args = {
+            'playlist': playlist,
+            'song_id': song_id
+        }
+        return render(request, 'recommender/playlist.html', args)
+    else:
+        return Http404('Error removing song from playlist')
 
 
 def playlist_append(request, playlist_num, song_id):
@@ -480,29 +580,77 @@ def playlist_append(request, playlist_num, song_id):
     else:
         raise Http404('Error')
 
-def songcards(request):
-    if request.method == "GET":
+def view_album(request, album_id):
+    if request.method == 'GET':
         if request.user.is_authenticated:
             owner = User.objects.get(username=request.user.username)
             playlists = Playlist.objects.filter(playlist_owner=owner)
         else:
             playlists = []
-
+        album = Album.objects.get(album_id=album_id)
         args = {
+            'album': album,
             'playlists': playlists
         }
-        return render(request, "recommender/songcards.html", args)
-        
-def view_album(request, album_id):
-    if request.method == 'GET':
-        album = Album.objects.get(album_id=album_id)
-        return render(request, 'recommender/album_view.html', {'album':album})
+        return render(request, 'recommender/album_view.html', args)
     else:
         raise Http404('Error')
+
 
 def view_artist(request, artist_name):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            owner = User.objects.get(username=request.user.username)
+            playlists = Playlist.objects.filter(playlist_owner=owner)
+        else:
+            playlists = []
         artist = Artist.objects.get(artist_name=artist_name)
-        return render(request, 'recommender/artist_view.html', {'artist':artist})
+        artist_albums = Album.objects.filter(album_artist=artist)
+        artist_albums = artist_albums.order_by('album_name')
+        args = {
+            'artist': artist,
+            'playlists': playlists,
+            'artist_albums': artist_albums
+        }
+        return render(request, 'recommender/artist_view.html', args)
     else:
         raise Http404('Error')
+
+def update_profile_picture(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            if ProfilePicture.objects.filter(user=user).exists():
+                print("exists")
+                profile_picture = ProfilePicture.objects.get(user=user)
+                profile_picture.delete()
+            else:
+                profile_picture = ProfilePicture(user=user)
+            
+            profile_picture = ProfilePicture(user=user, profile_picture=request.FILES['profile_picture'])
+            profile_picture.save()
+            return redirect('recommender:get_myprofile')
+    else:
+        form = ProfilePictureForm()
+    return render(request, 'recommender/my_profile.html', {'form': form})
+
+def update_bio(request):
+    if request.method == 'POST':
+        form = BioForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            if Bio.objects.filter(user=user).exists():
+                bio = Bio.objects.get(user=user)
+                bio.delete()
+            else:
+                bio = Bio(user=user)
+                
+            bio = Bio(user=user, bio=request.POST['bio'])
+            bio.save()
+            return redirect('recommender:get_myprofile')
+    else:
+        print('not post')
+        form = UpdateSettingsForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'recommender/edit_bio.html', args)

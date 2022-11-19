@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pfp_exists %}
 
-{% block title %} {{profile_user}}'s Profile {% endblock %}
+{% block title %} {{profile_user.username}}'s Profile {% endblock %}
 
 {% block content %}
 
@@ -9,20 +10,26 @@
           
 <div class="card" style="width: 100%; margin-bottom: 20px">  
   <div class="card-body">
-      <img src="{% static 'pfp.jpg' %}" class="card-img-top" alt="..." style ="height: 80px; width: 80px">
-      <h5 class="card-title">@{{profile_user}}</h5>
-      <div class="card-subtitle mb-2 text-muted">(Bio goes here)</div>
-      <div class="card-body" style="text-align: right;">
-        <a class="btn btn-outline-custom" style="margin-right: 10px">Button</a> 
-        <a class="btn btn-custom">Add Friend</a>
-      </div>
+    <div style="display:flex;gap:20px;justify-content:left">
+        <img src="{% get_static_prefix %}{{ profile_user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 80px; height: 80px; object-fit: cover">
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <h5 class="card-title">{{profile_user.first_name}} {{profile_user.last_name}}</h5>
+      <h6 class="card-text">@{{profile_user}}</h6>
+    </div>
+  </div>
+  {% if bio %}
+    <div class="card-text text-muted" style="margin:15px">{{bio}}</div>
+  {% endif %}
+  <div class="card-body" style="text-align: right;">
+    <a href="{% url "recommender:get_friends" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">View @{{profile_user}}'s Friends</a>
+    <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Add Friend</a>
   </div>
 </div>
-
+</div>
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">{{profile_user}}Your Playlists</h5>
+      <h5 class="card-title">@{{profile_user}}'s Playlists</h5>
         {% if playlists %}
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for playlist in playlists %}
@@ -38,7 +45,7 @@
 
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">Recommended Albums</h5>
+      <h5 class="card-title">Recommended Songs</h5>
       <div class="row row-cols-1 row-cols-md-3 g-3">
           {% if albums %}
           {% for album in albums %}

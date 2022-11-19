@@ -4,13 +4,12 @@
 
 {% block content %}
 
-
     <br>
     <center>
         <h2>Album Search</h2>
     
         <br>
-        <input class="form-text col-8" type="text"
+        <input class="form-text col-8" style="margin-bottom:25px" type="text"
         name="album" hx-get="{% url 'recommender:get_album' %}" 
         hx-trigger="keyup" hx-target="#search-results">
         </input>
@@ -18,10 +17,6 @@
         
         <div id="search-results">
         </div>
-
     </center>
-
-
-
 
 {% endblock %}

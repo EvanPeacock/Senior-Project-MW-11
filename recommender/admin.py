@@ -23,4 +23,16 @@ class albumAdmin(admin.ModelAdmin):
 class artistAdmin(admin.ModelAdmin):
      list_display = ['artist_name', 'artist_id']
 
+@admin.register(FriendsList)
+class friendsAdmin(admin.ModelAdmin):
+     list_display = ['user']
+
+@admin.register(ProfilePicture)
+class profilePictureAdmin(admin.ModelAdmin):
+     list_display = ['user']
+
+@admin.register(Bio)
+class bioAdmin(admin.ModelAdmin):
+     list_display = ['user']
+
 admin.site.register(DislikedMusic)
