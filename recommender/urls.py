@@ -38,9 +38,10 @@ urlpatterns = [
     path('playlist/<int:playlist_num>/add_song_update/<str:song_id>', views.playlist_append, name="playlist_append"),
     path('playlist/<int:playlist_num>/remove_song_update/<str:song_id>', views.remove_song, name="remove_song"),
 
-    path('friends/<str:user_name>', views.get_friends, name='get_friends'),
-    path('add_friend/<str:friend_name>', views.friends_list_append, name='add_friend'),
-    path('remove_friend/<str:friend_name>', views.friends_list_remove, name='remove_friend'),
+    path('following/<str:user_name>', views.get_following, name='get_following'),
+    path('follow/<str:friend_name>', views.following_list_append, name='add_friend'),
+    path('unfollow/<str:friend_name>', views.following_list_remove, name='remove_friend'),
+    path('followers/<str:user_name>', views.get_followers, name='get_followers'),
 
     path('dislikes/', views.get_dislikes, name= 'get_dislikes'),
     path('dislike/<slug:user_name>/<slug:song>/',views.dislike, name='dislike'),

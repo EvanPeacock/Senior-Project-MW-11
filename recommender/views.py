@@ -389,27 +389,42 @@ def create_playlist(request, user_name):
         form = PlaylistForm()
         return render(request, "recommender/playlists.html", {'form': form})
 
-def get_friends(request, user_name):
+def get_following(request, user_name):
     if request.method == 'GET':
         if request.user.is_authenticated:
             user = User.objects.get(username=user_name)
             getFriends = FriendsList.objects.filter(user=user).values_list('friends', flat=True)
             print (getFriends)
-            friends = []
+            following = []
             for friend in getFriends:
-                friends.append(User.objects.get(id=friend))
+                following.append(User.objects.get(id=friend))
 
             args = {
-                'friends': friends,
+                'following': following,
                 'user_name': user_name
             }
-            return render(request, 'recommender/friendslist.html', args)
+            return render(request, 'recommender/following.html', args)
         else:
             return render(request, 'recommender/signin.html', {})
     else:
         return Http404('Error getting friends')
 
-def friends_list_append(request, friend_name):
+def get_followers(request, user_name):
+    if request.method == 'GET':
+        getFriends = FriendsList.objects.filter(friends__username=user_name).values_list('user', flat=True)
+        followers = []
+        for friend in getFriends:
+            followers.append(User.objects.get(id=friend))
+
+        args = {
+            'followers': followers,
+            'user_name': user_name
+        }
+        return render(request, 'recommender/followers.html', args)
+    else:
+        return Http404('Error getting followers')
+
+def following_list_append(request, friend_name):
     if request.method == 'GET':
         if request.user.is_authenticated:
             user = User.objects.get(username=request.user.username)
@@ -427,13 +442,13 @@ def friends_list_append(request, friend_name):
                 friends_list = FriendsList.objects.create(user=user)
                 friends_list.friends.add(friend)
                 friends_list.save()
-            return redirect('/recommender/friends/' + request.user.username)
+            return redirect('/recommender/following/' + request.user.username)
         else:
             return redirect('/recommender/signin/')
     else:
         raise Http404('Error')
 
-def friends_list_remove(request, friend_name):
+def following_list_remove(request, friend_name):
     if request.method == 'GET':
         if request.user.is_authenticated:
             user = User.objects.get(username=request.user.username)
@@ -451,7 +466,7 @@ def friends_list_remove(request, friend_name):
                 friends_list = FriendsList.objects.create(user=user)
                 friends_list.friends.remove(friend)
                 friends_list.save()
-            return redirect('/recommender/friends/' + request.user.username)
+            return redirect('/recommender/following/' + request.user.username)
         else:
             return redirect('/recommender/signin/')
     else:
