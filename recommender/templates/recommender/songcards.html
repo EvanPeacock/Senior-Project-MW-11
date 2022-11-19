@@ -4,7 +4,7 @@
         <center class="card-body">
             <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% if request.user.is_authenticated %}
-                <div style="display:flex;gap:40px;justify-content:center">
+                <div style="display:flex;gap:5%;justify-content:center">
                     <div class="dropdown text-center" style="margin-top:12px">
                         <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Add to Playlist
@@ -22,10 +22,10 @@
 
                     {% comment %} this doesnt really work rn {% endcomment %}
                     {% if song in dislikedlist %}
-                        <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom" style="margin-left:25px;">
+                        <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom">
                         <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
                     {% else %}
-                        <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom" style="margin-left:25px;">
+                        <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom">
                         <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
                     {% endif %}
                 </div> 
