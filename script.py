@@ -4,7 +4,7 @@
 
 # Import models from models.py and time for timer
 from recommender.models import Musicdata, Album, Artist
-import time, random
+import time
 
 # Start the timer
 timerStart = time.time()
@@ -38,7 +38,7 @@ for song in songList:
     if Artist.objects.filter(artist_name=artist_name):
         
         # Check to see if song already added
-        if not Artist.objects.get(artist_tracks__track_id=song.track_id):
+        if not Artist.objects.filter(artist_tracks__track_id=song.track_id):
             
             # Add song to artist's tracks
             currArtist = Artist.objects.get(artist_name=artist_name)
@@ -46,7 +46,6 @@ for song in songList:
             
             # Save the object
             currArtist.save()
-            Artist.save()
             
             # Increment totalAdditions
             totalArtistAdditions = totalArtistAdditions + 1
@@ -59,7 +58,6 @@ for song in songList:
         
         # Save the object
         newArtist.save()
-        Artist.save()
         
         # Increment totalCreations and totalAdditions
         totalArtistCreations = totalArtistCreations + 1
@@ -88,25 +86,24 @@ for song in songList:
     album_artist = song.track_artist
     
     # Check for existence
-    if Album.objects.filter(album_id=album_id):
+    if Album.objects.filter(album_name=album_name, album_artist=album_artist):
         
         # Check to see if song already added
-        if not Album.objects.get(album_tracks__track_id=song.track_id):
+        if not Album.objects.filter(album_tracks__track_id=song.track_id):
             
             # Add song to album's tracks
-            currAlbum = Album.objects.get(album_id=album_id)
+            currAlbum = Album.objects.get(album_name=album_name, album_artist=album_artist)
             currAlbum.album_tracks.add(song)
             
             # Save the object
             currAlbum.save()
-            Album.save()
             
             # Increment totalAdditions
             totalAlbumAdditions = totalAlbumAdditions + 1
     else:
         # Create new object, set name and add song
         newAlbum = Album.objects.create()
-        newAlbum.album_id = album_id
+        newAlbum.album_id_original = album_id
         newAlbum.album_name = album_name
         newAlbum.album_release_date = album_release_date
         newAlbum.album_artist = album_artist
@@ -115,7 +112,6 @@ for song in songList:
         
         # Save the object
         newAlbum.save()
-        Album.save()
         
         # Increment totalCreations and totalAdditions
         totalAlbumCreations = totalAlbumCreations + 1

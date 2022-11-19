@@ -1,4 +1,4 @@
-from recommender.models import Album, Artist
+from recommender.models import Album, Artist, Musicdata
 
 def findArtistDuplicates():
 
@@ -48,14 +48,17 @@ def fixAlbums(albumList):
             # Loop through currList and find album with most songs
             most = ["", 0]
             for curr in currList:
-                if len(curr.album_tracks) > most[1]:
-                    most = [curr.album_id, len(curr.album_tracks)]
+                currTrackList = list(curr.album_tracks.all())
+                if len(currTrackList) > most[1]:
+                    most = [curr.album_id, len(currTrackList)]
             # Store album with most tracks
             top = currAlbum.get(curr.album_id)
+            print(f"{top.album_name} - Starting now...")
             currList.remove(top)
-            # Iterate through and add songs to top
+            # Iterate through others and add songs to top
             for curr2 in currList:
                 for track in curr2.album_tracks:
+                    print(f" - Moving {track} to {top.album_name}")
                     top.album_tracks.add(track)
                     top.save()
                 fixed.append(curr2)
@@ -67,5 +70,56 @@ def fixAlbums(albumList):
     result = [fixed, broken]
     return result
 
+def countAlbumSongs():
+    albums = Album.objects.all()
+    albumList = list(albums)
+    counter = 0
+    for album in albumList:
+        tracks = album.album_tracks.all()
+        trackList = list(tracks)
+        for track in trackList:
+            print(f" - {track.track_name}")
+            counter = counter + 1
+    return counter
 
+def countArtistSongs():
+    artists = Artist.objects.all()
+    artistList = list(artists)
+    counter = 0
+    for artist in artistList:
+        tracks = artist.artist_tracks.all()
+        trackList = list(tracks)
+        for track in trackList:
+            print(f" - {track.track_name}")
+            counter = counter + 1
+    return counter
     
+def compareTotals():
+    tracks = Musicdata.objects.all()
+    trackList = list(tracks)
+    trackCount = len(trackList)
+    albumCount = countAlbumSongs()
+    artistCount = countArtistSongs()
+    print(f"Tracks: {trackCount} - Albums: {albumCount} - Artists: {artistCount}")
+    
+def addArtistAlbums():
+    # Set metrics
+    totalAlbums = 0
+    totalArtists = 0
+    # Get list of Artists
+    artists = Artist.objects.all()
+    artistList = list(artists)
+    # Loop through each artist
+    for artist in artistList:
+        # Query albums with artist
+        totalArtists = totalArtists + 1
+        albums = Album.objects.filter(album_artist=artist)
+        albumList = list(albums)
+        # Loop through each album
+        for album in albumList:
+            # Add the album to artist_albums
+            print(f" - Adding {album.album_name} to {artist.artist_name}")
+            artist.artist_albums.add(album)
+            totalAlbums = totalAlbums + 1
+            artist.save()
+    print(f"Artists Changed: {totalArtists} - Albums Added: {totalAlbums}")
