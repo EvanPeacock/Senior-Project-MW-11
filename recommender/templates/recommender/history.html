@@ -12,6 +12,9 @@
             {% if search.artist %}
                 <p class="card-title">{{ search.artist }}</p>
             {% endif %}
+            {% if search.search_datetime %}
+                <p>Search Date: {{ search.search_datetime }}</p>
+            {% endif %}
             {% if search.from_year %}
                 <p>{{ search.from_year }}</p>
             {% endif %}
