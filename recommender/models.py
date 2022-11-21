@@ -113,8 +113,8 @@ class RecentSearches(models.Model):
 class Artist(models.Model):
     artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
-    artist_albums = models.ManyToManyField('Album', blank=True, null=True)
-    artist_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
+    artist_albums = models.ManyToManyField('Album', blank=True)
+    artist_tracks = models.ManyToManyField('Musicdata', blank=True)
     artist_genre = models.CharField(max_length=25, blank=True, null=True)
     artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
     
