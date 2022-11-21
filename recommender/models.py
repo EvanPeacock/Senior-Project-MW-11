@@ -113,8 +113,8 @@ class RecentSearches(models.Model):
 class Artist(models.Model):
     artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
-    # artist_albums = models.ManyToManyField(Album, blank=True, null=True)
-    artist_tracks = models.ManyToManyField('Musicdata', blank=True)
+    artist_albums = models.ManyToManyField('Album', blank=True, null=True)
+    artist_tracks = models.ManyToManyField('Musicdata', blank=True, null=True)
     artist_genre = models.CharField(max_length=25, blank=True, null=True)
     artist_subgenre = models.CharField(max_length=25, blank=True, null=True)
     
@@ -122,7 +122,8 @@ class Artist(models.Model):
         return str(self.artist_name)
 
 class Album(models.Model):
-    album_id = models.TextField(null=True, blank=True)
+    album_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
+    album_id_original = models.TextField(null=True, blank=True)
     album_name = models.CharField(max_length=50, blank=True, null=True)
     album_tracks = models.ManyToManyField('Musicdata', blank=True)
     album_artist = models.TextField(blank=True, null=True)
@@ -149,7 +150,6 @@ class song(models.Model):
 class DislikedMusic(models.Model):
     user = models.ManyToManyField(User, blank=True)
     music = models.ManyToManyField(Musicdata, blank=True)
-
 
 # class songtoplaylist(models.Model):
    # track_id = models.ForeignKey('song', on_delete=models.CASCADE)
