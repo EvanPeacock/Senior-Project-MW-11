@@ -332,12 +332,12 @@ def playlist_view(request, playlist_num):
             getPlaylists = Playlist.objects.filter(playlist_owner=owner)
             playlists = list(getPlaylists)
             playlists.remove(playlist)
+            disliked_songs = get_disliked_music(request)
         else:
             playlists = Playlist.objects.filter(playlist_owner=owner)
     else:
         playlists = []
-
-    disliked_songs = get_disliked_music(request)
+        disliked_songs = []
 
     args = {
         'playlist': playlist,
