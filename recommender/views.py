@@ -479,7 +479,7 @@ def following_list_remove(request, friend_name):
 def get_history(request):
     if request.method == "GET":
         try:
-            searches = RecentSearches.objects.all()
+            searches = RecentSearches.objects.all().order_by('-search_datetime')
             return render(request, "recommender/history.html", {'searches': searches})
         except:
             raise Http404('Error with searches')

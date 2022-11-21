@@ -2,6 +2,7 @@ import random
 from django.db import models  
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
+from django.utils import timezone
 
 
 def unique_rand():
@@ -104,6 +105,7 @@ class RecentSearches(models.Model):
     result1 = models.CharField(max_length=25, null=True, blank=True)
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
+    search_datetime = models.DateTimeField(blank=True, default=timezone.now())
     
 # For some reason, when Artist or Album object is created, the  
 # track lists are created with a full list. 
