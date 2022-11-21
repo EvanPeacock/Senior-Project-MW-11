@@ -83,7 +83,8 @@ def find_albums(artist, from_year=None, to_year=None):
         query = query.filter(track_album_release_date__gte=from_year)
     if to_year is not None:
         query = query.filter(track_album_release_date__lte=to_year)
-    return list(query.order_by('-track_popularity').values('track_id'))
+    # return list(query.order_by('-track_popularity').values('track_id'))
+    return list(query.order_by('-track_popularity'))
 
 
 def find_album_by_name(album):
@@ -132,20 +133,22 @@ def get_artist(request):
             )
 
             # Random 3 of top 10 popular albums
-            answer = albums[:10]
-            random.shuffle(answer)
-            answer = list(answer)[:3]
+            answers = albums[:10]
+            random.shuffle(answers)
+            answers = list(answers)[:3]
             rs = RecentSearches.objects.create()
             rs.artist = form.cleaned_data['artist']
             rs.from_year = from_year
             rs.to_year = to_year
-            rs.result1 = answer[0]
-            rs.result2 = answer[1]
-            rs.result3 = answer[2]
+            rs.result1 = answers[0].track_id
+            rs.result2 = answers[1].track_id
+            rs.result3 = answers[2].track_id
             rs.save()
+            answer = [answers[0].track_id, answers[1].track_id, answers[2].track_id]
             args = {
                 'form': form,
                 'albums': answer,
+                'answers':answers,
                 'playlists': playlists
             }
             return render(request, 'recommender/artist.html', args)
