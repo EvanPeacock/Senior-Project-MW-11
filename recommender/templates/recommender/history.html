@@ -19,15 +19,16 @@
                 <p>{{ search.to_year }}</p>
             {% endif %}
             {% if search.result1 %}
-            {% comment %} <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
-            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> {% endcomment %}
-                <p>{{ search.result1 }}</p>
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result1 }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
             {% if search.result2 %}
-                <p>{{ search.result2 }}</p>
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result2 }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
             {% if search.result3 %}
-                <p>{{ search.result3 }}</p>
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result3 }}" width="300" height="380" 
+            frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
         </div>
     </div>

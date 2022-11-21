@@ -28,13 +28,13 @@ Artist Search
                      flex-wrap:wrap;
                      list-style:none;
                      gap:45px">
-{% for album in albums %}
+{% for a in answers %}
 <li style="width:30%;">
     <div class="card">
       <center class="card-body">
 
 
-        <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380"
+        <iframe src="https://open.spotify.com/embed/track/{{ a.track_id }}" width="300" height="380"
           frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 
         {% if request.user.is_authenticated %}
@@ -47,15 +47,14 @@ Artist Search
             <ul class="dropdown-menu dropdown-menu-center">
               {% for playlist in playlists %}
               <li><a class="btn btn-link-custom"
-                  href="{% url 'recommender:playlist_append' playlist.playlist_id album.track_id %}">{{
-                  playlist.playlist_name }}</a></li>
+                  href="{% url 'recommender:playlist_append' playlist.playlist_id a.track_id %}">{{ playlist.playlist_name }}</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
               {% endfor %}
             </ul>
           </div>
-          <a href="{% url 'recommender:dislike' user.username album.track_id%}" class="btn btn-link-custom"
+          <a href="{% url 'recommender:dislike' user.username a.track_id%}" class="btn btn-link-custom"
             style="margin-left:25px;">
             <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
           </a>
