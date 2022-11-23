@@ -69,10 +69,10 @@ def get_explore(request):
     args = {
         'songs': sResp[:3],
         'albums': alResp[:3],
-        'playlists': pResp[:3],
+        'recPlaylists': pResp[:3],
         'artists': arResp[:3],
         'users': uResp[:10],
-        'userPlaylists': playlists
+        'playlists': playlists
     }
     return render(request, "recommender/explore.html", args)
 
