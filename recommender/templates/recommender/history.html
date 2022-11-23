@@ -10,26 +10,30 @@
     <div class="card" style="margin-bottom:20px">
         <div class="card-body">
             {% if search.artist %}
-                <p class="card-title">{{ search.artist }}</p>
+                <h4 class="card-title">{{ search.artist }}
             {% endif %}
             {% if search.from_year %}
-                <p>{{ search.from_year }}</p>
+            : from {{ search.from_year }}
             {% endif %}
+
             {% if search.to_year %}
-                <p>{{ search.to_year }}</p>
+                to {{ search.to_year }}
             {% endif %}
+                </h4>
+            <div class="card-body" style="display:flex;gap:5%;justify-content:center">
             {% if search.result1 %}
-            <iframe src="https://open.spotify.com/embed/track/{{ search.result1 }}" width="300" height="380" 
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result1 }}" width="31%" height="380" 
             frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
             {% if search.result2 %}
-            <iframe src="https://open.spotify.com/embed/track/{{ search.result2 }}" width="300" height="380" 
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result2 }}" width="31%" height="380" 
             frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
             {% if search.result3 %}
-            <iframe src="https://open.spotify.com/embed/track/{{ search.result3 }}" width="300" height="380" 
+            <iframe src="https://open.spotify.com/embed/track/{{ search.result3 }}" width="31%" height="380" 
             frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
+            </div>
         </div>
     </div>
     {% comment %} </a> {% endcomment %}
