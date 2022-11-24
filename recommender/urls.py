@@ -44,8 +44,10 @@ urlpatterns = [
     path('followers/<str:user_name>', views.get_followers, name='get_followers'),
 
     path('dislikes/', views.get_dislikes, name= 'get_dislikes'),
-    path('dislike/<slug:user_name>/<slug:song>/',views.dislike, name='dislike'),
-    path('undislike/<slug:user_name>/<slug:song>/', views.undislike, name='undislike'),
+    path('dislike/<str:user_name>/<str:object_id>', views.dislike, name='dislike'),
+    # path('dislike/<str:user_name>/<str:song_id>', views.dislike_song, name='dislike_song'),
+    # path('undislike/<str:user_name>/<str:song_id>', views.undislike_song, name='undislike_song'),
+    # path('undislike/<slug:user_name>/<slug:song>/', views.undislike, name='undislike'),
     
     path('album/<str:album_id>/', views.view_album, name="view_album"),
     path('artist/<str:artist_name>/', views.view_artist, name="view_artist"),

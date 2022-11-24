@@ -35,4 +35,6 @@ class profilePictureAdmin(admin.ModelAdmin):
 class bioAdmin(admin.ModelAdmin):
      list_display = ['user']
 
-admin.site.register(DislikedMusic)
+@admin.register(Dislikes)
+class dislikesAdmin(admin.ModelAdmin):
+     list_display = ['user']
