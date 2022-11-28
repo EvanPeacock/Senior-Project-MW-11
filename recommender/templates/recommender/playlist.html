@@ -24,9 +24,11 @@
             </a>
         </div>
 
+        {% if request.user.is_authenticated %}
         <div><a href="" class="btn btn-link-custom">
             <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
         </a></div>
+        {% endif %}
     </div>
     {% endif %}
 </div>
