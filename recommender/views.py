@@ -672,3 +672,6 @@ def update_bio(request):
         form = UpdateSettingsForm(instance=request.user)
         args = {'form': form}
         return render(request, 'recommender/edit_bio.html', args)
+
+def post_sign_in(request):
+    return redirect('recommender:get_myprofile')

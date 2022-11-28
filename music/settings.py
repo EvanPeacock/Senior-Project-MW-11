@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,14 @@ USE_TZ = True
 STATIC_URL = '/recommender/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'recommender/static')
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_SPOTIFY_KEY = '7cf511f88c4249e08e4439061d00c2b1' 
+SOCIAL_AUTH_SPOTIFY_SECRET = 'bfce9521a8d94d7896552d306fb56dfc'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.spotify.SpotifyOAuth2',
+)
+
+SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read']

@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='recommender/')),
     path('recommender/', include('recommender.urls')),
+    path('social/', include('social_django.urls')),
+    path('accounts/profile/', views.post_sign_in, name='post_sign_in'),
 ]
