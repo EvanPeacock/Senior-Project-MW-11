@@ -29,15 +29,48 @@ def get_home(request):
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
         userPlaylists = Playlist.objects.filter(playlist_owner=owner)
+        dislikes = Dislikes.objects.filter(user=owner)
+        
+        getDislikedSongs = dislikes.values_list('tracks', flat=True)
+        dislikedSongs = []
+        for track in getDislikedSongs:
+            if track:
+                dislikedSongs.append(Musicdata.objects.get(id=track))
+        
+        getDislikedArtists = dislikes.values_list('artists', flat=True)
+        dislikedArtists = []
+        for artist in getDislikedArtists:
+            if artist:
+                dislikedArtists.append(Artist.objects.get(artist_id=artist))
+
+        getDislikedAlbums = dislikes.values_list('albums', flat=True)
+        dislikedAlbums = []
+        for album in getDislikedAlbums:
+            if album:
+                dislikedAlbums.append(Album.objects.get(album_id=album))
+
+        getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+        dislikedPlaylists = []
+        for p in getDislikedPlaylists:
+            if p:
+                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
     else:
         userPlaylists = []
+        dislikedSongs = []
+        dislikedAlbums = []
+        dislikedArtists = []
+        dislikedPlaylists = []
 
     args = {
         'songs': sResp[:3],
         'albums': alResp[:3],
         'artists': arResp[:3],
         'popularPlaylists': pResp[:3],
-        'playlists': userPlaylists
+        'playlists': userPlaylists,
+        'dislikedSongs': dislikedSongs,
+        'dislikedAlbums': dislikedAlbums,
+        'dislikedArtists': dislikedArtists,
+        'dislikedPlaylists': dislikedPlaylists
     }
 
     return render(request, "recommender/home.html", args)
@@ -63,8 +96,37 @@ def get_explore(request):
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
         playlists = Playlist.objects.filter(playlist_owner=owner)
+        dislikes = Dislikes.objects.filter(user=owner)
+        
+        getDislikedSongs = dislikes.values_list('tracks', flat=True)
+        dislikedSongs = []
+        for track in getDislikedSongs:
+            if track:
+                dislikedSongs.append(Musicdata.objects.get(id=track))
+        
+        getDislikedArtists = dislikes.values_list('artists', flat=True)
+        dislikedArtists = []
+        for artist in getDislikedArtists:
+            if artist:
+                dislikedArtists.append(Artist.objects.get(artist_id=artist))
+
+        getDislikedAlbums = dislikes.values_list('albums', flat=True)
+        dislikedAlbums = []
+        for album in getDislikedAlbums:
+            if album:
+                dislikedAlbums.append(Album.objects.get(album_id=album))
+
+        getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+        dislikedPlaylists = []
+        for p in getDislikedPlaylists:
+            if p:
+                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
     else:
         playlists = []
+        dislikedSongs = []
+        dislikedAlbums = []
+        dislikedArtists = []
+        dislikedPlaylists = []
 
     args = {
         'songs': sResp[:3],
@@ -72,7 +134,11 @@ def get_explore(request):
         'recPlaylists': pResp[:3],
         'artists': arResp[:3],
         'users': uResp[:10],
-        'playlists': playlists
+        'playlists': playlists,
+        'dislikedSongs': dislikedSongs,
+        'dislikedAlbums': dislikedAlbums,
+        'dislikedArtists': dislikedArtists,
+        'dislikedPlaylists': dislikedPlaylists
     }
     return render(request, "recommender/explore.html", args)
 
@@ -242,6 +308,16 @@ def logout_view(request):
 
 def get_profile(request, user_name):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            dislikes = Dislikes.objects.filter(user=user)
+            getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+            dislikedPlaylists = []
+            for p in getDislikedPlaylists:
+                if p:
+                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+        else:   
+            dislikedPlaylists = []
         if user_name is not None:
             owner = User.objects.get(username=user_name)
             playlists = Playlist.objects.filter(playlist_owner=owner)
@@ -256,9 +332,8 @@ def get_profile(request, user_name):
             args = {
                 'profile_user': owner,
                 'playlists': playlists,
-                'songs': sResp[:3],
-                'albums': aResp[:3],
-                'bio': bio
+                'bio': bio,
+                'dislikedPlaylists': dislikedPlaylists,
             }
             return render(request, 'recommender/profile.html', args)
         else:
@@ -271,6 +346,12 @@ def get_myprofile(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             owner = request.user
+            dislikes = Dislikes.objects.filter(user=owner)
+            getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+            dislikedPlaylists = []
+            for p in getDislikedPlaylists:
+                if p:
+                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
             playlists = list(Playlist.objects.filter(playlist_owner=owner))
             random.shuffle(playlists)
 
@@ -280,6 +361,7 @@ def get_myprofile(request):
             args = {
                 'playlists': playlists[:3],
                 'bio': bio,
+                'dislikedPlaylists': dislikedPlaylists,
             }
             return render(request, 'recommender/myprofile.html', args)
         else:
@@ -331,21 +413,36 @@ def playlist_view(request, playlist_num):
 
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
+        dislikes = Dislikes.objects.filter(user=owner)
+        
+        getDislikedSongs = dislikes.values_list('tracks', flat=True)
+        dislikedSongs = []
+        for track in getDislikedSongs:
+            if track:
+                dislikedSongs.append(Musicdata.objects.get(id=track))
+
+        getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+        dislikedPlaylists = []
+        for p in getDislikedPlaylists:
+            if p:
+                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                
         if owner == playlist.playlist_owner:
-            getPlaylists = Playlist.objects.filter(playlist_owner=owner)
-            playlists = list(getPlaylists)
+            getUserPlaylists = Playlist.objects.filter(playlist_owner=owner)
+            playlists = list(getUserPlaylists)
             playlists.remove(playlist)
-            disliked_songs = get_disliked_music(request)
         else:
             playlists = Playlist.objects.filter(playlist_owner=owner)
     else:
         playlists = []
-        disliked_songs = []
-
+        dislikedSongs = []
+        dislikedPlaylists = []
+        
     args = {
         'playlist': playlist,
         'playlists': playlists,
-        'disliked_songs': disliked_songs
+        'dislikedSongs': dislikedSongs,
+        'dislikedPlaylists': dislikedPlaylists
     }
 
     return render(request, 'recommender/playlist.html', args)
@@ -353,17 +450,47 @@ def playlist_view(request, playlist_num):
 
 def get_playlists(request):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            dislikes = Dislikes.objects.filter(user=user)
+            getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+            dislikedPlaylists = []
+            for p in getDislikedPlaylists:
+                if p:
+                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+        else:
+            dislikedPlaylists = []
         playlists = Playlist.objects.all()
-        return render(request, 'recommender/playlists.html', {'playlists': playlists})
+        args = {
+            'playlists': playlists,
+            'dislikedPlaylists': dislikedPlaylists
+        }
+        return render(request, 'recommender/playlists.html', args)
     else:
         return Http404('Error getting playlists')
 
 
 def get_user_playlists(request, user_name):
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            dislikes = Dislikes.objects.filter(user=user)
+            getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+            dislikedPlaylists = []
+            for p in getDislikedPlaylists:
+                if p:
+                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+        else:
+            dislikedPlaylists = []
         owner = User.objects.get(username=user_name)
         playlists = Playlist.objects.filter(playlist_owner=owner)
-        return render(request, 'recommender/playlists.html', {'playlists': playlists, 'owner': owner})
+        args = {
+            'playlists': playlists,
+            'owner': owner,
+            'dislikedPlaylists': dislikedPlaylists
+        }
+        
+        return render(request, 'recommender/playlists.html', args)
     else:
         return Http404('Error finding user playlists')
 
@@ -486,74 +613,196 @@ def get_history(request):
     else:
         raise Http404('Error')
 
+def get_dislikes(request):
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user.username)
+        playlists = Playlist.objects.filter(playlist_owner=user)
 
-def dislike(request, user_name, song):
-    if request.method == 'GET':
-        try:
-            curUser = User.objects.filter(username=user_name).first()
-            music = Musicdata.objects.filter(track_id__contains=song).first()
-            dislikedMusic = DislikedMusic.objects.get(user=curUser)
-            dislikedMusic.save()
-            music.save()
-            dislikedMusic.music.add(music)
-            return redirect(request.META.get('HTTP_REFERER'))
-        except:
-            curUser = User.objects.filter(username=user_name).first()
-            dislikedMusic = DislikedMusic()
-            dislikedMusic.save()
-            curUser.save()
-            dislikedMusic.user.add(curUser)
-            music = Musicdata.objects.filter(track_id__contains=song).first()
-            music.save()
-            dislikedMusic.music.add(music)
-            return redirect(request.META.get('HTTP_REFERER'))
+        dislikes = Dislikes.objects.filter(user=user)
+        
+        getTracks = dislikes.values_list('tracks', flat=True)
+        tracks = []
+        for track in getTracks:
+            if track:
+                tracks.append(Musicdata.objects.get(id=track))
+        
+        getArtists = dislikes.values_list('artists', flat=True)
+        artists = []
+        for artist in getArtists:
+            if artist:
+                artists.append(Artist.objects.get(artist_id=artist))
+
+        getAlbums = dislikes.values_list('albums', flat=True)
+        albums = []
+        for album in getAlbums:
+            if album:
+                albums.append(Album.objects.get(album_id=album))
+
+        getPlaylists = dislikes.values_list('playlists', flat=True)
+        dislikedPlaylists = []
+        for playlist in getPlaylists:
+            if playlist:
+                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(playlist)-1)))
     else:
-        return Http404('Error adding song to dislikes')
-
-
-def get_disliked_music(request):
-    disliked = DislikedMusic.objects.all().filter(user=request.user)
-    songs = []
-    for song in disliked:
-        songs.append(song.music.values('track_id'))
+        playlists = []
 
     args = {
-        'dislikes': songs
+        'dislikes': dislikes,
+        'dislikedSongs': tracks,
+        'dislikedArtists': artists,
+        'dislikedAlbums': albums,
+        'dislikedPlaylists': dislikedPlaylists,
+        'playlists': playlists
     }
-    return args
+    return render(request, 'recommender/dislikes.html', args)
 
-
-def get_dislikes(request):
+def dislike_song(request, user_name, track_id):
     if request.method == 'GET':
-        disliked = DislikedMusic.objects.all().filter(user=request.user)
-        songs = []
-        for song in disliked:
-            songs.append(song.music.values('track_id'))
-
-        args = {
-            'dislikes': songs
-        }
-        return render(request, 'recommender/dislikes.html', args)
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            tracks = Musicdata.objects.filter(track_id=track_id)
+            track = tracks[0]
+            dislikes.tracks.add(track)
+            print(dislikes.tracks.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
     else:
-        return Http404('Error getting dislikes')
+        raise Http404('Error')
 
-
-def undislike(request, user_name, song):
+def dislike_artist(request, user_name, artist_id):
     if request.method == 'GET':
-        curUser = User.objects.filter(username=user_name).first()
-        dislike = DislikedMusic.objects.get(user=curUser)
-        track = Musicdata.objects.filter(track_id=song).first()
-        dislike.music.remove(track)
-        disliked = DislikedMusic.objects.filter(user=curUser)
-        songs = []
-        for song in disliked:
-            songs.append(song.music.values('track_id'))
-        args = {
-            'dislikes': songs
-        }
-        return render(request, 'recommender/dislikes.html', args)
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            artist = Artist.objects.get(artist_id=artist_id)
+            dislikes.artists.add(artist)
+            print(dislikes.artists.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
     else:
-        return Http404('Error removing song from dislikes')
+        raise Http404('Error')
+
+def dislike_album(request, user_name, album_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            album = Album.objects.get(album_id=album_id)
+            dislikes.albums.add(album)
+            print(dislikes.albums.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def dislike_playlist(request, user_name, playlist_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            playlist = Playlist.objects.get(playlist_id=playlist_id)
+            print(playlist.playlist_name)
+            print(playlist.playlist_id)
+            dislikes.playlists.add(playlist)
+            print(dislikes.playlists.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def undislike_song(request, user_name, track_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            track = Musicdata.objects.get(track_id=track_id)
+            dislikes.tracks.remove(track)
+            print(dislikes.tracks.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def undislike_artist(request, user_name, artist_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            artist = Artist.objects.get(artist_id=artist_id)
+            dislikes.artists.remove(artist)
+            print(dislikes.artists.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def undislike_album(request, user_name, album_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            album = Album.objects.get(album_id=album_id)
+            dislikes.albums.remove(album)
+            print(dislikes.albums.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
+def undislike_playlist(request, user_name, playlist_id):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            user = User.objects.get(username=user_name)
+            if Dislikes.objects.filter(user=user).exists():
+                dislikes = Dislikes.objects.get(user=user)
+            else:
+                dislikes = Dislikes.objects.create(user=user)
+            playlist = Playlist.objects.get(playlist_id=playlist_id)
+            dislikes.playlists.remove(playlist)
+            print(dislikes.playlists.all())
+            dislikes.save()
+            return redirect('/recommender/dislikes/')
+        else:
+            return redirect('/recommender/signin/')
+    else:
+        raise Http404('Error')
+
 
 
 def add_song_update(request, playlist_num):

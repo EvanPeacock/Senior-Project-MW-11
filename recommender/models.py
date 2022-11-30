@@ -147,9 +147,15 @@ class song(models.Model):
         return self.track_name
 
 
-class DislikedMusic(models.Model):
-    user = models.ManyToManyField(User, blank=True)
-    music = models.ManyToManyField(Musicdata, blank=True)
+class Dislikes(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tracks = models.ManyToManyField('Musicdata', blank=True)
+    artists = models.ManyToManyField('Artist', blank=True)
+    albums = models.ManyToManyField('Album', blank=True)
+    playlists = models.ManyToManyField('Playlist', blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 # class songtoplaylist(models.Model):
    # track_id = models.ForeignKey('song', on_delete=models.CASCADE)

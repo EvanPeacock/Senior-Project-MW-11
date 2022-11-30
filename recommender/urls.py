@@ -44,8 +44,15 @@ urlpatterns = [
     path('followers/<str:user_name>', views.get_followers, name='get_followers'),
 
     path('dislikes/', views.get_dislikes, name= 'get_dislikes'),
-    path('dislike/<slug:user_name>/<slug:song>/',views.dislike, name='dislike'),
-    path('undislike/<slug:user_name>/<slug:song>/', views.undislike, name='undislike'),
+    path('dislikes/<str:user_name>', views.get_dislikes, name= 'get_dislikes'),
+    path('dislike/song/<str:user_name>/<str:track_id>', views.dislike_song, name='dislike_song'),
+    path('undislike/song/<str:user_name>/<str:track_id>/', views.undislike_song, name='undislike_song'),
+    path('dislike/album/<str:user_name>/<str:album_id>', views.dislike_album, name='dislike_album'),
+    path('undislike/album/<str:user_name>/<str:album_id>/', views.undislike_album, name='undislike_album'),
+    path('dislike/artist/<str:user_name>/<str:artist_id>', views.dislike_artist, name='dislike_artist'),
+    path('undislike/artist/<str:user_name>/<str:artist_id>/', views.undislike_artist, name='undislike_artist'),
+    path('dislike/playlist/<str:user_name>/<str:playlist_id>', views.dislike_playlist, name='dislike_playlist'),
+    path('undislike/playlist/<str:user_name>/<str:playlist_id>/', views.undislike_playlist, name='undislike_playlist'),
     
     path('album/<str:album_id>/', views.view_album, name="view_album"),
     path('artist/<str:artist_name>/', views.view_artist, name="view_artist"),
