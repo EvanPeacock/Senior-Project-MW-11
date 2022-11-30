@@ -134,6 +134,7 @@ SOCIAL_AUTH_SPOTIFY_SECRET = 'bfce9521a8d94d7896552d306fb56dfc'
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.spotify.SpotifyOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read']

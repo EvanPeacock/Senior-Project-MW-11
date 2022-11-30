@@ -215,7 +215,6 @@ def get_signin(request):
 def get_registration(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-
         if form.is_valid():
             form.save()
             username = request.POST['username']
@@ -224,6 +223,8 @@ def get_registration(request):
             if user is not None:
                 login(request, user)
                 return redirect('/recommender/myprofile')
+            else:
+                raise Http404('Error with user')
         else:
             return redirect('/recommender/registration/')
     else:
