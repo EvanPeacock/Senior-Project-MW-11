@@ -21,11 +21,11 @@
                     </div>
 
                     {% comment %} this doesnt really work rn {% endcomment %}
-                    {% if song in dislikedlist %}
-                        <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom">
+                    {% if song in dislikedSongs %}
+                        <a href="{% url 'recommender:undislike_song' user.username song.track_id %}" class="btn btn-link-custom">
                         <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
                     {% else %}
-                        <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom">
+                        <a href="{% url 'recommender:dislike_song' user.username song.track_id%}" class="btn btn-link-custom">
                         <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
                     {% endif %}
                 </div> 

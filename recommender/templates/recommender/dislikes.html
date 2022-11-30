@@ -12,7 +12,7 @@
   <div class="card-body">
     <h5 class="card-title">Your Disliked Songs</h5>
     <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-      {% for song in tracks%}
+      {% for song in dislikedSongs %}
         {% include "recommender/songcards.html" %}
       {% endfor %}
     </ol>
@@ -23,7 +23,7 @@
   <div class="card-body">
     <h5 class="card-title">Your Disliked Albums</h5>
     <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-      {% for album in albums%}
+      {% for album in dislikedAlbums %}
         {% include "recommender/albumcards.html" %}
       {% endfor %}
     </ol>
