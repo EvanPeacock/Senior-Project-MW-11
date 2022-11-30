@@ -13,7 +13,7 @@
                 <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
             {% endfor %}
 
-            
+
                 <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
                     <div style="margin-top:12px">
                         <a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom">
