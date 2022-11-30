@@ -95,7 +95,7 @@ def get_explore(request):
 
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
-        playlists = Playlist.objects.filter(playlist_owner=owner)
+        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
         dislikes = Dislikes.objects.filter(user=owner)
         
         getDislikedSongs = dislikes.values_list('tracks', flat=True)
@@ -122,7 +122,7 @@ def get_explore(request):
             if p:
                 dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
     else:
-        playlists = []
+        userPlaylists = []
         dislikedSongs = []
         dislikedAlbums = []
         dislikedArtists = []
@@ -134,7 +134,7 @@ def get_explore(request):
         'recPlaylists': pResp[:3],
         'artists': arResp[:3],
         'users': uResp[:10],
-        'playlists': playlists,
+        'playlists': userPlaylists,
         'dislikedSongs': dislikedSongs,
         'dislikedAlbums': dislikedAlbums,
         'dislikedArtists': dislikedArtists,
@@ -201,19 +201,20 @@ def get_artist(request):
             # Random 3 of top 10 popular albums
             answers = albums[:10]
             random.shuffle(answers)
-            answers = list(answers)[:3]
-            rs = RecentSearches.objects.create()
-            rs.artist = form.cleaned_data['artist']
-            rs.from_year = from_year
-            rs.to_year = to_year
-            rs.result1 = answers[0].track_id
-            rs.result2 = answers[1].track_id
-            rs.result3 = answers[2].track_id
-            rs.save()
-            answer = [answers[0].track_id, answers[1].track_id, answers[2].track_id]
+            if len(answers) > 0:
+                answers = list(answers)[:3]
+                rs = RecentSearches.objects.create()
+                rs.artist = form.cleaned_data['artist']
+                rs.from_year = from_year
+                rs.to_year = to_year
+                rs.result1 = answers[0].track_id
+                rs.result2 = answers[1].track_id
+                rs.result3 = answers[2].track_id
+                rs.save()
+            else:
+                answers = []
             args = {
                 'form': form,
-                'albums': answer,
                 'answers':answers,
                 'playlists': playlists
             }
