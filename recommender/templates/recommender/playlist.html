@@ -25,10 +25,16 @@
         </div>
 
         {% if request.user.is_authenticated %}
-        <div><a href="" class="btn btn-link-custom">
-            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
-        </a></div>
-        {% endif %}
+                    {% if playlist in dislikedPlaylists %}
+                        <a href="{% url 'recommender:undislike_playlist' user.username playlist.playlist_id %}" class="btn btn-link-custom">
+                        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a> 
+                    
+                    {% else %}
+                        <a href="{% url 'recommender:dislike_playlist' user.username playlist.playlist_id %}" class="btn btn-link-custom">
+                        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
+                    {% endif %}
+                
+            {% endif %}
     </div>
     {% endif %}
 </div>

@@ -62,7 +62,7 @@
                   <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
                     {% if playlists %}
                     <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
-                      {% for playlist in playlists %}
+                      {% for playlist in recPlaylists %}
                       {% include "recommender/playlistcards.html" %}
                       {% endfor %}
                     </ol> 
@@ -71,7 +71,6 @@
             </div>
         </div>
     </div>
-    
 </div>
 
 {% endblock %}

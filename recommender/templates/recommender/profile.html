@@ -40,26 +40,5 @@
     {% endif %}
   </div>
 </div>
-
-
-
-
-<div class="card" style="width: 100%; margin-bottom: 20px">
-  <div class="card-body">
-      <h5 class="card-title">Recommended Songs</h5>
-      <div class="row row-cols-1 row-cols-md-3 g-3">
-          {% if albums %}
-          {% for album in albums %}
-          <td>
-          <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
-          frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-          </td>
-          {% endfor %}
-          {% endif %}
-
-      </div>
-  </div>
-
-</div>
 {% endblock %}
 
