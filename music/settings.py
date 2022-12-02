@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -129,11 +129,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'recommender/static')
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-SOCIAL_AUTH_SPOTIFY_KEY = '7cf511f88c4249e08e4439061d00c2b1' 
+SOCIAL_AUTH_SPOTIFY_KEY = '7cf511f88c4249e08e4439061d00c2b1'
 SOCIAL_AUTH_SPOTIFY_SECRET = 'bfce9521a8d94d7896552d306fb56dfc'
+
+SOCIAL_AUTH_GOOGLE_PLUS_KEY = '781782291631-0ufepdej5mc1be4tati6hg884j7u5b09.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_PLUS_SECRET = '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'
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.spotify.SpotifyOAuth2',
+    'social_core.backends.google.GooglePlusAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -148,5 +152,13 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+SOCIAL_AUTH_GOOGLE_PLUS_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_PLUS_SCOPE = [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
+
 
 SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read']

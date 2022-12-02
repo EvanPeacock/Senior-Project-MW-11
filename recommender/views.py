@@ -30,13 +30,13 @@ def get_home(request):
         owner = User.objects.get(username=request.user.username)
         userPlaylists = Playlist.objects.filter(playlist_owner=owner)
         dislikes = Dislikes.objects.filter(user=owner)
-        
+
         getDislikedSongs = dislikes.values_list('tracks', flat=True)
         dislikedSongs = []
         for track in getDislikedSongs:
             if track:
                 dislikedSongs.append(Musicdata.objects.get(id=track))
-        
+
         getDislikedArtists = dislikes.values_list('artists', flat=True)
         dislikedArtists = []
         for artist in getDislikedArtists:
@@ -53,7 +53,8 @@ def get_home(request):
         dislikedPlaylists = []
         for p in getDislikedPlaylists:
             if p:
-                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                dislikedPlaylists.append(
+                    Playlist.objects.get(playlist_id=str(int(p)-1)))
     else:
         userPlaylists = []
         dislikedSongs = []
@@ -97,13 +98,13 @@ def get_explore(request):
         owner = User.objects.get(username=request.user.username)
         userPlaylists = Playlist.objects.filter(playlist_owner=owner)
         dislikes = Dislikes.objects.filter(user=owner)
-        
+
         getDislikedSongs = dislikes.values_list('tracks', flat=True)
         dislikedSongs = []
         for track in getDislikedSongs:
             if track:
                 dislikedSongs.append(Musicdata.objects.get(id=track))
-        
+
         getDislikedArtists = dislikes.values_list('artists', flat=True)
         dislikedArtists = []
         for artist in getDislikedArtists:
@@ -120,7 +121,8 @@ def get_explore(request):
         dislikedPlaylists = []
         for p in getDislikedPlaylists:
             if p:
-                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                dislikedPlaylists.append(
+                    Playlist.objects.get(playlist_id=str(int(p)-1)))
     else:
         userPlaylists = []
         dislikedSongs = []
@@ -215,7 +217,7 @@ def get_artist(request):
                 answers = []
             args = {
                 'form': form,
-                'answers':answers,
+                'answers': answers,
                 'playlists': playlists
             }
             return render(request, 'recommender/artist.html', args)
@@ -317,8 +319,9 @@ def get_profile(request, user_name):
             dislikedPlaylists = []
             for p in getDislikedPlaylists:
                 if p:
-                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
-        else:   
+                    dislikedPlaylists.append(
+                        Playlist.objects.get(playlist_id=str(int(p)-1)))
+        else:
             dislikedPlaylists = []
         if user_name is not None:
             owner = User.objects.get(username=user_name)
@@ -329,7 +332,8 @@ def get_profile(request, user_name):
             albums = Musicdata.objects.all().values('track_id')
             aResp = list(albums)
             random.shuffle(aResp)
-            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            getBio = Bio.objects.filter(
+                user=owner).values_list('bio', flat=True)
             bio = getBio[0] if len(getBio) > 0 else None
             args = {
                 'profile_user': owner,
@@ -353,11 +357,13 @@ def get_myprofile(request):
             dislikedPlaylists = []
             for p in getDislikedPlaylists:
                 if p:
-                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                    dislikedPlaylists.append(
+                        Playlist.objects.get(playlist_id=str(int(p)-1)))
             playlists = list(Playlist.objects.filter(playlist_owner=owner))
             random.shuffle(playlists)
 
-            getBio = Bio.objects.filter(user=owner).values_list('bio', flat=True)
+            getBio = Bio.objects.filter(
+                user=owner).values_list('bio', flat=True)
             bio = getBio[0] if len(getBio) > 0 else None
 
             args = {
@@ -416,7 +422,7 @@ def playlist_view(request, playlist_num):
     if request.user.is_authenticated:
         owner = User.objects.get(username=request.user.username)
         dislikes = Dislikes.objects.filter(user=owner)
-        
+
         getDislikedSongs = dislikes.values_list('tracks', flat=True)
         dislikedSongs = []
         for track in getDislikedSongs:
@@ -427,8 +433,9 @@ def playlist_view(request, playlist_num):
         dislikedPlaylists = []
         for p in getDislikedPlaylists:
             if p:
-                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
-                
+                dislikedPlaylists.append(
+                    Playlist.objects.get(playlist_id=str(int(p)-1)))
+
         if owner == playlist.playlist_owner:
             getUserPlaylists = Playlist.objects.filter(playlist_owner=owner)
             playlists = list(getUserPlaylists)
@@ -439,7 +446,7 @@ def playlist_view(request, playlist_num):
         playlists = []
         dislikedSongs = []
         dislikedPlaylists = []
-        
+
     args = {
         'playlist': playlist,
         'playlists': playlists,
@@ -459,7 +466,8 @@ def get_playlists(request):
             dislikedPlaylists = []
             for p in getDislikedPlaylists:
                 if p:
-                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                    dislikedPlaylists.append(
+                        Playlist.objects.get(playlist_id=str(int(p)-1)))
         else:
             dislikedPlaylists = []
         playlists = Playlist.objects.all()
@@ -481,7 +489,8 @@ def get_user_playlists(request, user_name):
             dislikedPlaylists = []
             for p in getDislikedPlaylists:
                 if p:
-                    dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(p)-1)))
+                    dislikedPlaylists.append(
+                        Playlist.objects.get(playlist_id=str(int(p)-1)))
         else:
             dislikedPlaylists = []
         owner = User.objects.get(username=user_name)
@@ -491,7 +500,7 @@ def get_user_playlists(request, user_name):
             'owner': owner,
             'dislikedPlaylists': dislikedPlaylists
         }
-        
+
         return render(request, 'recommender/playlists.html', args)
     else:
         return Http404('Error finding user playlists')
@@ -521,12 +530,14 @@ def create_playlist(request, user_name):
         form = PlaylistForm()
         return render(request, "recommender/playlists.html", {'form': form})
 
+
 def get_following(request, user_name):
     if request.method == 'GET':
         if request.user.is_authenticated:
             user = User.objects.get(username=user_name)
-            getFriends = FriendsList.objects.filter(user=user).values_list('friends', flat=True)
-            print (getFriends)
+            getFriends = FriendsList.objects.filter(
+                user=user).values_list('friends', flat=True)
+            print(getFriends)
             following = []
             for friend in getFriends:
                 following.append(User.objects.get(id=friend))
@@ -541,9 +552,11 @@ def get_following(request, user_name):
     else:
         return Http404('Error getting friends')
 
+
 def get_followers(request, user_name):
     if request.method == 'GET':
-        getFriends = FriendsList.objects.filter(friends__username=user_name).values_list('user', flat=True)
+        getFriends = FriendsList.objects.filter(
+            friends__username=user_name).values_list('user', flat=True)
         followers = []
         for friend in getFriends:
             followers.append(User.objects.get(id=friend))
@@ -555,6 +568,7 @@ def get_followers(request, user_name):
         return render(request, 'recommender/followers.html', args)
     else:
         return Http404('Error getting followers')
+
 
 def following_list_append(request, friend_name):
     if request.method == 'GET':
@@ -579,6 +593,7 @@ def following_list_append(request, friend_name):
             return redirect('/recommender/signin/')
     else:
         raise Http404('Error')
+
 
 def following_list_remove(request, friend_name):
     if request.method == 'GET':
@@ -615,19 +630,20 @@ def get_history(request):
     else:
         raise Http404('Error')
 
+
 def get_dislikes(request):
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user.username)
         playlists = Playlist.objects.filter(playlist_owner=user)
 
         dislikes = Dislikes.objects.filter(user=user)
-        
+
         getTracks = dislikes.values_list('tracks', flat=True)
         tracks = []
         for track in getTracks:
             if track:
                 tracks.append(Musicdata.objects.get(id=track))
-        
+
         getArtists = dislikes.values_list('artists', flat=True)
         artists = []
         for artist in getArtists:
@@ -644,7 +660,8 @@ def get_dislikes(request):
         dislikedPlaylists = []
         for playlist in getPlaylists:
             if playlist:
-                dislikedPlaylists.append(Playlist.objects.get(playlist_id=str(int(playlist)-1)))
+                dislikedPlaylists.append(Playlist.objects.get(
+                    playlist_id=str(int(playlist)-1)))
     else:
         playlists = []
 
@@ -657,6 +674,7 @@ def get_dislikes(request):
         'playlists': playlists
     }
     return render(request, 'recommender/dislikes.html', args)
+
 
 def dislike_song(request, user_name, track_id):
     if request.method == 'GET':
@@ -677,6 +695,7 @@ def dislike_song(request, user_name, track_id):
     else:
         raise Http404('Error')
 
+
 def dislike_artist(request, user_name, artist_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -695,6 +714,7 @@ def dislike_artist(request, user_name, artist_id):
     else:
         raise Http404('Error')
 
+
 def dislike_album(request, user_name, album_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -712,6 +732,7 @@ def dislike_album(request, user_name, album_id):
             return redirect('/recommender/signin/')
     else:
         raise Http404('Error')
+
 
 def dislike_playlist(request, user_name, playlist_id):
     if request.method == 'GET':
@@ -733,6 +754,7 @@ def dislike_playlist(request, user_name, playlist_id):
     else:
         raise Http404('Error')
 
+
 def undislike_song(request, user_name, track_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -750,6 +772,7 @@ def undislike_song(request, user_name, track_id):
             return redirect('/recommender/signin/')
     else:
         raise Http404('Error')
+
 
 def undislike_artist(request, user_name, artist_id):
     if request.method == 'GET':
@@ -769,6 +792,7 @@ def undislike_artist(request, user_name, artist_id):
     else:
         raise Http404('Error')
 
+
 def undislike_album(request, user_name, album_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -787,6 +811,7 @@ def undislike_album(request, user_name, album_id):
     else:
         raise Http404('Error')
 
+
 def undislike_playlist(request, user_name, playlist_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -804,7 +829,6 @@ def undislike_playlist(request, user_name, playlist_id):
             return redirect('/recommender/signin/')
     else:
         raise Http404('Error')
-
 
 
 def add_song_update(request, playlist_num):
@@ -849,6 +873,7 @@ def playlist_append(request, playlist_num, song_id):
     else:
         raise Http404('Error')
 
+
 def view_album(request, album_id):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -885,6 +910,7 @@ def view_artist(request, artist_name):
     else:
         raise Http404('Error')
 
+
 def update_profile_picture(request):
     if request.method == 'POST':
         form = ProfilePictureForm(request.POST, request.FILES)
@@ -896,13 +922,15 @@ def update_profile_picture(request):
                 profile_picture.delete()
             else:
                 profile_picture = ProfilePicture(user=user)
-            
-            profile_picture = ProfilePicture(user=user, profile_picture=request.FILES['profile_picture'])
+
+            profile_picture = ProfilePicture(
+                user=user, profile_picture=request.FILES['profile_picture'])
             profile_picture.save()
             return redirect('recommender:get_myprofile')
     else:
         form = ProfilePictureForm()
     return render(request, 'recommender/my_profile.html', {'form': form})
+
 
 def update_bio(request):
     if request.method == 'POST':
@@ -914,7 +942,7 @@ def update_bio(request):
                 bio.delete()
             else:
                 bio = Bio(user=user)
-                
+
             bio = Bio(user=user, bio=request.POST['bio'])
             bio.save()
             return redirect('recommender:get_myprofile')
@@ -923,6 +951,7 @@ def update_bio(request):
         form = UpdateSettingsForm(instance=request.user)
         args = {'form': form}
         return render(request, 'recommender/edit_bio.html', args)
+
 
 def post_sign_in(request):
     return redirect('recommender:get_myprofile')

@@ -9,30 +9,32 @@
     <div class="card" style="width: 50%; min-width: 650px">
         <div class="card-body">
             {% if err %}
-             <p class="text-danger">{{ err }}</p>
+            <p class="text-danger">{{ err }}</p>
             {% endif %}
             <form method='post' class="form" style="margin-left:50px;margin-right:50px">
-            {% csrf_token %}
-        
-            <div class="form-floating mb-3">
-                {{form.username}}
-                <label for="floatingInput">Username</label>
-            </div>
-            <div class="form-floating mb-3">
-                {{form.password}}
-                <label for="floatingPassword">Password</label>
-            </div>
-                   
+                {% csrf_token %}
 
-            <div class="d-grid" style="width: 75%">
-                <button class="btn btn-custom"  type="submit">Sign In</button></br>
-                <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
-                <a href="{% url 'social:begin' 'spotify' %}">Spotify</a>
-                <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>
-                <button class="btn btn-custom" type="submit" style="background:#000000">Sign in with Apple</button></br>
-                {% comment %} <button class="btn btn-outline-custom" type="submit">Contact us</button></br> {% endcomment %}
-            </div>
-        </form>
+                <div class="form-floating mb-3">
+                    {{form.username}}
+                    <label for="floatingInput">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{form.password}}
+                    <label for="floatingPassword">Password</label>
+                </div>
+
+
+                <div class="d-grid" style="width: 75%">
+                    <button class="btn btn-custom" type="submit">Sign In</button></br>
+                    <a href="{% url 'social:begin' 'spotify' %}"><button class="btn btn-custom" type="button"
+                            style="background:#1DB954">Sign in with
+                            Spotify</button></a></br>
+                    <a href="{% url 'social:begin' 'google-plus' %}"> <button class="btn btn-custom" type="button"
+                            style="background:#C5C5C5">Sign in with
+                            Google</button></a>
+                    </br>
+                </div>
+            </form>
         </div>
     </div>
 </center>
