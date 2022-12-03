@@ -763,7 +763,8 @@ def undislike_song(request, user_name, track_id):
                 dislikes = Dislikes.objects.get(user=user)
             else:
                 dislikes = Dislikes.objects.create(user=user)
-            track = Musicdata.objects.get(track_id=track_id)
+            tracks = Musicdata.objects.filter(track_id=track_id)
+            track = tracks[0]
             dislikes.tracks.remove(track)
             print(dislikes.tracks.all())
             dislikes.save()
