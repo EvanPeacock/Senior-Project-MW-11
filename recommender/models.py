@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 
-
 def unique_rand():
     index = random.randint(1, 100000000)
     while True:
@@ -104,6 +103,11 @@ class RecentSearches(models.Model):
     result1 = models.CharField(max_length=25, null=True, blank=True)
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
+    search_datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.artist    
+
     
 # For some reason, when Artist or Album object is created, the  
 # track lists are created with a full list. 
