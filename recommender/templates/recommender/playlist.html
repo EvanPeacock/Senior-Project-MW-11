@@ -14,62 +14,62 @@
     </div>
     {% if playlist.creator == request.user.username %}
     <div class="right-header">
-        <a  class="btn btn-custom" href="{% url 'recommender:add_song_update' playlist.playlist_id %}" style="margin-left: 15px">Add Songs</a> 
+        <a class="btn btn-custom" href="{% url 'recommender:add_song_update' playlist.playlist_id %}"
+            style="margin-left: 15px">Add Songs</a>
     </div>
     {% else %}
     <div class="right-header" style="display:flex;flex-direction:row;justify-content:right;gap:15px">
         <div style="margin-top:12px">
             <a href={% url 'recommender:get_profile' playlist.creator %} class="btn btn-outline-custom">
-                <img src="{% get_static_prefix %}{{ playlist.creator|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px" style="width: 22px; height: 22px; margin-right:5px; margin-bottom:3px; object-fit: cover">{{playlist.creator}}
+                <img src="{% get_static_prefix %}{{ playlist.creator|pfp_exists }}.jpg"
+                    class="rounded-circle card-img-top" border="1px" class="rounded-circle" border="1px"
+                    style="width: 22px; height: 22px; margin-right:5px; margin-bottom:3px; object-fit: cover">{{playlist.creator}}
             </a>
         </div>
 
         {% if request.user.is_authenticated %}
-                    {% if playlist in dislikedPlaylists %}
-                        <a href="{% url 'recommender:undislike_playlist' user.username playlist.playlist_id %}" class="btn btn-link-custom">
-                        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a> 
-                    
-                    {% else %}
-                        <a href="{% url 'recommender:dislike_playlist' user.username playlist.playlist_id %}" class="btn btn-link-custom">
-                        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
-                    {% endif %}
-                
-            {% endif %}
+        {% if playlist in dislikedPlaylists %}
+        <a href="{% url 'recommender:undislike_playlist' user.username playlist.playlist_id %}"
+            class="btn btn-link-custom">
+            <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike"
+                style="height:40px;width:40px;"></a>
+
+        {% else %}
+        <a href="{% url 'recommender:dislike_playlist' user.username playlist.playlist_id %}"
+            class="btn btn-link-custom">
+            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a>
+        {% endif %}
+
+        {% endif %}
     </div>
     {% endif %}
 </div>
 
-<hr/>
+<hr />
 {% if playlist.creator == request.user.username %}
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
     {% for song in playlist.playlist_songs.all%}
-<li style="width:30%;">
-    <div class="card">
-        <center class="card-body">
-            <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <li style="width:30%;">
+        <div class="card">
+            <center class="card-body">
+                <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="300" height="380"
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <div style="display:flex;gap:40px;justify-content:center">
-                    <div class = "text-center">
-                        <a class="btn btn-custom" style="margin-top:12px" href="{% url 'recommender:remove_song' playlist.playlist_id song.track_id %}">Remove Song</a>
+                    <div class="text-center">
+                        <a class="btn btn-custom" style="margin-top:12px"
+                            href="{% url 'recommender:remove_song' playlist.playlist_id song.track_id %}">Remove
+                            Song</a>
                     </div>
-
-                    {% comment %} this doesnt really work rn {% endcomment %}
-                    {% if song in dislikedlist %}
-                        <a href="{% url 'recommender:undislike' user.username song.track_id %}" class="btn btn-link-custom" style="margin-left:25px;">
-                        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
-                    {% else %}
-                        <a href="{% url 'recommender:dislike' user.username song.track_id%}" class="btn btn-link-custom" style="margin-left:25px;">
-                        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
-                    {% endif %}
-                </div> 
-        </center>
-    </div>
-</li>
-{% endfor %}
+                </div>
+            </center>
+        </div>
+    </li>
+    {% endfor %}
 </ol>
 {% else %}
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
     {% for song in playlist.playlist_songs.all%}
-        {% include "recommender/songcards.html" %}
+    {% include "recommender/songcards.html" %}
     {% endfor %}
 </ol>
 {% endif %}

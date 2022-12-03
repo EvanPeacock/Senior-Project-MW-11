@@ -5,56 +5,52 @@
 {% block content %}
 
 {% if err %}
-    <p>{{ err }}</p>
+<p>{{ err }}</p>
 {% endif %}
 
 <center>
     <h2 class="fw-bold">Ready to Listen?</h2>
     <div class="card" style="width: 50%; min-width: 650px">
         <div class="card-body text-muted">
-        <form method='post' class="form" style="margin-left:50px;margin-right:50px">
-            {% csrf_token %}
+            <form method='post' class="form" style="margin-left:50px;margin-right:50px">
+                {% csrf_token %}
 
-            <div class="form-floating mb-3">
-                {{form.first_name}}
-                <label for="floatingInput">First Name</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.first_name}}
+                    <label for="floatingInput">First Name</label>
+                </div>
 
-            <div class="form-floating mb-3">
-                {{form.last_name}}
-                <label for="floatingInput">Last Name</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.last_name}}
+                    <label for="floatingInput">Last Name</label>
+                </div>
 
-            <div class="form-floating mb-3">
-                {{form.username}}
-                <label for="floatingInput">Username</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.username}}
+                    <label for="floatingInput">Username</label>
+                </div>
 
-            <div class="form-floating mb-3">
-                {{form.email}}
-                <label for="floatingInput">Email</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.email}}
+                    <label for="floatingInput">Email</label>
+                </div>
 
-            <div class="form-floating mb-3">
-                {{form.password1}}
-                <label for="floatingInput">Password</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.password1}}
+                    <label for="floatingInput">Password</label>
+                </div>
 
-            <div class="form-floating mb-3">
-                {{form.password2}}
-                <label for="floatingInput">Confirm Password</label>
-            </div>
+                <div class="form-floating mb-3">
+                    {{form.password2}}
+                    <label for="floatingInput">Confirm Password</label>
+                </div>
 
 
 
-            <div class="d-grid" style="width: 75%">
-                <button class="btn btn-custom"  type="submit">Register</button></br>
-                <button class="btn btn-custom" type="submit" style="background:#1DB954">Sign in with Spotify</button></br>
-                <button class="btn btn-custom" type="submit" style="background:#C5C5C5">Sign in with Google</button></br>
-                <button class="btn btn-custom" type="submit" style="background:#000000">Sign in with Apple</button></br>
-                {% comment %} <button class="btn btn-outline-custom" type="submit">Contact us</button></br> {% endcomment %}
-            </div>
-        </form>
+                <div class="d-grid" style="width: 75%">
+                    <button class="btn btn-custom" type="submit">Register</button></br>
+                </div>
+            </form>
         </div>
     </div>
 </center>
