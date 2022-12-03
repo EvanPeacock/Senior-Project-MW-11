@@ -22,12 +22,8 @@ Artist Search
 </form>
 <br>
 <!-- -->
-{% if albums %}
-<ol style="display:flex;
-                     flex-direction:row;
-                     flex-wrap:wrap;
-                     list-style:none;
-                     gap:45px">
+{% if answers %}
+<ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
 {% for a in answers %}
 <li style="width:30%;">
     <div class="card">

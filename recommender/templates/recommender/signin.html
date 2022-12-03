@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} Sign In {% endblock %}
 
@@ -23,16 +24,12 @@
                     <label for="floatingPassword">Password</label>
                 </div>
 
+                <br/>
 
-                <div class="d-grid" style="width: 75%">
-                    <button class="btn btn-custom" type="submit">Sign In</button></br>
-                    <a href="{% url 'social:begin' 'spotify' %}"><button class="btn btn-custom" type="button"
-                            style="background:#1DB954">Sign in with
-                            Spotify</button></a></br>
-                    <a href="{% url 'social:begin' 'google-plus' %}"> <button class="btn btn-custom" type="button"
-                            style="background:#C5C5C5">Sign in with
-                            Google</button></a>
-                    </br>
+                <div class="d-grid" style="width:65%;gap:30px">
+                    <button class="btn btn-custom" type="submit">Sign In</button>
+                    <a href="{% url 'social:begin' 'spotify' %}" class="btn btn-outline-spotify" type="button">Sign in with Spotify <img src="{% get_static_prefix %}spotify.png" style="object-fit:cover;height:20px;width:20px;margin-left:5px"></a>
+                    <a href="{% url 'social:begin' 'google-plus' %}" class="btn btn-outline-google" type="button">Sign in with Google <img src="{% get_static_prefix %}google.png" style="object-fit:cover;height:20px;width:20px;margin-left:5px"></a>
                 </div>
             </form>
         </div>

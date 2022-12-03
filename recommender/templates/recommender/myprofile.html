@@ -92,6 +92,9 @@
         <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">My Dislikes</a>
         <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
         <a class="btn btn-outline-custom" data-toggle="modal" data-target="#editprofile">My Information</a>
+
+        <a href="{% url 'social:begin' 'spotify' %}" class="btn btn-outline-spotify" type="button">Link Spotify <img src="{% get_static_prefix %}spotify.png" style="object-fit:cover;height:20px;width:20px;margin-left:5px"></a>
+        <a href="{% url 'social:begin' 'google-plus' %}" class="btn btn-outline-google" type="button">Link Google <img src="{% get_static_prefix %}google.png" style="object-fit:cover;height:20px;width:20px;margin-left:5px"></a>
       </div>
   </div>
 </div>

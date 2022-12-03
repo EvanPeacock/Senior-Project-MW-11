@@ -12674,6 +12674,54 @@ fieldset:disabled .btn {
     inset 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
 }
 
+.btn-outline-spotify {
+  border: 2px solid transparent;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background:
+    linear-gradient(to right, white, white),
+    linear-gradient(0.125turn, #00d95f, #00d95f);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  color: #000;
+  transition: .35s all;
+  display: inline-block;
+}
+
+.btn-outline-spotify:hover {
+  transform: scale(1.1);
+  color: #000;
+  box-shadow:
+    2px 2px 5px 0 rgba(0, 0, 0, 0.45),
+    inset 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn-outline-google {
+  border: 2px solid transparent;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background:
+    linear-gradient(to right, white, white),
+    linear-gradient(0.125turn, #ec4434, #fcbc04, #34ab54, #4483f3);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  color: #000;
+  transition: .35s all;
+  display: inline-block;
+}
+
+.btn-outline-google:hover {
+  transform: scale(1.1);
+  color: #000;
+  box-shadow:
+    2px 2px 5px 0 rgba(0, 0, 0, 0.45),
+    inset 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
+}
+
 body {
   font-family: 'Comfortaa', sans-serif;
 }
