@@ -50,17 +50,10 @@ Artist Search
               {% endfor %}
             </ul>
           </div>
-          <a href="{% url 'recommender:dislike' user.username a.track_id%}" class="btn btn-link-custom"
+          <a href="{% url 'recommender:dislike_song' user.username a.track_id%}" class="btn btn-link-custom"
             style="margin-left:25px;">
             <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
           </a>
-
-          {% comment %} this is for if a song is already disliked {% endcomment %}
-          {% comment %} <a href="{% url 'recommender:undislike' user.username album.track_id%}" class="btn btn-link-custom"
-            style="margin-left:25px;">
-            <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike"
-              style="height:40px;width:40px;">
-          </a> {% endcomment %}
 
         </div>
         {% endif %}
