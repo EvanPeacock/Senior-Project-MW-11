@@ -12829,3 +12829,36 @@ h6 {
   text-align: center !important;
   transform: translate(-50%, 0) !important;
 }
+
+.test-button {
+  /* Basic button styling */
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  
+  /* Add animation to the button */
+  animation: rainbow-flash 0.5s ease-in-out infinite;
+}
+
+/* The :hover pseudo-class will apply the following styles when the button is hovered over */
+.test-button:hover {
+  /* Stop the animation when the button is hovered over */
+  animation-play-state: paused;
+  /* Change the background color to a solid rainbow color */
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+}
+
+/* The @keyframes rule defines the animation that will be used for the button */
+@keyframes rainbow-flash {
+  0% {
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  }
+  50% {
+    background-image: none;
+  }
+  100% {
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  }
+}

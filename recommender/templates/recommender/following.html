@@ -37,7 +37,7 @@
                   <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ friend }}</h6>
                   <a href={% url 'recommender:get_profile' friend %} class="btn btn-outline-custom">View Profile</a>
                   {% if user_name == request.user.username %}
-                  <a href={% url 'recommender:remove_friend' friend %} class="btn btn-custom" style="margin-left: 10px">Remove Friend</a>
+                  <a href={% url 'recommender:remove_friend' friend %} class="btn btn-custom" style="margin-left: 10px">Unfollow</a>
                     {% endif %}
                 </div>
                 </div>
