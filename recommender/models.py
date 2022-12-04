@@ -2,6 +2,7 @@ import random
 from django.db import models  
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
+from django.utils import timezone
 
 def unique_rand():
     index = random.randint(1, 100000000)
@@ -103,7 +104,7 @@ class RecentSearches(models.Model):
     result1 = models.CharField(max_length=25, null=True, blank=True)
     result2 = models.CharField(max_length=25, null=True, blank=True)
     result3 = models.CharField(max_length=25, null=True, blank=True)
-    search_datetime = models.DateTimeField(auto_now_add=True)
+    search_datetime = models.DateTimeField(blank=False, null=False, default=timezone.now)
 
     def __str__(self):
         return self.artist    

@@ -539,9 +539,9 @@ def get_following(request, user_name):
                 user=user).values_list('friends', flat=True)
             print(getFriends)
             following = []
-            for friend in getFriends:
-                following.append(User.objects.get(id=friend))
-
+            if list(getFriends)[0] != None:
+                for friend in getFriends:
+                    following.append(User.objects.get(id=friend))
             args = {
                 'following': following,
                 'user_name': user_name
