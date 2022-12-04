@@ -6,71 +6,72 @@
 
 {% block content %}
 <div class='nav'>
-    <div class="row" style="margin-top: -30px;">
-        <div class="col-md-4" id="left">
-            {% if users %}
-            {% for user in users %}
-            <div class="card" style="width: 100%; margin-bottom: 20px">
-                <div class="row">
-                  <center style="padding:30px">    
-                    <img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" style="object-fit: cover; height:225px;width:225px;">
-                  </center>
-                <div class="card-body" style="text-align: center;">
-                  <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                  <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
-                  <a href={% url 'recommender:get_profile' user %} class="btn btn-outline-custom">View Profile</a>
-                  <a href={% url "recommender:add_friend" user %} class="btn btn-custom" style="margin-left: 10px">Follow</a>
-                </div>
-                </div>
-            </div>
-            {% endfor %}
-            {% endif %}
+  <div class="row" style="margin-top: -30px;">
+    <div class="col-md-4" id="left">
+      {% if users %}
+      {% for user in users %}
+      <div class="card" style="width: 100%; margin-bottom: 20px">
+        <div class="row">
+          <center style="padding:30px">
+            <img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top"
+              border="1px" style="object-fit: cover; height:225px;width:225px;">
+          </center>
+          <div class="card-body" style="text-align: center;">
+            <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+            <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
+            <a href={% url 'recommender:get_profile' user %} class="btn btn-outline-custom">View Profile</a>
+            <a href={% url "recommender:add_friend" user %} class="btn btn-custom" style="margin-left: 10px">Follow</a>
+          </div>
         </div>
-
-        <div class="col-md-8" id="right">
-            <div class="card" style="width: 100%; margin-bottom: 20px">
-                <div class="card-body">
-                  <h5 class="card-title">Recomended Songs</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Songs you might like</h6>
-                    {% if songs %}
-                    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
-                      {% for song in songs%}
-                      {% include "recommender/songcards.html" %}
-                      {% endfor %}
-                    </ol>
-                    {% endif %} 
-              </div>
-            </div>
-        
-            <div class="card" style="width: 100%; margin-bottom: 20px">
-              <div class="card-body">
-                <h5 class="card-title">Recomended Albums</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Albums you might like</h6>
-                  {% if albums %}
-                  <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
-                  {% for album in albums %}           
-                  {% include "recommender/albumcards.html" %}
-                  {% endfor %}
-                  </ol>
-                  {% endif %}
-              </div>
-            </div>
-        
-            <div class="card" style="width: 100%; margin-bottom: 20px">
-                <div class="card-body">
-                  <h5 class="card-title">Recomended Playlists</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
-                    {% if playlists %}
-                    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
-                      {% for playlist in recPlaylists %}
-                      {% include "recommender/playlistcards.html" %}
-                      {% endfor %}
-                    </ol> 
-                    {% endif %}
-              </div>
-            </div>
-        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
     </div>
+
+    <div class="col-md-8" id="right">
+      <div class="card" style="width: 100%; margin-bottom: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Recomended Songs</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Songs you might like</h6>
+          {% if songs %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for song in songs%}
+            {% include "recommender/songcards.html" %}
+            {% endfor %}
+          </ol>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card" style="width: 100%; margin-bottom: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Recomended Albums</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Albums you might like</h6>
+          {% if albums %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for album in albums %}
+            {% include "recommender/albumcards.html" %}
+            {% endfor %}
+          </ol>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card" style="width: 100%; margin-bottom: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Recomended Playlists</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
+          {% if recPlaylists %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for playlist in recPlaylists %}
+            {% include "recommender/playlistcards.html" %}
+            {% endfor %}
+          </ol>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
