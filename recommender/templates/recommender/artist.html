@@ -24,43 +24,8 @@ Artist Search
 <!-- -->
 {% if answers %}
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-{% for a in answers %}
-<li style="width:30%;">
-    <div class="card">
-      <center class="card-body">
-
-
-        <iframe src="https://open.spotify.com/embed/track/{{ a.track_id }}" width="300" height="380"
-          frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-
-        {% if request.user.is_authenticated %}
-        <div style="display:flex;gap:40px;justify-content:center">
-          <div class="dropdown text-center" style="margin-top:12px">
-            <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Add to Playlist
-            </button>
-            <ul class="dropdown-menu dropdown-menu-center">
-              {% for playlist in playlists %}
-              <li><a class="btn btn-link-custom"
-                  href="{% url 'recommender:playlist_append' playlist.playlist_id a.track_id %}">{{ playlist.playlist_name }}</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          <a href="{% url 'recommender:dislike_song' user.username a.track_id%}" class="btn btn-link-custom"
-            style="margin-left:25px;">
-            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
-          </a>
-
-        </div>
-        {% endif %}
-
-      </center>
-    </div>
-  </li>
+{% for song in answers %}
+    {% include "recommender/songcards.html"%}
 {% endfor %}
 </ol>
 {% endif %}
