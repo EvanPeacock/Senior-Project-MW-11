@@ -32,10 +32,16 @@
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
           <h5 class="card-title">Recomended Songs</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Songs you might like</h6>
-          {% if songs %}
+          <h6 class="card-subtitle mb-2 text-muted">Songs you might hate</h6>
+          {% if friendsDislikeSongList %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
-            {% for song in songs%}
+            {% for song in friendsDislikeSongList %}
+            {% include "recommender/songcards.html" %}
+            {% endfor %}
+          </ol>
+          {% else %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for song in songs %}
             {% include "recommender/songcards.html" %}
             {% endfor %}
           </ol>
@@ -46,8 +52,14 @@
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
           <h5 class="card-title">Recomended Albums</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Albums you might like</h6>
-          {% if albums %}
+          <h6 class="card-subtitle mb-2 text-muted">Albums you might hate</h6>
+          {% if friendsDislikeAlbumList %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for album in friendsDislikeAlbumList %}
+            {% include "recommender/albumcards.html" %}
+            {% endfor %}
+          </ol>
+          {% elif albums %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
             {% for album in albums %}
             {% include "recommender/albumcards.html" %}
@@ -60,8 +72,14 @@
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
           <h5 class="card-title">Recomended Playlists</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Playlists you might like</h6>
-          {% if recPlaylists %}
+          <h6 class="card-subtitle mb-2 text-muted">Playlists you might hate</h6>
+          {% if friendsDislikePlaylistList %}
+          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
+            {% for playlist in friendsDislikePlaylistList %}
+            {% include "recommender/playlistcards.html" %}
+            {% endfor %}
+          </ol>
+          {% elif recPlaylists %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
             {% for playlist in recPlaylists %}
             {% include "recommender/playlistcards.html" %}
