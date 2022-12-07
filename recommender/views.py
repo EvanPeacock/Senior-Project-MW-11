@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 
 
 def get_home(request):
-    songs = Musicdata.objects.all().values('track_id')
+    songs = Musicdata.objects.all()
     sResp = list(songs)
     random.shuffle(sResp)
 
@@ -78,7 +78,7 @@ def get_home(request):
 
 
 def get_explore(request):
-    songs = Musicdata.objects.all().values('track_id')
+    songs = Musicdata.objects.all()
     sResp = list(songs)
     random.shuffle(sResp)
     albums = Album.objects.all()
@@ -910,7 +910,6 @@ def view_artist(request, artist_name):
         return render(request, 'recommender/artist_view.html', args)
     else:
         raise Http404('Error')
-
 
 def update_profile_picture(request):
     if request.method == 'POST':

@@ -9,7 +9,7 @@
                 <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
             {% endfor %}
 
-                <div style="display:flex;gap:10px;justify-content:center;margin-bottom:5px;">
+                <div style="display:flex;gap:5%;justify-content:center;">
                     <div style="margin-top:12px"><a href={% url 'recommender:view_artist' album.album_artist %} class="btn btn-outline-custom">{{album.album_artist}}</a></div>
 
                     <div style="margin-top:12px"><a href="{% url 'recommender:view_album' album.album_id %}" class="btn btn-custom">View Album</a></div>
