@@ -21,30 +21,34 @@
     <div class="card-text text-muted" style="margin:15px">{{bio}}</div>
   {% endif %}
   <div class="card-body" style="text-align: right;">
-    <a href="{% url "recommender:get_followers" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Followers</a>
-    <a href="{% url "recommender:get_following" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Following</a>
+    {% if followers %}
+    <a href="{% url "recommender:get_followers" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Followers: {{followers|length}}</a>
+    {% endif %}
+    {% if following %}
+    <a href="{% url "recommender:get_following" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Following: {{following|length}}</a>
+    {% endif %}
     <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Follow</a>
   </div>
 </div>
 </div>
 
+{% if playlists %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
       <h5 class="card-title">@{{profile_user}}'s Playlists</h5>
-        {% if playlists %}
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for playlist in playlists %}
               {% include "recommender/playlistcards.html" %}
             {% endfor %}
         </ol>
-    {% endif %}
   </div>
 </div>
+{% endif %}
 
+{% if followers %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">A few of @{{profile_user}}'s Followers</h5>
-        {% if followers %}
+      <h5 class="card-title">A few of @{{profile_user}}'s followers</h5>
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for friend in followers %}
             {% if friend %}
@@ -63,14 +67,14 @@
             </div>
             {% endfor %}
         </ol>
-    {% endif %}
   </div>
 </div>
+{% endif %}
 
+{% if following %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">A few of @{{profile_user}}'s Following</h5>
-        {% if following %}
+      <h5 class="card-title">A few of @{{profile_user}}'s following</h5>
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for friend in following %}
             {% if friend %}
@@ -89,8 +93,8 @@
             </div>
             {% endfor %}
         </ol>
-    {% endif %}
   </div>
 </div>
-{% endblock %}
+{% endif %}
 
+{% endblock %}

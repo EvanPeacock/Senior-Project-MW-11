@@ -4,24 +4,22 @@
         <center class="card-body">
             <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% if request.user.is_authenticated %}
-                <div style="display:flex;gap:5%;justify-content:center;">
-                    <div style="margin-top:12px"><a href={% url 'recommender:view_artist' song.track_artist %} class="btn btn-outline-custom">{{song.track_artist}}</a></div>
-                    
+            <div style="display:flex;flex-direction:column;gap:5%;justify-content:center;">
+                <div><a href={% url 'recommender:view_artist' song.track_artist %} class="btn btn-outline-custom" style="width:73%">{{song.track_artist}}</a></div>
+                <div style="display:flex;flex-direction:row;gap:5%;justify-content:center;">
                     <div class="dropdown text-center">
-                        <div style="margin-top:12px"><a class="btn btn-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button style="margin-top:12px" class="btn btn-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Add to Playlist
-                        </a></div>
-                        <ul class="dropdown-menu dropdown-menu-center" style="position:relative">
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-center">
                             <p>Playlists</p>
-                        {% for playlist in playlists %}
-                        <li><hr class="dropdown-divider"></li>
-                            <li><a class="btn btn-link-custom" href="{% url 'recommender:playlist_append' playlist.playlist_id song.track_id %}">{{playlist.playlist_name }}</a></li>
-                            
-                            
-                        {% endfor %}
+                            {% for playlist in playlists %}
+                            <li><hr class="dropdown-divider"></li>
+                                <li><a class="btn btn-link-custom" href="{% url 'recommender:playlist_append' playlist.playlist_id song.track_id %}">{{playlist.playlist_name}}</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
-
+            
                     {% if song in dislikedSongs %}
                         <a href="{% url 'recommender:undislike_song' user.username song.track_id %}" class="btn btn-link-custom">
                         <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
@@ -29,7 +27,8 @@
                         <a href="{% url 'recommender:dislike_song' user.username song.track_id%}" class="btn btn-link-custom">
                         <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
                     {% endif %}
-                </div> 
+                </div>
+            </div>
             {% endif %}
         </center>
     </div>

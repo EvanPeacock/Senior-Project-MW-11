@@ -87,8 +87,12 @@
   
   
       <div style="display:flex;gap:25px;justify-content:center;margin-top:25px">
+        {% if followers %}
         <a href="{% url "recommender:get_followers" request.user.username %}" class="btn btn-outline-custom" style="margin-right: 10px">My Followers</a>
+        {% endif %}
+        {% if following %}
         <a href="{% url "recommender:get_following" request.user.username %}" class="btn btn-outline-custom" style="margin-right: 10px">My Following</a>
+        {% endif %}
         <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">My Dislikes</a>
         <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
         <a class="btn btn-outline-custom" data-toggle="modal" data-target="#editprofile">My Information</a>
@@ -112,10 +116,10 @@
 </div>
 {% endif %}
 
+{% if followers %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">A few of Your Followers</h5>
-        {% if followers %}
+      <h5 class="card-title">A few of your followers</h5>
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for friend in followers %}
             {% if friend %}
@@ -138,10 +142,10 @@
   </div>
 </div>
 
+{% if following %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">A few of Your Following</h5>
-        {% if following %}
+      <h5 class="card-title">A few of your following</h5>
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for friend in following %}
             {% if friend %}

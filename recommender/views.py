@@ -363,10 +363,11 @@ def get_profile(request, user_name):
             for friend in getFriends:
                 followers.append(User.objects.get(id=friend))
             getFollowing = FriendsList.objects.filter(
-                user=user).values_list('friends', flat=True)
-            print(getFollowing)
+                user=owner).values_list('friends', flat=True)
             following = []
-            if list(getFollowing)[0] != None:
+            print('getFollowing')
+            if getFollowing.exists() and getFollowing[0] is not None:
+                print(list(getFollowing))
                 for friend in getFollowing:
                     following.append(User.objects.get(id=friend))
             getBio = Bio.objects.filter(
