@@ -326,18 +326,26 @@ def get_profile(request, user_name):
         if user_name is not None:
             owner = User.objects.get(username=user_name)
             playlists = Playlist.objects.filter(playlist_owner=owner)
-            songs = Musicdata.objects.all().values('track_id')
-            sResp = list(songs)
-            random.shuffle(sResp)
-            albums = Musicdata.objects.all().values('track_id')
-            aResp = list(albums)
-            random.shuffle(aResp)
+            getFriends = FriendsList.objects.filter(
+            friends__username=user_name).values_list('user', flat=True)
+            followers = []
+            for friend in getFriends:
+                followers.append(User.objects.get(id=friend))
+            getFollowing = FriendsList.objects.filter(
+                user=user).values_list('friends', flat=True)
+            print(getFollowing)
+            following = []
+            if list(getFollowing)[0] != None:
+                for friend in getFollowing:
+                    following.append(User.objects.get(id=friend))
             getBio = Bio.objects.filter(
                 user=owner).values_list('bio', flat=True)
             bio = getBio[0] if len(getBio) > 0 else None
             args = {
                 'profile_user': owner,
                 'playlists': playlists,
+                'followers' : followers[:3],
+                'following' : following[:3],
                 'bio': bio,
                 'dislikedPlaylists': dislikedPlaylists,
             }
@@ -361,7 +369,18 @@ def get_myprofile(request):
                         Playlist.objects.get(playlist_id=str(int(p)-1)))
             playlists = list(Playlist.objects.filter(playlist_owner=owner))
             random.shuffle(playlists)
-
+            getFriends = FriendsList.objects.filter(
+            friends__username=owner).values_list('user', flat=True)
+            followers = []
+            for friend in getFriends:
+                followers.append(User.objects.get(id=friend))
+            getFollowing = FriendsList.objects.filter(
+                user=owner).values_list('friends', flat=True)
+            print(getFollowing)
+            following = []
+            if list(getFollowing)[0] != None:
+                for friend in getFollowing:
+                    following.append(User.objects.get(id=friend))
             getBio = Bio.objects.filter(
                 user=owner).values_list('bio', flat=True)
             bio = getBio[0] if len(getBio) > 0 else None
@@ -369,6 +388,8 @@ def get_myprofile(request):
             args = {
                 'playlists': playlists[:3],
                 'bio': bio,
+                'followers' : followers[:3],
+                'following' : following[:3],
                 'dislikedPlaylists': dislikedPlaylists,
             }
             return render(request, 'recommender/myprofile.html', args)

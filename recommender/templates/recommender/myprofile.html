@@ -102,7 +102,7 @@
 {% if playlists %}
 <div class="card" style="width: 100%; margin-bottom: 20px">
   <div class="card-body">
-      <h5 class="card-title">{{profile_user}}Your Playlists</h5>
+      <h5 class="card-title">A few of Your Playlists</h5>
         <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
             {% for playlist in playlists %}
               {% include "recommender/playlistcards.html" %}
@@ -112,4 +112,55 @@
 </div>
 {% endif %}
 
+<div class="card" style="width: 100%; margin-bottom: 20px">
+  <div class="card-body">
+      <h5 class="card-title">A few of Your Followers</h5>
+        {% if followers %}
+        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+            {% for friend in followers %}
+            {% if friend %}
+            <div class="card" style="width: 30%; margin-bottom: 20px">
+                <div class="row">
+                <center>    
+                    <img src="{% get_static_prefix %}{{ friend.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" style="object-fit: cover; height: 250px; width: 250px; margin-top: 25px">
+                </center>
+                <div class="card-body" style="text-align: center;">
+                  <h5 class="card-title">{{ friend.first_name }} {{ friend.last_name }}</h5>
+                  <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ friend }}</h6>
+                  <a href={% url 'recommender:get_profile' friend %} class="btn btn-outline-custom">View Profile</a>
+                </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </ol>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card" style="width: 100%; margin-bottom: 20px">
+  <div class="card-body">
+      <h5 class="card-title">A few of Your Following</h5>
+        {% if following %}
+        <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
+            {% for friend in following %}
+            {% if friend %}
+            <div class="card" style="width: 30%; margin-bottom: 20px">
+                <div class="row">
+                <center>    
+                    <img src="{% get_static_prefix %}{{ friend.username|pfp_exists }}.jpg" class="rounded-circle card-img-top" border="1px" style="object-fit: cover; height: 250px; width: 250px; margin-top: 25px">
+                </center>
+                <div class="card-body" style="text-align: center;">
+                  <h5 class="card-title">{{ friend.first_name }} {{ friend.last_name }}</h5>
+                  <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ friend }}</h6>
+                  <a href={% url 'recommender:get_profile' friend %} class="btn btn-outline-custom">View Profile</a>
+                </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </ol>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
