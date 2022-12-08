@@ -95,6 +95,7 @@ def get_explore(request):
     random.shuffle(uResp)
 
     if request.user.is_authenticated:
+
         owner = User.objects.get(username=request.user.username)
         userPlaylists = Playlist.objects.filter(playlist_owner=owner)
         dislikes = Dislikes.objects.filter(user=owner)
@@ -123,12 +124,39 @@ def get_explore(request):
             if p:
                 dislikedPlaylists.append(
                     Playlist.objects.get(playlist_id=str(int(p)-1)))
+
+        friends = FriendsList.objects.filter(user=request.user).values_list('friends')
+        friendsList = list(friends)
+        friendsDislikeSongList = []
+        friendsDislikeAlbumList = []
+        friendsDislikePlaylistList = []
+        if friendsList:
+            for friend in friendsList:
+                friendsDislikes = Dislikes.objects.filter(user=friend)
+                getFriendsDislikedSongs = friendsDislikes.values_list('tracks',flat=True)
+                getFriendsDislikedAlbums = friendsDislikes.values_list('albums',flat=True)
+                getFriendsDislikedPlaylists = friendsDislikes.values_list('playlists',flat=True)
+                for track in getFriendsDislikedSongs:
+                    if track:
+                        friendsDislikeSongList.append(Musicdata.objects.get(id=track))
+                for album in getFriendsDislikedAlbums:
+                    if album:
+                        friendsDislikeAlbumList.append(Album.objects.get(album_id=album))
+                for playlist in getFriendsDislikedPlaylists:
+                    if playlist:
+                        friendsDislikePlaylistList.append(Playlist.objects.get(playlist_id=str(int(playlist) - 1)))
+            random.shuffle(friendsDislikeSongList)
+            random.shuffle(friendsDislikeAlbumList)
+            random.shuffle(friendsDislikePlaylistList)
     else:
         userPlaylists = []
         dislikedSongs = []
         dislikedAlbums = []
         dislikedArtists = []
         dislikedPlaylists = []
+        friendsDislikeSongList = []
+        friendsDislikeAlbumList = []
+        friendsDislikePlaylistList = []
 
     args = {
         'songs': sResp[:3],
@@ -140,7 +168,10 @@ def get_explore(request):
         'dislikedSongs': dislikedSongs,
         'dislikedAlbums': dislikedAlbums,
         'dislikedArtists': dislikedArtists,
-        'dislikedPlaylists': dislikedPlaylists
+        'dislikedPlaylists': dislikedPlaylists,
+        'friendsDislikeSongList': friendsDislikeSongList[:3],
+        'friendsDislikeAlbumList': friendsDislikeAlbumList[:3],
+        'friendsDislikePlaylistList': friendsDislikePlaylistList[:3],
     }
     return render(request, "recommender/explore.html", args)
 
