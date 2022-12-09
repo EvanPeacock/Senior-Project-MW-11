@@ -11,9 +11,13 @@
     </div>
     {% if request.user.is_authenticated %}
     <div class="right-header" style="display:flex;flex-direction:row;justify-content:right;gap:15px">
-        <div><a href="" class="btn btn-link-custom">
-            <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;">
-        </a></div>
+        {% if artist in dislikedArtist %}
+        <a href="{% url 'recommender:undislike_artist' user.username artist.artist_id %}" class="btn btn-link-custom">
+        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
+        {% else %}
+        <a href="{% url 'recommender:dislike_artist' user.username artist.artist_id %}" class="btn btn-link-custom">
+        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
+        {% endif %}
     </div>
     {% endif %}
 </div>
