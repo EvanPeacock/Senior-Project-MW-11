@@ -410,7 +410,7 @@ def get_myprofile(request):
                 user=owner).values_list('friends', flat=True)
             print(getFollowing)
             following = []
-            if list(getFollowing)[0] != None:
+            if getFollowing.exists() and getFollowing[0] is not None:
                 for friend in getFollowing:
                     following.append(User.objects.get(id=friend))
             getBio = Bio.objects.filter(
@@ -592,7 +592,7 @@ def get_following(request, user_name):
                 user=user).values_list('friends', flat=True)
             print(getFriends)
             following = []
-            if list(getFriends)[0] != None:
+            if getFriends.exists() and getFriends[0] is not None:
                 for friend in getFriends:
                     following.append(User.objects.get(id=friend))
             args = {
