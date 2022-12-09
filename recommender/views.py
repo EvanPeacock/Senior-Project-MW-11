@@ -156,6 +156,7 @@ def get_explore(request):
                         currSong = random.choice(list(Musicdata.objects.all()))
                         if currSong not in friendsDislikeSongList:
                             friendsDislikeSongList.append(currSong)
+                            break
 
             if len(friendsDislikeAlbumList) < 3:
                 for _ in range(3 - len(friendsDislikeAlbumList)):
@@ -163,6 +164,7 @@ def get_explore(request):
                         currAlbum = random.choice(list(Album.objects.all()))
                         if currAlbum not in friendsDislikeAlbumList:
                             friendsDislikeAlbumList.append(currAlbum)
+                            break
                     
             if len(friendsDislikePlaylistList) < 3:
                 for _ in range(3 - len(friendsDislikePlaylistList)):
@@ -170,6 +172,7 @@ def get_explore(request):
                         currPlaylist = random.choice(list(Playlist.objects.all()))
                         if currPlaylist not in friendsDislikePlaylistList:
                             friendsDislikePlaylistList.append(currPlaylist)
+                            break
 
             random.shuffle(friendsDislikeSongList)
             random.shuffle(friendsDislikeAlbumList)
