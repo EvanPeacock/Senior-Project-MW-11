@@ -145,9 +145,36 @@ def get_explore(request):
                 for playlist in getFriendsDislikedPlaylists:
                     if playlist:
                         friendsDislikePlaylistList.append(Playlist.objects.get(playlist_id=str(int(playlist) - 1)))
+
+            friendsDislikeSongList = friendsDislikeSongList[:3]
+            friendsDislikeAlbumList = friendsDislikeAlbumList[:3]
+            friendsDislikePlaylistList = friendsDislikePlaylistList[:3]
+
+            if len(friendsDislikeSongList) < 3:
+                for _ in range(3 - len(friendsDislikeSongList)):
+                    while True:
+                        currSong = random.choice(list(Musicdata.objects.all()))
+                        if currSong not in friendsDislikeSongList:
+                            friendsDislikeSongList.append(currSong)
+
+            if len(friendsDislikeAlbumList) < 3:
+                for _ in range(3 - len(friendsDislikeAlbumList)):
+                    while True:
+                        currAlbum = random.choice(list(Album.objects.all()))
+                        if currAlbum not in friendsDislikeAlbumList:
+                            friendsDislikeAlbumList.append(currAlbum)
+                    
+            if len(friendsDislikePlaylistList) < 3:
+                for _ in range(3 - len(friendsDislikePlaylistList)):
+                    while True:
+                        currPlaylist = random.choice(list(Playlist.objects.all()))
+                        if currPlaylist not in friendsDislikePlaylistList:
+                            friendsDislikePlaylistList.append(currPlaylist)
+
             random.shuffle(friendsDislikeSongList)
             random.shuffle(friendsDislikeAlbumList)
             random.shuffle(friendsDislikePlaylistList)
+
     else:
         userPlaylists = []
         dislikedSongs = []
@@ -169,9 +196,9 @@ def get_explore(request):
         'dislikedAlbums': dislikedAlbums,
         'dislikedArtists': dislikedArtists,
         'dislikedPlaylists': dislikedPlaylists,
-        'friendsDislikeSongList': friendsDislikeSongList[:3],
-        'friendsDislikeAlbumList': friendsDislikeAlbumList[:3],
-        'friendsDislikePlaylistList': friendsDislikePlaylistList[:3],
+        'friendsDislikeSongList': friendsDislikeSongList,
+        'friendsDislikeAlbumList': friendsDislikeAlbumList,
+        'friendsDislikePlaylistList': friendsDislikePlaylistList,
     }
     return render(request, "recommender/explore.html", args)
 
