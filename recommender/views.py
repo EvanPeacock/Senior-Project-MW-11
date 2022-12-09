@@ -980,15 +980,24 @@ def view_artist(request, artist_name):
         if request.user.is_authenticated:
             owner = User.objects.get(username=request.user.username)
             playlists = Playlist.objects.filter(playlist_owner=owner)
+            dislikes = Dislikes.objects.filter(user=owner)
+            getDislikedArtists = dislikes.values_list('artists', flat=True)
+            dislikedArtists = []
+            for artist in getDislikedArtists:
+                if artist:
+                    dislikedArtists.append(Artist.objects.get(artist_id=artist))
         else:
             playlists = []
+            dislikedArtists = []
         artist = Artist.objects.get(artist_name=artist_name)
         artist_albums = Album.objects.filter(album_artist=artist)
         artist_albums = artist_albums.order_by('album_name')
+        
         args = {
             'artist': artist,
             'playlists': playlists,
-            'artist_albums': artist_albums
+            'artist_albums': artist_albums,
+            'dislikedArtist': dislikedArtists
         }
         return render(request, 'recommender/artist_view.html', args)
     else:

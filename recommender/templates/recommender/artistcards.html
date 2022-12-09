@@ -1,0 +1,28 @@
+{% load static %}           
+<li style="width:30%;">
+      <div class="card">
+        <center class="card-body">
+          {% if artist.artist_name %}<h5 class="card-title">{{ artist.artist_name }}</h5>{% endif %}
+        
+        
+            {% for song in artist.artist_tracks.all|slice:":3" %}
+                <iframe src="https://open.spotify.com/embed/track/{{ song.track_id }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="margin-bottom:15px;"></iframe>
+            {% endfor %}
+
+                <div style="display:flex;flex-direction:column;gap:5%;justify-content:center;">
+                    <div style="margin-top:12px;"><a href={% url 'recommender:view_artist' artist.artist_name %} class="btn btn-outline-custom" style="width:60%">{{artist.artist_name}}</a></div>
+
+                    {% if request.user.is_authenticated %}
+                    {% if artist in dislikedArtists %}
+                        <a href="{% url 'recommender:undislike_artist' user.username artist.artist_id %}" class="btn btn-link-custom">
+                        <img src="{% static 'dislike-filled.svg' %}" alt="Un-dislike" title="Un-dislike" style="height:40px;width:40px;"></a>
+                    {% else %}
+                        <a href="{% url 'recommender:dislike_artist' user.username artist.artist_id %}" class="btn btn-link-custom">
+                        <img src="{% static 'dislike.svg' %}" alt="Dislike" title="Dislike" style="height:40px;width:40px;"></a> 
+                    {% endif %}
+                    {% endif %}
+                </div> 
+
+              </center>
+          </div>
+  </li>
