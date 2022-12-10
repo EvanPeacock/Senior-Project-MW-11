@@ -10,67 +10,36 @@ from django.shortcuts import render, redirect
 
 
 def get_home(request):
-    songs = Musicdata.objects.all()
-    sResp = list(songs)
-    random.shuffle(sResp)
+    MAX_LENGTH = 3
+    dislikes = Dislikes.objects.all()
 
-    albums = Album.objects.all()
-    alResp = list(albums)
-    random.shuffle(alResp)
+    getDislikedSongs = dislikes.values_list('tracks', flat=True)
+    dislikedSongs = []
+    for song in getDislikedSongs:
+        if song and len(dislikedSongs) < MAX_LENGTH:
+            if song not in dislikedSongs:
+                dislikedSongs.append(Musicdata.objects.get(id=song))
 
-    artists = Artist.objects.all()
-    arResp = list(artists)
-    random.shuffle(arResp)
-
-    popularPlaylists = Playlist.objects.all()
-    pResp = list(popularPlaylists)
-    random.shuffle(pResp)
-
-    if request.user.is_authenticated:
-        owner = User.objects.get(username=request.user.username)
-        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
-        dislikes = Dislikes.objects.filter(user=owner)
-
-        getDislikedSongs = dislikes.values_list('tracks', flat=True)
-        dislikedSongs = []
-        for track in getDislikedSongs:
-            if track:
-                dislikedSongs.append(Musicdata.objects.get(id=track))
-
-        getDislikedArtists = dislikes.values_list('artists', flat=True)
-        dislikedArtists = []
-        for artist in getDislikedArtists:
-            if artist:
-                dislikedArtists.append(Artist.objects.get(artist_id=artist))
-
-        getDislikedAlbums = dislikes.values_list('albums', flat=True)
-        dislikedAlbums = []
-        for album in getDislikedAlbums:
-            if album:
+                
+    getDislikedAlbums = dislikes.values_list('albums', flat=True)
+    dislikedAlbums = []
+    for album in getDislikedAlbums:
+        if album and len(dislikedAlbums) < MAX_LENGTH:
+            if album not in dislikedAlbums:
                 dislikedAlbums.append(Album.objects.get(album_id=album))
 
-        getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
-        dislikedPlaylists = []
-        for p in getDislikedPlaylists:
-            if p:
+
+    getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
+    dislikedPlaylists = []
+    for playlist in getDislikedPlaylists:
+        if playlist and len(dislikedPlaylists) < MAX_LENGTH:
+            if playlist not in dislikedPlaylists:
                 dislikedPlaylists.append(
-                    Playlist.objects.get(playlist_id=str(int(p)-1)))
-    else:
-        userPlaylists = []
-        dislikedSongs = []
-        dislikedAlbums = []
-        dislikedArtists = []
-        dislikedPlaylists = []
+                    Playlist.objects.get(playlist_id=str(int(playlist)-1)))
 
     args = {
-        'songs': sResp[:3],
-        'albums': alResp[:3],
-        'artists': arResp[:3],
-        'popularPlaylists': pResp[:3],
-        'playlists': userPlaylists,
         'dislikedSongs': dislikedSongs,
         'dislikedAlbums': dislikedAlbums,
-        'dislikedArtists': dislikedArtists,
         'dislikedPlaylists': dislikedPlaylists
     }
 
