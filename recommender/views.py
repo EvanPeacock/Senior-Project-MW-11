@@ -944,15 +944,31 @@ def playlist_append(request, playlist_num, song_id):
 
 def view_album(request, album_id):
     if request.method == 'GET':
+        dislikedSongs = []
+        dislikedAlbums = []
         if request.user.is_authenticated:
+
             owner = User.objects.get(username=request.user.username)
             playlists = Playlist.objects.filter(playlist_owner=owner)
+            dislikes = Dislikes.objects.filter(user=owner)
+
+            getDislikedSongs = dislikes.values_list('tracks', flat=True)
+            for track in getDislikedSongs:
+                if track:
+                    dislikedSongs.append(Musicdata.objects.get(id=track))
+
+            getDislikedAlbums = dislikes.values_list('albums', flat=True)
+            for album in getDislikedAlbums:
+                if album:
+                    dislikedAlbums.append(Album.objects.get(album_id=album))
         else:
             playlists = []
         album = Album.objects.get(album_id=album_id)
         args = {
             'album': album,
-            'playlists': playlists
+            'playlists': playlists,
+            'dislikedSongs': dislikedSongs,
+            'dislikedAlbums': dislikedAlbums
         }
         return render(request, 'recommender/album_view.html', args)
     else:
