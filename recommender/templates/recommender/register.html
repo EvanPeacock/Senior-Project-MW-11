@@ -4,14 +4,15 @@
 
 {% block content %}
 
-{% if err %}
-<p>{{ err }}</p>
-{% endif %}
+
 
 <center>
     <h2 class="fw-bold">Ready to Listen?</h2>
     <div class="card" style="width: 50%; min-width: 650px">
         <div class="card-body text-muted">
+            {% if err %}
+            <p class="text-danger">{{ err }}</p>
+            {% endif %}
             <form method='post' class="form" style="margin-left:50px;margin-right:50px">
                 {% csrf_token %}
 

@@ -325,6 +325,7 @@ def get_signin(request):
 
 
 def get_registration(request):
+    err = "Unable to Authenticate!"
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -338,7 +339,8 @@ def get_registration(request):
             else:
                 raise Http404('Error with user')
         else:
-            return redirect('/recommender/registration/')
+            args = {'form': form, 'err': err}
+            return render(request, 'recommender/register.html', args)
     else:
         form = RegisterForm
         args = {'form': form}
