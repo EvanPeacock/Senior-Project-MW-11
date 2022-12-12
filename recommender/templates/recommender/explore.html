@@ -20,7 +20,13 @@
             <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
             <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
             <a href={% url 'recommender:get_profile' user %} class="btn btn-outline-custom">View Profile</a>
+            {% if request.user.is_authenticated %}
+            {% if user in following %}
+            <a href={% url "recommender:remove_friend" user %} class="btn btn-custom" style="margin-left: 10px">Unfollow</a>
+            {% else %}
             <a href={% url "recommender:add_friend" user %} class="btn btn-custom" style="margin-left: 10px">Follow</a>
+            {% endif %}
+            {% endif %}
           </div>
         </div>
       </div>
@@ -31,8 +37,8 @@
     <div class="col-md-8" id="right">
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
-          <h5 class="card-title">Recomended Songs</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Songs you might hate</h6>
+          <h5 class="card-title">"Recomended" Songs</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Songs you might dislike</h6>
           {% if friendsDislikeSongList %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
             {% for song in friendsDislikeSongList %}
@@ -51,8 +57,8 @@
 
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
-          <h5 class="card-title">Recomended Albums</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Albums you might hate</h6>
+          <h5 class="card-title">"Recomended" Albums</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Albums you might dislike</h6>
           {% if friendsDislikeAlbumList %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
             {% for album in friendsDislikeAlbumList %}
@@ -71,8 +77,8 @@
 
       <div class="card" style="width: 100%; margin-bottom: 20px">
         <div class="card-body">
-          <h5 class="card-title">Recomended Playlists</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Playlists you might hate</h6>
+          <h5 class="card-title">"Recomended" Playlists</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Playlists you might dislike</h6>
           {% if friendsDislikePlaylistList %}
           <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:25px">
             {% for playlist in friendsDislikePlaylistList %}

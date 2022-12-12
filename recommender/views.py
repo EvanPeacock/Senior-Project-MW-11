@@ -71,6 +71,11 @@ def get_explore(request):
 
     if request.user.is_authenticated:
 
+        following = FriendsList.objects.filter(user=request.user).values_list('friends')
+        followingList = []
+        for f in following:
+            followingList.append(User.objects.get(id=f[0]))
+
         owner = User.objects.get(username=request.user.username)
         userPlaylists = Playlist.objects.filter(playlist_owner=owner)
         dislikes = Dislikes.objects.filter(user=owner)
@@ -162,6 +167,7 @@ def get_explore(request):
         friendsDislikeSongList = []
         friendsDislikeAlbumList = []
         friendsDislikePlaylistList = []
+        followingList = []
 
     args = {
         'songs': sResp[:3],
@@ -177,6 +183,7 @@ def get_explore(request):
         'friendsDislikeSongList': friendsDislikeSongList,
         'friendsDislikeAlbumList': friendsDislikeAlbumList,
         'friendsDislikePlaylistList': friendsDislikePlaylistList,
+        'following': followingList,
     }
     return render(request, "recommender/explore.html", args)
 
