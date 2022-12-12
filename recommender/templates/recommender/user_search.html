@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} User Search {% endblock %}
+
+{% block content %}
+
+<br>
+<center>
+    <h2>User Search</h2>
+
+    <br>
+    <input class="form-text col-8" style="margin-bottom:25px" type="text" name="user"
+        hx-get="{% url 'recommender:get_user' %}" hx-trigger="keyup" hx-target="#search-results">
+    </input>
+    <br>
+
+    <div id="search-results">
+    </div>
+</center>
+
+{% endblock %}

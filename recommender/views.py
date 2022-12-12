@@ -303,6 +303,21 @@ def get_track(request):
             }
             return render(request, "recommender/results2.html", args)
 
+def get_user(request):
+    if request.method == 'GET':
+        user = request.GET.get('user', None)
+        if user is None:
+            return render(request, "recommender/user_search.html", {'user': user})
+        else:
+            users = {}
+            if user != "":
+                query = User.objects.filter(username__contains=user)
+                users = list(query)
+                users = [*set([item for item in users])]
+            args = {
+                'users': users
+            }
+            return render(request, "recommender/results4.html", args)
 
 def get_signin(request):
     err = ''
