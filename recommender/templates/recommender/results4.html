@@ -1,11 +1,22 @@
+{% load static %}
+{% load pfp_exists %}
+
 {% if users %}
-{% for user in users %}
 <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
-    <div class="card">
-        <div class="card-body">
-            <a href="{% url 'recommender:get_profile' user.username %}">{{ user }}</a>
+    {% for user in users %}
+    <div class="card" style="width: 30%; margin-bottom: 20px">
+        <div class="row">
+            <center style="padding:30px">
+                <img src="{% get_static_prefix %}{{ user.username|pfp_exists }}.jpg" class="rounded-circle card-img-top"
+                border="1px" style="object-fit: cover; height:225px;width:225px;">
+            </center>
+            <div class="card-body" style="text-align: center;">
+                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                <h6 class="card-subtitle" style="margin-bottom: 20px">@{{ user }}</h6>
+                <a href={% url 'recommender:get_profile' user %} class="btn btn-outline-custom">View Profile</a>
+            </div>
         </div>
     </div>
-    <ol>
-        {% endfor %}
-        {% endif %}
+    {% endfor %}
+</ol>
+{% endif %}
