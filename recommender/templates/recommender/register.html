@@ -10,7 +10,7 @@
 
 <center>
     <h2 class="fw-bold">Ready to Listen?</h2>
-    <div class="card" style="width: 50%; min-width: 650px">
+    <div class="card" style="width: 60%; min-width: 650px">
         <div class="card-body text-muted">
             <form method='post' class="form" style="margin-left:50px;margin-right:50px">
                 {% csrf_token %}
@@ -40,12 +40,15 @@
                     <label for="floatingInput">Password</label>
                 </div>
 
+                <p>Your password can’t be too similar to your other personal information.</p>
+                <p>Your password must contain at least 8 characters.</p>
+                <p>Your password can’t be a commonly used password.</p>
+                <p>Your password can’t be entirely numeric.</p>
+
                 <div class="form-floating mb-3">
                     {{form.password2}}
                     <label for="floatingInput">Confirm Password</label>
                 </div>
-
-
 
                 <div class="d-grid" style="width:65%">
                     <button class="btn btn-custom" type="submit">Register</button></br>
