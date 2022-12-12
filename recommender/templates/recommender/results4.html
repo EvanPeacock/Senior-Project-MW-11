@@ -1,0 +1,11 @@
+{% if users %}
+{% for user in users %}
+<ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
+    <div class="card">
+        <div class="card-body">
+            <a href="{% url 'recommender:get_profile' user.username %}">{{ user }}</a>
+        </div>
+    </div>
+    <ol>
+        {% endfor %}
+        {% endif %}
