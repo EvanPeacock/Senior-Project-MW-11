@@ -261,7 +261,7 @@ def get_artist(request):
             args = {
                 'form': form,
                 'answers': answers,
-                'playlists': playlists
+                'playlists': playlists,
             }
             return render(request, 'recommender/artist.html', args)
         else:
@@ -959,18 +959,24 @@ def view_album(request, album_id):
 
 def view_artist(request, artist_name):
     if request.method == 'GET':
+        dislikedArtists = []
+        dislikedAlbums = []
         if request.user.is_authenticated:
             owner = User.objects.get(username=request.user.username)
             playlists = Playlist.objects.filter(playlist_owner=owner)
             dislikes = Dislikes.objects.filter(user=owner)
             getDislikedArtists = dislikes.values_list('artists', flat=True)
-            dislikedArtists = []
+            
             for artist in getDislikedArtists:
                 if artist:
                     dislikedArtists.append(Artist.objects.get(artist_id=artist))
+
+            getDislikedAlbums = dislikes.values_list('albums', flat=True)
+            for album in getDislikedAlbums:
+                if album:
+                    dislikedAlbums.append(Album.objects.get(album_id=album))
         else:
             playlists = []
-            dislikedArtists = []
         artist = Artist.objects.get(artist_name=artist_name)
         artist_albums = Album.objects.filter(album_artist=artist)
         artist_albums = artist_albums.order_by('album_name')
@@ -979,7 +985,8 @@ def view_artist(request, artist_name):
             'artist': artist,
             'playlists': playlists,
             'artist_albums': artist_albums,
-            'dislikedArtist': dislikedArtists
+            'dislikedArtist': dislikedArtists,
+            'dislikedAlbums': dislikedAlbums
         }
         return render(request, 'recommender/artist_view.html', args)
     else:
