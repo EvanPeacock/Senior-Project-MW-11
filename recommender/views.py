@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
+from collections import Counter
 
 
 def get_home(request):
@@ -15,27 +16,32 @@ def get_home(request):
 
     getDislikedSongs = dislikes.values_list('tracks', flat=True)
     dislikedSongs = []
-    for song in getDislikedSongs:
+    songCount = Counter(getDislikedSongs)
+    topSongs = songCount.most_common(3)
+    for song in topSongs:
         if song and len(dislikedSongs) < MAX_LENGTH:
             if song not in dislikedSongs:
-                dislikedSongs.append(Musicdata.objects.get(id=song))
-
+                dislikedSongs.append(Musicdata.objects.get(id=song[0]))
                 
     getDislikedAlbums = dislikes.values_list('albums', flat=True)
     dislikedAlbums = []
-    for album in getDislikedAlbums:
+    albumCount = Counter(getDislikedAlbums)
+    topAlbums = albumCount.most_common(3)
+    for album in topAlbums:
         if album and len(dislikedAlbums) < MAX_LENGTH:
             if album not in dislikedAlbums:
-                dislikedAlbums.append(Album.objects.get(album_id=album))
+                dislikedAlbums.append(Album.objects.get(album_id=album[0]))
 
 
     getDislikedPlaylists = dislikes.values_list('playlists', flat=True)
     dislikedPlaylists = []
-    for playlist in getDislikedPlaylists:
+    playlistCount = Counter(getDislikedPlaylists)
+    topPlaylists = playlistCount.most_common(3)
+    for playlist in topPlaylists:
         if playlist and len(dislikedPlaylists) < MAX_LENGTH:
             if playlist not in dislikedPlaylists:
                 dislikedPlaylists.append(
-                    Playlist.objects.get(playlist_id=str(int(playlist)-1)))
+                    Playlist.objects.get(playlist_id=str(int(playlist[0])-1)))
 
     args = {
         'dislikedSongs': dislikedSongs,

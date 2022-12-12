@@ -5,8 +5,8 @@
 <div class='nav' style="margin:5px;padding:5px;display:flex;flex-direction:column;gap:30px;justify-content:center">
   <div class="card" style="width: 100%;">
     <div class="card-body">
-      <h5 class="card-title">Unpopular Songs Today</h5>
-      <h6 class="card-subtitle mb-3 text-muted">Today's most unpopular songs</h6>
+      <h5 class="card-title">Unpopular Songs</h5>
+      <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked songs</h6>
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
         {% for song in dislikedSongs%}
           {% include "recommender/songcards.html" %}
@@ -17,8 +17,8 @@
 
   <div class="card" style="width: 100%;">
     <div class="card-body">
-      <h5 class="card-title">Unpopular Albums Today</h5>
-      <h6 class="card-subtitle mb-3 text-muted">Today's most unpopular albums</h6>
+      <h5 class="card-title">Unpopular Albums</h5>
+      <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked albums</h6>
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
         {% for album in dislikedAlbums%}
           {% include "recommender/albumcards.html" %}
@@ -29,8 +29,8 @@
 
   <div class="card" style="width: 100%;">
     <div class="card-body">
-      <h5 class="card-title">Unpopular Playlists Today</h5>
-      <h6 class="card-subtitle mb-3 text-muted">Today's most unpopular playlists</h6>
+      <h5 class="card-title">Unpopular Playlists</h5>
+      <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked playlists</h6>
         {% if dislikedPlaylists %}
          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
           {% for playlist in dislikedPlaylists %}
