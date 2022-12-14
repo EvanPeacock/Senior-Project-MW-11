@@ -43,10 +43,44 @@ def get_home(request):
                 dislikedPlaylists.append(
                     Playlist.objects.get(playlist_id=str(int(playlist[0])-1)))
 
+    if request.user.is_authenticated:
+
+        owner = User.objects.get(username=request.user.username)
+        userPlaylists = Playlist.objects.filter(playlist_owner=owner)
+        Userdislikes = Dislikes.objects.filter(user=owner)
+
+        getDislikedSongs = Userdislikes.values_list('tracks', flat=True)
+        UserdislikedSongs = []
+        for track in getDislikedSongs:
+            if track:
+                UserdislikedSongs.append(Musicdata.objects.get(id=track))
+
+        getDislikedAlbums = Userdislikes.values_list('albums', flat=True)
+        UserdislikedAlbums = []
+        for album in getDislikedAlbums:
+            if album:
+                UserdislikedAlbums.append(Album.objects.get(album_id=album))
+
+        getDislikedPlaylists = Userdislikes.values_list('playlists', flat=True)
+        UserdislikedPlaylists = []
+        for p in getDislikedPlaylists:
+            if p:
+                UserdislikedPlaylists.append(
+                    Playlist.objects.get(playlist_id=str(int(p)-1)))
+    else:  
+        userPlaylists = []
+        UserdislikedSongs = []
+        UserdislikedAlbums = []
+        UserdislikedPlaylists = []
+
     args = {
-        'dislikedSongs': dislikedSongs,
-        'dislikedAlbums': dislikedAlbums,
-        'dislikedPlaylists': dislikedPlaylists
+        'playlists': userPlaylists,
+        'TopdislikedSongs': dislikedSongs,
+        'TopdislikedAlbums': dislikedAlbums,
+        'TopdislikedPlaylists': dislikedPlaylists,
+        'dislikedSongs': UserdislikedSongs,
+        'dislikedAlbums': UserdislikedAlbums,
+        'dislikedPlaylists': UserdislikedPlaylists,
     }
 
     return render(request, "recommender/home.html", args)

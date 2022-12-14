@@ -8,7 +8,7 @@
       <h5 class="card-title">Unpopular Songs</h5>
       <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked songs</h6>
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-        {% for song in dislikedSongs%}
+        {% for song in TopdislikedSongs%}
           {% include "recommender/songcards.html" %}
         {% endfor %}
       </ol>
@@ -20,7 +20,7 @@
       <h5 class="card-title">Unpopular Albums</h5>
       <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked albums</h6>
       <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-        {% for album in dislikedAlbums%}
+        {% for album in TopdislikedAlbums%}
           {% include "recommender/albumcards.html" %}
         {% endfor %}
       </ol>
@@ -31,9 +31,9 @@
     <div class="card-body">
       <h5 class="card-title">Unpopular Playlists</h5>
       <h6 class="card-subtitle mb-3 text-muted">Top 3 most disliked playlists</h6>
-        {% if dislikedPlaylists %}
+        {% if TopdislikedPlaylists %}
          <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:45px">
-          {% for playlist in dislikedPlaylists %}
+          {% for playlist in TopdislikedPlaylists %}
             {% include "recommender/playlistcards.html" %}
           {% endfor %}
         </ol> 
