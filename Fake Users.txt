@@ -30,3 +30,15 @@ Password:100Dollars
 
 Username:AndyShmandy
 Password:duelmeforit
+
+Username:batman
+Password:thejoker
+
+Username:superman
+Password:kryptonite
+
+Username:theflash
+Password:barryallen
+
+Username:spiderman
+Password:maryjane123
