@@ -22,10 +22,10 @@
   {% endif %}
   <div class="card-body" style="text-align: right;">
     {% if followers %}
-    <a href="{% url "recommender:get_followers" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Followers: {{followers|length}}</a>
+    <a href="{% url "recommender:get_followers" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Followers: {{countfollowers|length}}</a>
     {% endif %}
     {% if following %}
-    <a href="{% url "recommender:get_following" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Following: {{following|length}}</a>
+    <a href="{% url "recommender:get_following" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Following: {{countfollowing|length}}</a>
     {% endif %}
     <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Follow</a>
   </div>

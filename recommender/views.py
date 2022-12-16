@@ -440,7 +440,9 @@ def get_profile(request, user_name):
                 'profile_user': owner,
                 'playlists': playlists,
                 'followers' : followers[:3],
+                'countfollowers' : followers,
                 'following' : following[:3],
+                'countfollowing' : following,
                 'bio': bio,
                 'dislikedPlaylists': dislikedPlaylists,
             }
@@ -484,7 +486,9 @@ def get_myprofile(request):
                 'playlists': playlists[:3],
                 'bio': bio,
                 'followers' : followers[:3],
+                'countfollowers' : followers,
                 'following' : following[:3],
+                'countfollowing' : following,
                 'dislikedPlaylists': dislikedPlaylists,
             }
             return render(request, 'recommender/myprofile.html', args)

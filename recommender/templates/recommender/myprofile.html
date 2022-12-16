@@ -88,10 +88,10 @@
   
       <div style="display:flex;gap:25px;justify-content:center;margin-top:25px">
         {% if followers %}
-        <a href="{% url "recommender:get_followers" request.user.username %}" class="btn btn-outline-custom">Followers: {{followers|length}}</a>
+        <a href="{% url "recommender:get_followers" request.user.username %}" class="btn btn-outline-custom">Followers: {{countfollowers|length}}</a>
         {% endif %}
         {% if following %}
-        <a href="{% url "recommender:get_following" request.user.username %}" class="btn btn-outline-custom">Following: {{following|length}}</a>
+        <a href="{% url "recommender:get_following" request.user.username %}" class="btn btn-outline-custom">Following: {{countfollowing|length}}</a>
         {% endif %}
         <a href="{% url "recommender:get_dislikes" %}" class="btn btn-outline-custom">My Dislikes</a>
         <a href="{% url "recommender:get_user_playlists" request.user.username %}" class="btn btn-outline-custom">My Playlists</a>
