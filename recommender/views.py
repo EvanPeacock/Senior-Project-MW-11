@@ -415,8 +415,13 @@ def get_profile(request, user_name):
                 if p:
                     dislikedPlaylists.append(
                         Playlist.objects.get(playlist_id=str(int(p)-1)))
+            getUserFollowing = FriendsList.objects.filter(user=user).values_list('friends', flat=True)
+            userFollowing = []
+            for friend in getUserFollowing:
+                userFollowing.append(User.objects.get(id=friend))
         else:
             dislikedPlaylists = []
+            userFollowing = []
         if user_name is not None:
             owner = User.objects.get(username=user_name)
             playlists = Playlist.objects.filter(playlist_owner=owner)
@@ -445,6 +450,7 @@ def get_profile(request, user_name):
                 'countfollowing' : following,
                 'bio': bio,
                 'dislikedPlaylists': dislikedPlaylists,
+                'userFollowing': userFollowing
             }
             return render(request, 'recommender/profile.html', args)
         else:

@@ -27,7 +27,11 @@
     {% if following %}
     <a href="{% url "recommender:get_following" profile_user %}" class="btn btn-outline-custom" style="margin-right: 10px">Following: {{countfollowing|length}}</a>
     {% endif %}
+    {% if profile_user in userFollowing %}
+    <a href={% url "recommender:remove_friend" profile_user%} class="btn btn-custom">Unfollow</a>
+    {% else %}
     <a href={% url "recommender:add_friend" profile_user%} class="btn btn-custom">Follow</a>
+    {% endif %}
   </div>
 </div>
 </div>
