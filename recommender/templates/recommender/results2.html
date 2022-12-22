@@ -4,34 +4,5 @@
             {% include "recommender/songcards.html" %}
         {% endfor %}
     </ol>    
-    {% comment %} {% for song in tracks %}
-    <ol style="display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;gap:50px 30px;">
-        <div class="card">
-            <div class="card-body"> 
-                <td>
-                    <iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
-                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                </td>
-                <div class = "text-center">
-                    {% if request.user.is_authenticated %}
-                    <a href="{% url 'recommender:dislike' user.username song%}" class="btn btn-custom">☆</a>
-                    {% endif %} {% endcomment %}
-
-                    {% comment %} <div class="dropdown text-center">
-                        <button class="btn btn-link-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Add to Playlist
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-center">
-                            {% for playlist in playlists %}
-                                <li><a class="dropdown-item" href="{% url 'recommender:add_to_playlist' user.username track playlist.id %}">{{ playlist.name }}</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                            {% endfor %}
-                        </ul>
-                    </div> {% endcomment %}
-                {% comment %} </div>
-            </div>
-        </div>
-    <ol>
-    {% endfor %} {% endcomment %}
-
+    
 {% endif %}

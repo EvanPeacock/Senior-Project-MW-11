@@ -108,12 +108,6 @@ class RecentSearches(models.Model):
     def __str__(self):
         return self.artist    
 
-    
-# For some reason, when Artist or Album object is created, the  
-# track lists are created with a full list. 
-#   - I got around this by reseting them on creation in script.py
-#   - Maybe can be fixed by altering __init__?
-
 class Artist(models.Model):
     artist_id = models.TextField(primary_key=True, default=uniqueIDArtist, editable=False)
     artist_name = models.CharField(max_length=25, blank=True, null=True)
@@ -138,19 +132,6 @@ class Album(models.Model):
     def __str__(self):
         return self.album_name
 
-class song(models.Model):
-    track_id = models.CharField(max_length=8, unique=True, default=unique_rand)
-    track_name = models.TextField()
-    artist_id = models.TextField()
-    track_album_id = models.TextField()
-    track_album_release_date = models.IntegerField()
-    playlist_id = models.ManyToManyField('playlist')
-    duration_ms = models.IntegerField()
-
-    def __str__(self):
-        return self.track_name
-
-
 class Dislikes(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tracks = models.ManyToManyField('Musicdata', blank=True)
@@ -160,7 +141,3 @@ class Dislikes(models.Model):
 
     def __str__(self):
         return self.user.username
-
-# class songtoplaylist(models.Model):
-   # track_id = models.ForeignKey('song', on_delete=models.CASCADE)
-    #playlist_id = models.ForeignKey('playlist',  on_delete=models.CASCADE)

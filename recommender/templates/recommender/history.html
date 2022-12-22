@@ -6,7 +6,7 @@
 <h3> Artist Search History </h3>
 
 {% for search in searches %}
-    {% comment %} <a href="{% url "recommender:get_artist" %}" style="text-decoration:none;color:black;"> {% endcomment %}
+   
     <div class="card" style="margin-bottom:20px">
         <div class="card-body">
             {% if search.artist %}
@@ -36,7 +36,6 @@
             </div>
         </div>
     </div>
-    {% comment %} </a> {% endcomment %}
 {% endfor %}
 
 {% endblock %}
